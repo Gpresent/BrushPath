@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import GestureDemo from './GestureDemo';
 import Draw from './Draw';
+import Draw2 from './Draw2';
 
 export default function App() {
   return (

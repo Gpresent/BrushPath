@@ -74,7 +74,7 @@ export default function Draw() {
               <Path
                 key={p.id}
                 path={p.segments.join(" ")}
-                strokeWidth={8}
+                strokeWidth={10}
                 style="stroke"
                 strokeJoin="round"
                 strokeCap="round"
