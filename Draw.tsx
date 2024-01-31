@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, Button } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -16,6 +16,9 @@ interface IPath {
 export default function Draw() {
   const [paths, setPaths] = useState<IPath[]>([]);
   const [currentPathId, setCurrentPathId] = useState<string | null>(null);
+  const [lastX, setLastX] = useState<number | null>(null);
+  const [lastY, setLastY] = useState<number | null>(null);
+  const [threshold, setThreshold] = useState<number>(1); // Set your threshold distance here
 
   const generatePathId = () => {
     return `path-${Date.now()}`;
@@ -24,6 +27,8 @@ export default function Draw() {
   const startPath = (x: number, y: number) => {
     const newPathId = generatePathId();
     setCurrentPathId(newPathId);
+    setLastX(x);
+    setLastY(y);
     setPaths((prevPaths) => [
       ...prevPaths,
       { id: newPathId, segments: [`M ${x} ${y}`], color: "#06d6a0" },
@@ -31,15 +36,28 @@ export default function Draw() {
   };
 
   const updatePath = (x: number, y: number) => {
-    if (currentPathId) {
-      setPaths((prevPaths) =>
-        prevPaths.map((path) =>
-          path.id === currentPathId
-            ? { ...path, segments: [...path.segments, `L ${x} ${y}`] }
-            : path
-        )
-      );
+    if (
+      currentPathId &&
+      lastX !== null &&
+      lastY !== null
+    ) {
+      //const distance = Math.sqrt((x - lastX) ** 2 + (y - lastY) ** 2);
+      if (true /*distance >= threshold*/) {
+        setLastX(x);
+        setLastY(y);
+        setPaths((prevPaths) =>
+          prevPaths.map((path) =>
+            path.id === currentPathId
+              ? { ...path, segments: [...path.segments, `L ${x} ${y}`] }
+              : path
+          )
+        );
+      }
     }
+  };
+
+  const clearScreen = () => {
+    setPaths([]);
   };
 
   const pan = Gesture.Pan()
@@ -56,12 +74,31 @@ export default function Draw() {
               <Path
                 key={p.id}
                 path={p.segments.join(" ")}
-                strokeWidth={5}
+                strokeWidth={8}
                 style="stroke"
+                strokeJoin="round"
+                strokeCap="round"
                 color={p.color}
               />
             ))}
           </Canvas>
+          <View
+            style={{
+              position: "absolute",
+              bottom: 30,
+              left: 0,
+              right: 0,
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              title="Clear Screen"
+              onPress={clearScreen}
+              color="#ff6f61"
+            />
+          </View>
         </View>
       </GestureDetector>
     </GestureHandlerRootView>
