@@ -31,7 +31,7 @@ export default function Draw() {
     setLastY(y);
     setPaths((prevPaths) => [
       ...prevPaths,
-      { id: newPathId, segments: [`M ${x} ${y}`], color: "#06d6a0" },
+      { id: newPathId, segments: [`M ${x},${y} `], color: "#06d6a0" },
     ]);
   };
 
@@ -48,7 +48,7 @@ export default function Draw() {
         setPaths((prevPaths) =>
           prevPaths.map((path) =>
             path.id === currentPathId
-              ? { ...path, segments: [...path.segments, `L ${x} ${y}`] }
+              ? { ...path, segments: [...path.segments, `${x},${y} `] }
               : path
           )
         );
@@ -63,7 +63,8 @@ export default function Draw() {
   const pan = Gesture.Pan()
     .onStart(({ x, y }) => startPath(x, y))
     .onUpdate(({ x, y }) => updatePath(x, y))
-    .minDistance(1);
+    .minDistance(1)
+    .onEnd(() => console.log(paths[paths.length - 1].segments.join('')));
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
