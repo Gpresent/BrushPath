@@ -10,10 +10,12 @@ for file in os.listdir('./kanji'):
     with open('./kanji/' + file, 'r', encoding='utf-8') as f:
         content = f.read()
         with open(newdir + '/' + file, 'w', encoding='utf-8') as f2:
-            for line in content.split('\n'):
-                if '<g id="kvg:StrokeNumbers' in line:
-                    f2.write('<g id=\"kvg:StrokeNumbers_' + file[0:file.find('.')] + '\" font-size=\"8\" fill=\"#210c0c\">\n')
-                else:
-                    f2.write(line + '\n')
+            comment_start = content.find('<!--')
+            comment_end = content.find('-->')
+            while comment_start != -1:
+                content = content[:comment_start] + content[comment_end+3:]
+                comment_start = content.find('<!--')
+                comment_end = content.find('-->')
+            f2.write(content)
             print(str(filenum) + " files cleaned")
             filenum += 1
