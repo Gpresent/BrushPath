@@ -64,13 +64,12 @@ export default function Draw() {
     setKanjiShown(!kanjiShown);
   }
 
-  const svg = useSVG(require("./kanji_cleaned/04ee4.svg"));
-  const width = 256;
-  const viewX = Dimensions.get("screen").width / 2 - width/2;
-  const height = 256;
-  const viewY = Dimensions.get("screen").height / 2 - height/2;
+  const svg = useSVG(require("./kanji_cleaned/07dda.svg"));
+  const size = 350;
+  const viewX = Dimensions.get("screen").width / 2 - size/2;
+  const viewY = Dimensions.get("screen").height / 2 - size/2;
   const src = svg ? rect(0, 0, svg.width(), svg.height()) : rect(0, 0, 1, 1);
-  const dst = rect(viewX, viewY, width, height);
+  const dst = rect(viewX, viewY, size, size);
 
   const pan = Gesture.Pan()
     .onStart(({ x, y }) => startPath(x, y))
