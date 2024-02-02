@@ -64,7 +64,7 @@ export default function Draw() {
     setKanjiShown(!kanjiShown);
   }
 
-  const svg = useSVG(require("./kanji_cleaned/0f9a8.svg"));
+  const svg = useSVG(require("./kanji_cleaned/04ee4.svg"));
   const width = 256;
   const viewX = Dimensions.get("screen").width / 2 - width/2;
   const height = 256;
