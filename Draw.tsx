@@ -31,7 +31,7 @@ export default function Draw() {
     setLastY(y);
     setPaths((prevPaths) => [
       ...prevPaths,
-      { id: newPathId, segments: [`M ${x},${y} `], color: "#06d6a0" },
+      { id: newPathId, segments: [`M ${x},${y} `], color: "#ffffff" },
     ]);
   };
 
@@ -82,7 +82,7 @@ export default function Draw() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={pan}>
-        <View style={{ flex: 1, backgroundColor: "grey" }}>
+        <View style={{ flex: 1, backgroundColor: "#424780" }}>
           <Canvas style={{ flex: 8 }}>
             {kanjiShown && svg && (
               <Group 
@@ -116,12 +116,12 @@ export default function Draw() {
               <Button
                 title="Clear Screen"
                 onPress={clearScreen}
-                color="#ff6f61"
+                color="#101440"
               />
               <Button
                 title={kanjiShown ? "Hide Kanji" : "Show Kanji"}
                 onPress={toggleKanji}
-                color="#ff6f61"
+                color="#101440"
               />
             </View>
           </View>
