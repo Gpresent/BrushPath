@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { View, Button } from "react-native";
+import { View, Button, Dimensions } from "react-native";
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import { Canvas, Path } from "@shopify/react-native-skia";
+import { Canvas, Path, useSVG, ImageSVG, rect, fitbox, Group } from "@shopify/react-native-skia";
 
 interface IPath {
   id: string;
@@ -18,7 +18,7 @@ export default function Draw() {
   const [currentPathId, setCurrentPathId] = useState<string | null>(null);
   const [lastX, setLastX] = useState<number | null>(null);
   const [lastY, setLastY] = useState<number | null>(null);
-  const [threshold, setThreshold] = useState<number>(1); // Set your threshold distance here
+  const [kanjiShown, setKanjiShown] = useState<boolean>(false);
 
   const generatePathId = () => {
     return `path-${Date.now()}`;
@@ -31,7 +31,7 @@ export default function Draw() {
     setLastY(y);
     setPaths((prevPaths) => [
       ...prevPaths,
-      { id: newPathId, segments: [`M ${x},${y} `], color: "#06d6a0" },
+      { id: newPathId, segments: [`M ${x},${y} `], color: "#ffffff" },
     ]);
   };
 
@@ -60,6 +60,19 @@ export default function Draw() {
     setPaths([]);
   };
 
+  const toggleKanji = () => {
+    setKanjiShown(!kanjiShown);
+  }
+
+  const kanjiUnicode = "07dda";
+  const svg = useSVG(require("./kanji_cleaned/" + kanjiUnicode + ".svg"));
+  
+  const size = 350;
+  const viewX = Dimensions.get("screen").width / 2 - size/2;
+  const viewY = Dimensions.get("screen").height / 2 - size/2;
+  const src = svg ? rect(0, 0, svg.width(), svg.height()) : rect(0, 0, 1, 1);
+  const dst = rect(viewX, viewY, size, size);
+
   const pan = Gesture.Pan()
     .onStart(({ x, y }) => startPath(x, y))
     .onUpdate(({ x, y }) => updatePath(x, y))
@@ -69,8 +82,15 @@ export default function Draw() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={pan}>
-        <View style={{ flex: 1, backgroundColor: "black" }}>
+        <View style={{ flex: 1, backgroundColor: "#424780" }}>
           <Canvas style={{ flex: 8 }}>
+            {kanjiShown && svg && (
+              <Group 
+                transform={fitbox("contain", src, dst)}
+              >
+                <ImageSVG svg={svg} />
+              </Group>
+            )}
             {paths.map((p) => (
               <Path
                 key={p.id}
@@ -87,18 +107,23 @@ export default function Draw() {
             style={{
               position: "absolute",
               bottom: 30,
-              left: 0,
-              right: 0,
-              flex: 1,
+              left: 70,
+              right: 70,
               justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <Button
-              title="Clear Screen"
-              onPress={clearScreen}
-              color="#ff6f61"
-            />
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <Button
+                title="Clear Screen"
+                onPress={clearScreen}
+                color="#101440"
+              />
+              <Button
+                title={kanjiShown ? "Hide Kanji" : "Show Kanji"}
+                onPress={toggleKanji}
+                color="#101440"
+              />
+            </View>
           </View>
         </View>
       </GestureDetector>
