@@ -64,7 +64,9 @@ export default function Draw() {
     setKanjiShown(!kanjiShown);
   }
 
-  const svg = useSVG(require("./kanji_cleaned/07dda.svg"));
+  const kanjiUnicode = "07dda";
+  const svg = useSVG(require("./kanji_cleaned/" + kanjiUnicode + ".svg"));
+  
   const size = 350;
   const viewX = Dimensions.get("screen").width / 2 - size/2;
   const viewY = Dimensions.get("screen").height / 2 - size/2;
@@ -83,7 +85,9 @@ export default function Draw() {
         <View style={{ flex: 1, backgroundColor: "grey" }}>
           <Canvas style={{ flex: 8 }}>
             {kanjiShown && svg && (
-              <Group transform={fitbox("contain", src, dst)}>
+              <Group 
+                transform={fitbox("contain", src, dst)}
+              >
                 <ImageSVG svg={svg} />
               </Group>
             )}
