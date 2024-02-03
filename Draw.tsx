@@ -63,9 +63,12 @@ export default function Draw() {
   const toggleKanji = () => {
     setKanjiShown(!kanjiShown);
   }
-
-  const kanjiUnicode = "07dda";
-  const svg = useSVG(require("./kanji_cleaned/" + kanjiUnicode + ".svg"));
+  const kanji = "線".charCodeAt(0).toString(16).padStart(5, "0");
+  console.log("|" + kanji + "|");
+  const kanjiUni = "07dda";
+  const kanjiUrl = "./kanji_cleaned/" + kanjiUni + ".svg";
+  const svgImport = require(kanjiUrl);
+  const svg = useSVG(svgImport);
   
   const size = 350;
   const viewX = Dimensions.get("screen").width / 2 - size/2;
