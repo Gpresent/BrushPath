@@ -20,6 +20,7 @@ def is_joyo_kanji(character):
 
 def check_filenames_in_directory(source_directory, target_directory):
     try:
+        get_joyo_kanji()
         for filename in os.listdir(source_directory):
             if filename.endswith('.svg'):
                 hex_string = filename[:-4]  # Remove .svg)
