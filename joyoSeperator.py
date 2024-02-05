@@ -5,11 +5,18 @@ newdir = './joyo_kanji'
 if not os.path.exists(newdir):
     os.makedirs(newdir)
 
+joyo_kanji = []
+joyo_kanji_unicode = []
+def get_joyo_kanji():
+    with open('joyo-kanji-code-u.csv', 'r', encoding='utf-8') as file:
+        for line in file:
+            if line[0] != '#':
+                joyo_kanji.append(line[0])
+    for kanji in joyo_kanji:
+        joyo_kanji_unicode.append(hex(ord(kanji))[2:].rjust(5, "0"))
+
 def is_joyo_kanji(character):
-    if '\u4E00' <= character <= '\u9FFF' or '\u3400' <= character <= '\u4DBF':
-        #print("is joyo")
-        return True
-    return False
+    return character in joyo_kanji_unicode
 
 def check_filenames_in_directory(source_directory, target_directory):
     try:
@@ -17,8 +24,7 @@ def check_filenames_in_directory(source_directory, target_directory):
             if filename.endswith('.svg'):
                 hex_string = filename[:-4]  # Remove .svg)
                 try:
-                    character = chr(int(hex_string, 16))
-                    if is_joyo_kanji(character):
+                    if is_joyo_kanji(hex_string):
                         #print(f"'{hex_string}' (from '{filename}') represents a Jōyō Kanji character.")
                         shutil.copy(os.path.join(source_directory, filename),
                                     os.path.join(target_directory, filename))
@@ -34,6 +40,8 @@ directory_path = './kanji_cleaned'
 test_string = "漢字"
 check_filenames_in_directory(directory_path, './joyo_kanji')
 #is_joyo_kanji(test_string)
+# get_joyo_kanji()
+# print(joyo_kanji_unicode)
 
 #for file in files:
     #print(file)
