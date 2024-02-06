@@ -65,11 +65,7 @@ export default function Draw() {
     setKanjiShown(!kanjiShown);
   }
   const kanji = "日".charCodeAt(0).toString(16).padStart(5, "0");
-  console.log("|" + kanji + "|");
-  const kanjiUni = "07dda";
-  
-  // const kanjiUrl = "./joyo_kanji/" + kanjiUni + ".svg";
-  // const svgImport = require(kanjiUrl);
+
   const svg = useSVG(kanjiSVGs[kanji]);
   
   const size = 350;
