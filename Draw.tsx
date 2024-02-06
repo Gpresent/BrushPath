@@ -6,6 +6,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { Canvas, Path, useSVG, ImageSVG, rect, fitbox, Group } from "@shopify/react-native-skia";
+import {kanjiSVGs} from "./joyo_kanji";
 
 interface IPath {
   id: string;
@@ -63,12 +64,13 @@ export default function Draw() {
   const toggleKanji = () => {
     setKanjiShown(!kanjiShown);
   }
-  const kanji = "線".charCodeAt(0).toString(16).padStart(5, "0");
+  const kanji = "日".charCodeAt(0).toString(16).padStart(5, "0");
   console.log("|" + kanji + "|");
   const kanjiUni = "07dda";
-  const kanjiUrl = "./kanji_cleaned/" + kanjiUni + ".svg";
-  const svgImport = require(kanjiUrl);
-  const svg = useSVG(svgImport);
+  
+  // const kanjiUrl = "./joyo_kanji/" + kanjiUni + ".svg";
+  // const svgImport = require(kanjiUrl);
+  const svg = useSVG(kanjiSVGs[kanji]);
   
   const size = 350;
   const viewX = Dimensions.get("screen").width / 2 - size/2;
