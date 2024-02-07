@@ -64,7 +64,7 @@ export default function Draw() {
   const toggleKanji = () => {
     setKanjiShown(!kanjiShown);
   }
-  const kanji = "日".charCodeAt(0).toString(16).padStart(5, "0");
+  const kanji = "何".charCodeAt(0).toString(16).padStart(5, "0");
 
   const svg = useSVG(kanjiSVGs[kanji]);
   
