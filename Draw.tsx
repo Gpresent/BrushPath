@@ -7,6 +7,7 @@ import {
 } from "react-native-gesture-handler";
 import { Canvas, Path, useSVG, ImageSVG, rect, fitbox, Group } from "@shopify/react-native-skia";
 import {kanjiSVGs} from "./joyo_kanji";
+import { createInterpolator } from './svg-interpolator';
 
 interface IPath {
   id: string;
@@ -80,6 +81,21 @@ export default function Draw() {
     .minDistance(1)
     .onEnd(() => console.log(paths[paths.length - 1].segments.join('')));
 
+    const interpolator = createInterpolator({
+      joinPathData: true,
+      minDistance: 0.5,
+      roundToNearest: 0.25,
+      sampleFrequency: 0.001,
+    }, '../svg-interpolator/sax-wasm.wasm').then(
+      (out) => {
+        console.log("Interpolated...")
+        const interpaths = out.processSVG(svg);
+        console.log(interpaths);
+      }
+    )
+
+    
+    
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={pan}>
