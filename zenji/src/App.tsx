@@ -4,8 +4,29 @@ import './App.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 
 const styles = {
-  display: 'flex',
-  height: '90vh'
+  canvas: {
+    display: 'flex',
+    height: '90vh',
+    margin: '0px 50px',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    width: '100px',
+    height: '50px',
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: '10px',
+    margin: '0px 50px',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+  },
+  
   // border: '1rem solid #9c9c9c',
   // borderRadius: '1rem',
 };
@@ -13,37 +34,40 @@ const styles = {
 function App(this: any) {
   const canvas: any = useRef<any>();
   return (
-    <div className="App">
+    <div className="App" style={styles.container}>
       
       <ReactSketchCanvas
       ref={canvas}
-      style={styles}
-      strokeWidth={4}
-      strokeColor="red"
+      style={styles.canvas}
+      strokeWidth={5}
+      strokeColor="#8a712d"
+      canvasColor="#f5f5f5"
       
       />
-      <button
-        onClick={() => {
-          canvas.current
-            .exportSvg()
-            .then((data:any) => {
-              console.log(data);
-            })
-            .catch((e:any) => {
-              console.log(e);
-            });
-        }}
-      >
-        Get Image
-      </button>
-      <button style={{marginLeft: '10px'}}
-        onClick={() => {
-          canvas.current
-            .clearCanvas()
-        }}
-      >
-        Clear
-      </button>
+      <div style={{display: 'flex', height: '10vh', justifyContent: 'center', alignItems: 'center'}}>
+        <button style={styles.button}
+          onClick={() => {
+            canvas.current
+              .exportSvg()
+              .then((data:any) => {
+                console.log(data);
+              })
+              .catch((e:any) => {
+                console.log(e);
+              });
+          }}
+        >
+          Get Image
+        </button>
+        <button style={styles.button}
+          onClick={() => {
+            canvas.current
+              .clearCanvas()
+          }}
+        >
+          Clear
+        </button>
+      </div>
     </div>
   );
 }
