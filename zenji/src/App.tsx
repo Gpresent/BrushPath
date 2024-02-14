@@ -4,8 +4,10 @@ import './App.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 
 const styles = {
-  border: '1rem solid #9c9c9c',
-  borderRadius: '1rem',
+  display: 'flex',
+  height: '90vh'
+  // border: '1rem solid #9c9c9c',
+  // borderRadius: '1rem',
 };
 
 function App(this: any) {
@@ -16,26 +18,32 @@ function App(this: any) {
       <ReactSketchCanvas
       ref={canvas}
       style={styles}
-      width="500px"
-      height="500px"
       strokeWidth={4}
       strokeColor="red"
       
-    />
-    <button
-          onClick={() => {
-            canvas.current
-              .exportSvg()
-              .then((data:an) => {
-                console.log(data);
-              })
-              .catch((e:any) => {
-                console.log(e);
-              });
-          }}
-        >
-          Get Image
-        </button>
+      />
+      <button
+        onClick={() => {
+          canvas.current
+            .exportSvg()
+            .then((data:any) => {
+              console.log(data);
+            })
+            .catch((e:any) => {
+              console.log(e);
+            });
+        }}
+      >
+        Get Image
+      </button>
+      <button style={{marginLeft: '10px'}}
+        onClick={() => {
+          canvas.current
+            .clearCanvas()
+        }}
+      >
+        Clear
+      </button>
     </div>
   );
 }
