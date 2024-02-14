@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
+import pathsToCoords from './coord-utils/pathsToCoords';
+import getTotalLengthAllPaths from './coord-utils/getTotalLengthAllPaths';
 
 const styles = {
   canvas: {
@@ -31,6 +32,24 @@ const styles = {
   // borderRadius: '1rem',
 };
 
+const parser = new DOMParser();
+
+function interpolate(inputSvg: any){
+  var doc = parser.parseFromString(inputSvg, "image/svg+xml");
+  const svg = doc.getElementsByTagName('svg')[0];
+  console.log(svg);
+
+  var paths = svg.getElementsByTagName('path');
+  var coords: number[][][] = [];
+  for (var i = 0; i < paths.length; i++) {
+
+    coords[i] = pathsToCoords([paths[i]], 1, paths[i].getTotalLength() / 5, 0, 0);
+  }
+  var totalLengths = getTotalLengthAllPaths(paths);
+  console.log(coords);
+  console.log(totalLengths);
+}
+
 function App(this: any) {
   const canvas: any = useRef<any>();
   return (
@@ -50,7 +69,7 @@ function App(this: any) {
             canvas.current
               .exportSvg()
               .then((data:any) => {
-                console.log(data);
+                interpolate(data);
               })
               .catch((e:any) => {
                 console.log(e);
