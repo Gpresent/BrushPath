@@ -1,24 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { ReactSketchCanvas } from 'react-sketch-canvas';
 
-function App() {
+const styles = {
+  border: '1rem solid #9c9c9c',
+  borderRadius: '1rem',
+};
+
+function App(this: any) {
+  const canvas: any = useRef<any>();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      
+      <ReactSketchCanvas
+      ref={canvas}
+      style={styles}
+      width="500px"
+      height="500px"
+      strokeWidth={4}
+      strokeColor="red"
+      
+    />
+    <button
+          onClick={() => {
+            canvas.current
+              .exportSvg()
+              .then((data:any) => {
+                console.log(data);
+              })
+              .catch((e:any) => {
+                console.log(e);
+              });
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Get Image
+        </button>
     </div>
   );
 }
