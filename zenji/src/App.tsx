@@ -26,7 +26,7 @@ function App(this: any) {
           onClick={() => {
             canvas.current
               .exportSvg()
-              .then((data:any) => {
+              .then((data:an) => {
                 console.log(data);
               })
               .catch((e:any) => {
