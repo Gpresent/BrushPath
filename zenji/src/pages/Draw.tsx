@@ -53,6 +53,10 @@ function interpolate(inputSvg: any){
 
 function Draw(this: any) {
   const canvas: any = useRef<any>();
+  const [svg, setSvg] = React.useState<any>(null);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+
+  setSvg()
   return (
     <div style={styles.container}>
       <ReactSketchCanvas
@@ -63,6 +67,9 @@ function Draw(this: any) {
       canvasColor="#f5f5f5"
       
       />
+      <svg style={{display: 'block', position: 'absolute'}}>
+        {displaySVG ? svg : null}
+      </svg>
       <div style={{display: 'flex', height: '10vh', justifyContent: 'center', alignItems: 'center'}}>
         <button style={styles.button}
           onClick={() => {
