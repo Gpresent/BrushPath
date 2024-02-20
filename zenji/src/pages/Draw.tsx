@@ -15,7 +15,7 @@ const styles = {
   button: {
     width: '100px',
     height: '50px',
-    backgroundColor: 'red',
+    backgroundColor: 'black',
     color: 'white',
     borderRadius: '10px',
     margin: '0px 50px',
