@@ -3,6 +3,7 @@ import './App.css';
 import Draw from './pages/Draw';
 import DeckCard from './components/DeckCard';
 import WordCard from './components/WordCard';
+import Layout from './Layout';
 
 const styles = {
   container: {
@@ -17,6 +18,7 @@ const styles = {
  
 function App(this: any) {
   return (
+    <Layout>
     <div className="App" style={styles.container}>
       <Draw />
       <DeckCard deck={{
@@ -31,6 +33,7 @@ function App(this: any) {
         english: 'one'
       }}/>
     </div>
+    </Layout>
   );
 }
 
