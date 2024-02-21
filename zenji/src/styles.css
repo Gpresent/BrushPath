@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=DM Sans:wght@400&display=swap");
+
+p {
+    margin: 0;
+}
+
+.deck-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* gap: 10px; */
+    width: 95%;
+    /* height: 148; */
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}
+
+.cover-image {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 1);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 30.25%; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.title {
+    color: rgba(0, 0, 0, 1);
+    font-size: 20px;
+    font-family: DM Sans, sans-serif;
+    font-weight: 400;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
