@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import './App.css';
 import Draw from './pages/Draw';
 import DeckCard from './components/DeckCard';
+import WordCard from './components/WordCard';
 
 const styles = {
   container: {
@@ -23,6 +24,12 @@ function App(this: any) {
         coverImage: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b',
         name: 'hi'
       }} />
+      <WordCard character={{
+        id: 0,
+        unicode: '一',
+        hiragana: 'いち',
+        english: 'one'
+      }}/>
     </div>
   );
 }

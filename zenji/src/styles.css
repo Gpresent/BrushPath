@@ -38,3 +38,47 @@ p {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.word-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 98px;
+    width: 90%;
+    height: 52px;
+    padding: 13px 10px 15px;
+    border-top-width: 1px;
+    border-color: rgba(0, 0, 0, 1);
+    border-top-style: solid;
+    box-sizing: border-box;
+    /* margin-top: 10px; */
+  }
+
+  .character {
+    color: rgba(0, 0, 0, 1);
+    font-size: 32px;
+    line-height: 69%;
+    font-family: DM Sans, sans-serif;
+    font-weight: 500;
+  }
+  
+  .hiragana {
+    color: rgba(0, 0, 0, 1);
+    font-size: 20px;
+    line-height: 110%;
+    font-family: DM Sans, sans-serif;
+    font-weight: 500;
+  }
+  
+  .meaning {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: rgba(0, 0, 0, 1);
+    font-size: 20px;
+    line-height: 110%;
+    font-family: DM Sans, sans-serif;
+    font-weight: 400;
+    text-align: right;
+  }
