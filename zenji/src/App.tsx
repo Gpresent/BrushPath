@@ -5,10 +5,13 @@ import DeckCard from './components/DeckCard';
 import WordCard from './components/WordCard';
 import Layout from './Layout';
 import DictionaryView from './pages/Dictionary';
+import Home from './pages/Home';
+
  
 function App(this: any) {
   return (
     <Layout>
+      <Home message={'Welcome back'} user={'Charlotte'}></Home>
     <div>
       <Draw />
       <DeckCard deck={{

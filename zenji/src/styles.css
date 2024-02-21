@@ -2,6 +2,34 @@ p {
     margin: 0;
 }
 
+.home-stats {
+    /* border: 1px solid rgba(0, 0, 0, 1); */
+    /* border-radius: 10px; */
+    width: 100%;
+    height: 20vh;
+    background-color:rgb(219, 218, 218);
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-page {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    /* height: 100vh; */
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.home-greeting {
+    margin: 0;
+    align-self: flex-start;
+}
+
 .deck-card {
     display: flex;
     flex-direction: column;
@@ -97,6 +125,7 @@ p {
     position:fixed;
     top:0;
     width: 100%;
+    /* border-bottom: 1.9px solid #d1d3d6; */
   }
   
   .title {
@@ -184,6 +213,7 @@ p {
   font-weight: 500;
   text-align: center;
 }
+
 
 .icon-1 {
   display: flex;
