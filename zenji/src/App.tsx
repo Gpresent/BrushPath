@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+// import React, { useRef } from 'react';
 import './App.css';
 import Draw from './pages/Draw';
 import DeckCard from './components/DeckCard';
 import WordCard from './components/WordCard';
 import Layout from './Layout';
+import DictionaryView from './components/Dictionary';
 
 const styles = {
   container: {
