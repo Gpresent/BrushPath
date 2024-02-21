@@ -3,6 +3,7 @@ import '../App.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 import pathsToCoords from '../coord-utils/pathsToCoords';
 import getTotalLengthAllPaths from '../coord-utils/getTotalLengthAllPaths';
+import { useEffect } from 'react';
 
 const styles = {
   canvas: {
@@ -11,8 +12,11 @@ const styles = {
     margin: '0px 50px',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 2,
   },
   button: {
+    borderWidth: '0px',
+    padding: '0px',
     width: '100px',
     height: '50px',
     backgroundColor: 'black',
@@ -28,6 +32,14 @@ const styles = {
     height: '100vh',
     width: "100%",
   },
+  svg: {
+    position: 'absolute' as 'absolute',
+    zIndex: 1,
+    height: '40vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
   
   // border: '1rem solid #9c9c9c',
   // borderRadius: '1rem',
@@ -55,8 +67,23 @@ function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svg, setSvg] = React.useState<any>(null);
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [kanji, setKanji] = React.useState<string>('');
 
-  setSvg()
+  useEffect(() => {
+    const loadSvg = async (unicode: string) => {
+      // Load SVG dynamically
+      try {
+        const svgModule = await import('../joyo_kanji/' + unicode + '.svg');
+        setSvg(svgModule.default);
+      } catch (e) {
+
+      }
+    };
+    const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, '0') || '';
+
+    loadSvg(unicode);
+  }, [kanji]);
+  
   return (
     <div style={styles.container}>
       <ReactSketchCanvas
@@ -64,12 +91,10 @@ function Draw(this: any) {
       style={styles.canvas}
       strokeWidth={5}
       strokeColor="#8a712d"
-      canvasColor="#f5f5f5"
+      canvasColor="transparent"
       
       />
-      <svg style={{display: 'block', position: 'absolute'}}>
-        {displaySVG ? svg : null}
-      </svg>
+      {displaySVG && <img src={svg} alt="kanji" style={{...styles.svg}} />}
       <div style={{display: 'flex', height: '10vh', justifyContent: 'center', alignItems: 'center'}}>
         <button style={styles.button}
           onClick={() => {
@@ -93,6 +118,29 @@ function Draw(this: any) {
         >
           Clear
         </button>
+        <button style={styles.button}
+          onClick={() => {
+            canvas.current
+              .undo()
+          }}
+        >
+          Undo
+        </button>
+        <button style={styles.button}
+          onClick={() => {
+            setDisplaySVG(!displaySVG);
+          }}
+          >
+            {displaySVG ? 'Hide Kanji' : 'Show Kanji'}
+        </button>
+        <input
+          placeholder='Enter Kanji'
+          style={{...styles.button, textAlign: 'center'}}
+          onChange={(e) => {
+            setKanji(e.target.value);
+          }}
+          value={kanji}
+        />
       </div>
     </div>
   );
