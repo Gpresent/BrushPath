@@ -8,10 +8,12 @@ const Header: React.FC = () => {
   };
 
   return (
+    <div className = "header-wrapper">
     <div className="header">
         <div className="settingsButton"></div>
         <div className="title">Zenji</div>
         <PersonOutlineOutlinedIcon className="settingsButton" onClick={handleEditProfile}></PersonOutlineOutlinedIcon>
+    </div>
     </div>
   );
 };

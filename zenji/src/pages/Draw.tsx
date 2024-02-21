@@ -22,12 +22,12 @@ const styles = {
     backgroundColor: 'black',
     color: 'white',
     borderRadius: '10px',
-    margin: '0px 50px',
+    // margin: '0px 50px',
   },
   container: {
     display: 'flex',
     flexDirection: 'column' as 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: '100vh',
     width: "100%",
@@ -95,7 +95,7 @@ function Draw(this: any) {
       
       />
       {displaySVG && <img src={svg} alt="kanji" style={{...styles.svg}} />}
-      <div style={{display: 'flex', height: '10vh', justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{display: 'flex', height: '10vh', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
         <button style={styles.button}
           onClick={() => {
             canvas.current

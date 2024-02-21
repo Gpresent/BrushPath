@@ -95,6 +95,13 @@ p {
     padding: 10px;
     background-color: white; /* Adjust background color as needed */
     color: black; /* Adjust text color as needed */
+
+  }
+
+  .header-wrapper {
+    position:fixed;
+    top:0;
+    width: 100%;
   }
   
   .title {
