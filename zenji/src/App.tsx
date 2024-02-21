@@ -4,23 +4,12 @@ import Draw from './pages/Draw';
 import DeckCard from './components/DeckCard';
 import WordCard from './components/WordCard';
 import Layout from './Layout';
-import DictionaryView from './components/Dictionary';
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    width: "100%",
-  },
-};
+import DictionaryView from './pages/Dictionary';
  
 function App(this: any) {
   return (
     <Layout>
-    <div className="App" style={styles.container}>
+    <div>
       <Draw />
       <DeckCard deck={{
         id: 0,
