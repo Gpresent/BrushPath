@@ -8,11 +8,12 @@ import { useEffect } from "react";
 const styles = {
   canvas: {
     position: "relative" as "relative",
-    width: '90%',
+    width: '100%',
+    aspectRatio: '1/1',
+    maxWidth: '500px',
     display: "flex",
     border: '1px solid rgba(0, 0, 0, 1)',
     borderRadius: '10px',
-    height: "600px",
     marginTop: '10px',
     alignItems: "center",
     justifyContent: "center",
@@ -38,10 +39,7 @@ const styles = {
   },
   svg: {
     position: "absolute" as "absolute",
-    height: "40%",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    height: "70%",
     zIndex: 1,
   },
 

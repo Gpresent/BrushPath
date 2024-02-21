@@ -12,7 +12,6 @@ function App(this: any) {
   return (
     <Layout>
       <Home message={'Welcome back'} user={'Charlotte'}></Home>
-    <div>
       <Draw />
       <DeckCard deck={{
         id: 0,
@@ -25,7 +24,6 @@ function App(this: any) {
         hiragana: 'いち',
         english: 'one'
       }}/>
-    </div>
     </Layout>
   );
 }
