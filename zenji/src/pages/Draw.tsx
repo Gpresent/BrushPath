@@ -67,7 +67,7 @@ function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svg, setSvg] = React.useState<any>(null);
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
-  const [kanji, setKanji] = React.useState<string>('');
+  const [kanji, setKanji] = React.useState<string>('何');
 
   useEffect(() => {
     const loadSvg = async (unicode: string) => {
@@ -89,7 +89,7 @@ function Draw(this: any) {
       <ReactSketchCanvas
       ref={canvas}
       style={styles.canvas}
-      strokeWidth={5}
+      strokeWidth={7}
       strokeColor="#8a712d"
       canvasColor="rgba(214, 90, 181, 0.2)"
       
@@ -117,14 +117,6 @@ function Draw(this: any) {
           }}
         >
           Clear
-        </button>
-        <button style={styles.button}
-          onClick={() => {
-            canvas.current
-              .undo()
-          }}
-        >
-          Undo
         </button>
         <button style={styles.button}
           onClick={() => {
