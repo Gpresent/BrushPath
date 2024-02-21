@@ -7,6 +7,7 @@ import { useEffect } from "react";
 
 const styles = {
   canvas: {
+    position: "relative" as "relative",
     width: '90%',
     display: "flex",
     border: '1px solid rgba(0, 0, 0, 1)',
@@ -37,12 +38,11 @@ const styles = {
   },
   svg: {
     position: "absolute" as "absolute",
-    top: "10%",
-    zIndex: 1,
     height: "40%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 1,
   },
 
   // border: '1rem solid #9c9c9c',
@@ -93,14 +93,16 @@ function Draw(this: any) {
 
   return (
     <div style={styles.container}>
-      <ReactSketchCanvas
-        ref={canvas}
-        style={styles.canvas}
-        strokeWidth={7}
-        strokeColor="#8a712d"
-        canvasColor="rgba(214, 90, 181, 0.2)"
-      />
-      {displaySVG && <img src={svg} alt="kanji" style={{ ...styles.svg }} />}
+      <div style={styles.canvas}>
+        <ReactSketchCanvas
+          ref={canvas}
+          style={{width: '100%', height: '100%'}}
+          strokeWidth={7}
+          strokeColor="#8a712d"
+          canvasColor="rgba(214, 90, 181, 0.2)"
+        />
+        {displaySVG && <img src={svg} alt="kanji" style={{ ...styles.svg }} />}
+      </div>
       <div
         style={{
           display: "flex",
