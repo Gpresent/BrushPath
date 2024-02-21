@@ -91,7 +91,7 @@ function Draw(this: any) {
       style={styles.canvas}
       strokeWidth={5}
       strokeColor="#8a712d"
-      canvasColor="transparent"
+      canvasColor="rgba(214, 90, 181, 0.2)"
       
       />
       {displaySVG && <img src={svg} alt="kanji" style={{...styles.svg}} />}
