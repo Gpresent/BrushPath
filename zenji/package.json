@@ -15,6 +15,8 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "d3": "^7.8.5",
+    "fs": "^0.0.1-security",
+    "jszip": "^3.10.1",
     "pathologist": "^0.1.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

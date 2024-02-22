@@ -8,6 +8,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ClearIcon from '@mui/icons-material/Clear';
+import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
+import kanjiList from "../joyo_kanji.json";
+import JSZip from 'jszip';
 import "../styles.css";
 
 
@@ -54,7 +57,7 @@ const parser = new DOMParser();
 function interpolate(inputSvg: any) {
   var doc = parser.parseFromString(inputSvg, "image/svg+xml");
   const svg = doc.getElementsByTagName("svg")[0];
-  console.log(svg);
+  //console.log(svg);
 
   var paths = svg.getElementsByTagName("path");
   var coords: number[][][] = [];
@@ -68,8 +71,9 @@ function interpolate(inputSvg: any) {
     );
   }
   var totalLengths = getTotalLengthAllPaths(paths);
-  console.log(coords);
-  console.log(totalLengths);
+  //console.log(coords);
+  //console.log(totalLengths);
+  return { coords, totalLengths };
 }
 
 function Draw(this: any) {
@@ -81,7 +85,7 @@ function Draw(this: any) {
 
   const modifySVGColors = (inputSvg: any) => {
     var doc = new DOMParser().parseFromString(inputSvg, "image/svg+xml")
-    console.log("Here is the doc:", doc);
+    //console.log("Here is the doc:", doc);
     const svgElement = doc.getElementsByTagName('svg')[0];
 
     if (!svgElement) {
@@ -111,16 +115,56 @@ function Draw(this: any) {
     return new XMLSerializer().serializeToString(svgElement);
   }
 
+  const interpolate_stored = async () => {
+    const zip = new JSZip();
+  
+    for (var i = 0; i < kanjiList.length; i++) {
+      const svgModule = await fetch('/joyo_kanji/' + kanjiList[i] + '.svg');
+      const svgText = await svgModule.text();
+      const modifiedSvg = modifySVGColors(svgText);
+  
+      const { coords, totalLengths } = interpolate(modifiedSvg);
+  
+      // Convert data to JSON format
+      const data = JSON.stringify({ coords, totalLengths }, null, 2);
+  
+      // Add the JSON data to the zip folder
+      zip.file(kanjiList[i] + '.json', data);
+      console.log("Added " + kanjiList[i] + " to the zip file.");
+    }
+  
+    // Generate the zip file
+    zip.generateAsync({ type: 'blob' })
+      .then((blob) => {
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(blob);
+  
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'interpolation_data.zip'; // Change the filename as needed
+  
+        // Append the link to the body
+        document.body.appendChild(link);
+  
+        // Click the link to trigger download
+        link.click();
+  
+        // Remove the link from the body
+        document.body.removeChild(link);
+      })
+      .catch((error) => {
+        console.error('Error generating zip file:', error);
+      });
+  };
+
   useEffect(() => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
         const svgModule = await fetch('/joyo_kanji/' + unicode + '.svg');
         const svgText = await svgModule.text();
-        //console.log("Here is the svg:", modifySVGColors(svgText));
         const modifiedSvg = modifySVGColors(svgText);
-        //console.log("svgModule:", svgModule.default);
-
 
         setSvgHtml({ __html: modifiedSvg });
       } catch (e) {
@@ -187,7 +231,16 @@ function Draw(this: any) {
             setDisplaySVG(!displaySVG);
           }}
         >
-          {displaySVG ? <VisibilityOffIcon></VisibilityOffIcon> : <VisibilityIcon></VisibilityIcon>}
+          {displaySVG ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+        </button>
+        <button
+          className="interpolate-kanji"
+          style={styles.button}
+          onClick={() => {
+            interpolate_stored();
+          }}
+        >
+          <HighlightAltIcon></HighlightAltIcon>
         </button>
       </div>
     </div>
