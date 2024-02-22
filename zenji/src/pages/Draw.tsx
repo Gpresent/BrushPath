@@ -21,6 +21,7 @@ const styles = {
     border: '1px solid rgba(0, 0, 0, 1)',
     borderRadius: '10px',
     marginTop: '10px',
+    marginBottom: '10px',
     alignItems: "center",
     justifyContent: "center",
     zIndex: 2,
@@ -28,25 +29,20 @@ const styles = {
   button: {
     borderWidth: "0px",
     padding: "0px",
-    // width: "100px",
-    // height: "50px",
     backgroundColor: "transparent",
-    // color: "white",
-    // borderRadius: "10px",
-    // margin: '0px 10px',
   },
   container: {
     display: "flex",
     flexDirection: "column" as "column",
     justifyContent: "space-between",
-    alignItems: "center",
+    // alignItems: "center",
     height: "100%",
     width: "100%",
   },
   svg: {
     position: "absolute" as "absolute",
-    height: "70%",
-    zIndex: 1,
+    zIndex: -1,
+    opacity: .75,
   },
 
   // border: '1rem solid #9c9c9c',
@@ -139,25 +135,26 @@ function Draw(this: any) {
 
   return (
     <div style={styles.container}>
+      <div className="kanji-input-wrapper">
+      <p className="kanji-input-prompt">Enter Kanji to Practice:</p>
+        <input
+          className="kanji-input-typed"
+          placeholder="Enter Kanji"
+          onChange={(e) => {
+            setKanji(e.target.value);
+          }}
+          value={kanji}
+        />
+        </div>
       <div style={styles.canvas}>
         <ReactSketchCanvas
           ref={canvas}
-          style={{width: '100%', height: '100%'}}
+          style={{width: '99%', height: '99%', borderRadius: '10px'}}
           strokeWidth={7}
-          strokeColor="#8a712d"
-          canvasColor="rgba(214, 90, 181, 0.2)"
+          strokeColor="rgba(40, 40, 41, .75)"
+          canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          height: "10vh",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
         <button
           className="save-kanji"
           style={styles.button}
@@ -192,14 +189,6 @@ function Draw(this: any) {
         >
           {displaySVG ? <VisibilityOffIcon></VisibilityOffIcon> : <VisibilityIcon></VisibilityIcon>}
         </button>
-        <input
-          placeholder="Enter Kanji"
-          style={{ ...styles.button, textAlign: "center" }}
-          onChange={(e) => {
-            setKanji(e.target.value);
-          }}
-          value={kanji}
-        />
       </div>
     </div>
   );

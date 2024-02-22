@@ -7,13 +7,47 @@ h2 {
 }
 
 .save-kanji {
-
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 10px;
 }
 .clear-kanji  {
-
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 10px;
 }
 .view-kanji {
-    
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 10px;
+}
+
+.kanji-input-typed {
+    margin-top: 5px;
+    border: 1px solid  rgba(77, 77, 77, 1);
+    border-radius: 10px;
+    height: 35px;
+    font-size: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding-left: 10px;
+    /* margin-right: -10px; */
+}
+
+.kanji-input-prompt {
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.kanji-input-wrapper {
+    width: calc(100% - 10px);
+    margin-top: 30px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 .home-stats {
