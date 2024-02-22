@@ -4,6 +4,12 @@ import { ReactSketchCanvas } from "react-sketch-canvas";
 import pathsToCoords from "../coord-utils/pathsToCoords";
 import getTotalLengthAllPaths from "../coord-utils/getTotalLengthAllPaths";
 import { useEffect } from "react";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import ClearIcon from '@mui/icons-material/Clear';
+import "../styles.css";
+
 
 const styles = {
   canvas: {
@@ -22,12 +28,12 @@ const styles = {
   button: {
     borderWidth: "0px",
     padding: "0px",
-    width: "100px",
-    height: "50px",
-    backgroundColor: "black",
-    color: "white",
-    borderRadius: "10px",
-    margin: '0px 10px',
+    // width: "100px",
+    // height: "50px",
+    backgroundColor: "transparent",
+    // color: "white",
+    // borderRadius: "10px",
+    // margin: '0px 10px',
   },
   container: {
     display: "flex",
@@ -153,6 +159,7 @@ function Draw(this: any) {
         }}
       >
         <button
+          className="save-kanji"
           style={styles.button}
           onClick={() => {
             canvas.current
@@ -165,23 +172,25 @@ function Draw(this: any) {
               });
           }}
         >
-          Get Image
+          <SaveAltIcon></SaveAltIcon>
         </button>
-        <button
+        <button 
+          className="clear-kanji"
           style={styles.button}
           onClick={() => {
             canvas.current.clearCanvas();
           }}
         >
-          Clear
+          <ClearIcon></ClearIcon>
         </button>
         <button
+          className="view-kanji"
           style={styles.button}
           onClick={() => {
             setDisplaySVG(!displaySVG);
           }}
         >
-          {displaySVG ? "Hide Kanji" : "Show Kanji"}
+          {displaySVG ? <VisibilityOffIcon></VisibilityOffIcon> : <VisibilityIcon></VisibilityIcon>}
         </button>
         <input
           placeholder="Enter Kanji"

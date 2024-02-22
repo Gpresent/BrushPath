@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = (props) => {
           id: 0,
           coverImage:
             "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b",
-          name: "hi",
+          name: "le epic deck",
         }}
       />
     <h2>Recent Decks</h2>

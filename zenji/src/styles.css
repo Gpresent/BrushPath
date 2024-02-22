@@ -6,6 +6,16 @@ h2 {
     margin: 0;
 }
 
+.save-kanji {
+
+}
+.clear-kanji  {
+
+}
+.view-kanji {
+    
+}
+
 .home-stats {
     /* border: 1px solid rgba(0, 0, 0, 1); */
     /* border-radius: 10px; */
@@ -43,6 +53,7 @@ h2 {
     max-width: 357px;
     height: 110px;
     box-sizing: border-box;
+    align-self: center;
 }
 
 .word-group {
@@ -72,7 +83,6 @@ h2 {
     line-height: 122%;
     font-family: DM Sans, sans-serif;
     font-weight: 400;
-    text-align: center;
 }
 
 .image-wrapper {
@@ -111,6 +121,10 @@ h2 {
     }
     .deck-list {
         justify-content: space-between;
+    }
+    .deck-prompt {
+        align-self: flex-start;
+        margin-left: 10px;
     }
 }
 
