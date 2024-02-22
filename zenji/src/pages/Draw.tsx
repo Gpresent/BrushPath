@@ -57,29 +57,26 @@ const parser = new DOMParser();
 function interpolate(inputSvg: any) {
   var doc = parser.parseFromString(inputSvg, "image/svg+xml");
   const svg = doc.getElementsByTagName("svg")[0];
-  //console.log(svg);
+  const scale = 500 / svg.viewBox.baseVal.width;
 
   var paths = svg.getElementsByTagName("path");
   var coords: number[][][] = [];
   for (var i = 0; i < paths.length; i++) {
     coords[i] = pathsToCoords(
       [paths[i]],
-      1,
-      paths[i].getTotalLength() / 5,
+      scale,
+      paths[i].getTotalLength() * scale / 10,
       0,
       0
     );
   }
-  var totalLengths = getTotalLengthAllPaths(paths);
-  //console.log(coords);
-  //console.log(totalLengths);
+  var totalLengths = getTotalLengthAllPaths(paths) * scale;
   return { coords, totalLengths };
 }
 
 function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
-  const [svg, setSvg] = React.useState<any>(null);
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
 
@@ -121,9 +118,8 @@ function Draw(this: any) {
     for (var i = 0; i < kanjiList.length; i++) {
       const svgModule = await fetch('/joyo_kanji/' + kanjiList[i] + '.svg');
       const svgText = await svgModule.text();
-      const modifiedSvg = modifySVGColors(svgText);
   
-      const { coords, totalLengths } = interpolate(modifiedSvg);
+      const { coords, totalLengths } = interpolate(svgText);
   
       // Convert data to JSON format
       const data = JSON.stringify({ coords, totalLengths }, null, 2);
