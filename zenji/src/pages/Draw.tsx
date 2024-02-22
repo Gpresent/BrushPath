@@ -72,22 +72,64 @@ function interpolate(inputSvg: any) {
 
 function Draw(this: any) {
   const canvas: any = useRef<any>();
+  const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
   const [svg, setSvg] = React.useState<any>(null);
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
+
+  const modifySVGColors = (inputSvg: any) => {
+    var doc = new DOMParser().parseFromString(inputSvg, "image/svg+xml")
+    console.log("Here is the doc:", doc);
+    const svgElement = doc.getElementsByTagName('svg')[0];
+
+    if (!svgElement) {
+      console.error("SVG element not found in the parsed document.");
+    }
+
+    //svg size (have to change both equally)
+    svgElement.setAttribute('width', '300px');
+    svgElement.setAttribute('height', '300px');
+
+    //temporary colors (33)
+    const colors = [
+      "#FF5733", "#33FF57", "#3357FF", "#F333FF", "#FF3333", "#33FFFF",
+      "#FFD700", "#FF69B4", "#8A2BE2", "#00FF7F", "#DC143C", "#00008B",
+      "#008B8B", "#B8860B", "#A9A9A9", "#006400", "#BDB76B", "#8B008B",
+      "#556B2F", "#FF8C00", "#9932CC", "#8B0000", "#E9967A", "#8FBC8F",
+      "#483D8B", "#2F4F4F", "#00CED1", "#9400D3", "#FF1493", "#00BFFF",
+      "#696969", "#1E90FF", "#B22222"
+    ];
+    
+    var paths = svgElement.getElementsByTagName('path');
+
+    for (var i = 0; i < paths.length; i++) {
+      paths[i].setAttribute("stroke", colors[i % colors.length]);
+    }
+
+    return new XMLSerializer().serializeToString(svgElement);
+  }
 
   useEffect(() => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
-        const svgModule = await import("../joyo_kanji/" + unicode + ".svg");
-        setSvg(svgModule.default);
-      } catch (e) {}
+        const svgModule = await fetch('/joyo_kanji/' + unicode + '.svg');
+        const svgText = await svgModule.text();
+        //console.log("Here is the svg:", modifySVGColors(svgText));
+        const modifiedSvg = modifySVGColors(svgText);
+        //console.log("svgModule:", svgModule.default);
+
+
+        setSvgHtml({ __html: modifiedSvg });
+      } catch (e) {
+
+      }
     };
-    const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, "0") || "";
+    const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, '0') || '';
 
     loadSvg(unicode);
   }, [kanji]);
+
 
   return (
     <div style={styles.container}>
@@ -99,7 +141,7 @@ function Draw(this: any) {
           strokeColor="#8a712d"
           canvasColor="rgba(214, 90, 181, 0.2)"
         />
-        {displaySVG && <img src={svg} alt="kanji" style={{ ...styles.svg }} />}
+        {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
       </div>
       <div
         style={{
