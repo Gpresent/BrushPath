@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "../App.css";
-import { ReactSketchCanvas } from "react-sketch-canvas";
+import { ReactSketchCanvas, CanvasPath } from "react-sketch-canvas";
 import pathsToCoords from "../coord-utils/pathsToCoords";
 import getTotalLengthAllPaths from "../coord-utils/getTotalLengthAllPaths";
 import { useEffect } from "react";
@@ -47,6 +47,11 @@ const styles = {
     zIndex: -1,
     opacity: .75,
   },
+  gradeSvg: {
+    position: "absolute" as "absolute",
+    zIndex: 1,
+    opacity: 1,
+  }
 
   // border: '1rem solid #9c9c9c',
   // borderRadius: '1rem',
@@ -74,58 +79,12 @@ function interpolate(inputSvg: string) {
   return { coords, totalLengths };
 }
 
-function genPathsFromCoords(inputSvg: string): CanvasPath[] {
-  const doc = parser.parseFromString(inputSvg, "image/svg+xml");
-  const svg = doc.getElementsByTagName("svg")[0];
-  const paths = svg.getElementsByTagName("path");
-
-  let canvasPaths: CanvasPath[] = [];
-  //For each path
-  for(var i = 0; i< paths.length; i++) {
-    
-    let path: CanvasPath = {
-      strokeColor: "#000000",
-      strokeWidth: 4,
-      paths: []
-    }
-    //For each coord
-    for(var c = 0; c < coords.length; c++) {
-      
-      let canvasPath: CanvasPath ={
-        
-          drawMode: true,
-          strokeColor: "#000000",
-          strokeWidth: 4,
-          paths: [
-            {
-              "x": coords[c][0]+r,
-              "y": coords[c][1],
-            },
-            {
-              "x": coords[c][0],
-              "y": coords[c][1]+r,
-            },
-            {
-              "x": coords[c][0]-r,
-              "y": coords[c][1],
-            },
-            {
-              "x": coords[c][0],
-              "y": coords[c][1]-r,
-            },
-          ]
-          
-      }
-      canvasPaths.push(canvasPath);
-    }
-  }
-  return canvasPaths;
-}
-
 function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
+  const [gradeSvgHtml, setGradeSvgHtml] = React.useState({ __html: '' });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [gradeSVG, setGradeSVG] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
 
   const modifySVGColors = (inputSvg: any) => {
@@ -242,6 +201,7 @@ function Draw(this: any) {
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
+        {gradeSVG && <div dangerouslySetInnerHTML={gradeSvgHtml} style={styles.gradeSvg} />}
         <button
           className="save-kanji"
           style={styles.button}
@@ -292,8 +252,10 @@ function Draw(this: any) {
           canvas.current
           .exportSvg().then((data: any) => {
             const modifiedSvg = modifySVGColors(data);
-            const paths = genPathsFromSvg(modifiedSvg);
-            canvas.current.loadPaths({paths: paths || []})
+            setGradeSvgHtml({ __html: modifiedSvg });
+            canvas.current.clearCanvas();
+            setGradeSVG(!gradeSVG);
+            
           })
         }}
         >
