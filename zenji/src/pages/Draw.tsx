@@ -239,6 +239,26 @@ function Draw(this: any) {
           <HighlightAltIcon></HighlightAltIcon>
         </button>
       </div>
+      <button
+        className="recolor-canvas"
+        onClick={() => {
+          canvas.current
+          .exportSvg().then((data: any) => {
+            const modifiedSvg = modifySVGColors(data);
+            console.log(modifiedSvg);
+            const paths = modifiedSvg.match(/<path d="[^"]+"/g);
+            console.log(paths);
+            if (paths) {
+              canvas.current.clearCanvas();
+              for (var i = 0; i < paths.length; i++) {
+                canvas.current.loadPaths(paths[i])
+              }
+            }
+          })
+        }}
+        >
+          Recolor Canvas
+        </button>
     </div>
   );
 }
