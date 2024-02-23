@@ -54,7 +54,7 @@ const styles = {
 
 const parser = new DOMParser();
 
-function interpolate(inputSvg: any) {
+function interpolate(inputSvg: string) {
   var doc = parser.parseFromString(inputSvg, "image/svg+xml");
   const svg = doc.getElementsByTagName("svg")[0];
   const scale = 500 / svg.viewBox.baseVal.width;
@@ -72,6 +72,54 @@ function interpolate(inputSvg: any) {
   }
   var totalLengths = getTotalLengthAllPaths(paths) * scale;
   return { coords, totalLengths };
+}
+
+function genPathsFromCoords(inputSvg: string): CanvasPath[] {
+  const doc = parser.parseFromString(inputSvg, "image/svg+xml");
+  const svg = doc.getElementsByTagName("svg")[0];
+  const paths = svg.getElementsByTagName("path");
+
+  let canvasPaths: CanvasPath[] = [];
+  //For each path
+  for(var i = 0; i< paths.length; i++) {
+    
+    let path: CanvasPath = {
+      strokeColor: "#000000",
+      strokeWidth: 4,
+      paths: []
+    }
+    //For each coord
+    for(var c = 0; c < coords.length; c++) {
+      
+      let canvasPath: CanvasPath ={
+        
+          drawMode: true,
+          strokeColor: "#000000",
+          strokeWidth: 4,
+          paths: [
+            {
+              "x": coords[c][0]+r,
+              "y": coords[c][1],
+            },
+            {
+              "x": coords[c][0],
+              "y": coords[c][1]+r,
+            },
+            {
+              "x": coords[c][0]-r,
+              "y": coords[c][1],
+            },
+            {
+              "x": coords[c][0],
+              "y": coords[c][1]-r,
+            },
+          ]
+          
+      }
+      canvasPaths.push(canvasPath);
+    }
+  }
+  return canvasPaths;
 }
 
 function Draw(this: any) {
@@ -171,11 +219,6 @@ function Draw(this: any) {
 
     loadSvg(unicode);
   }, [kanji]);
-
-  const genPathsFromSvg = (inputSvg: any) => {
-    return [];
-  }
-
 
   return (
     <div style={styles.container}>
