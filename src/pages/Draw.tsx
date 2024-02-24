@@ -1,14 +1,12 @@
 import React, { useRef } from "react";
 import "../App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
-import pathsToCoords from "../coord-utils/pathsToCoords";
-import getTotalLengthAllPaths from "../coord-utils/getTotalLengthAllPaths";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ClearIcon from '@mui/icons-material/Clear';
-import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
+import color_input from "../grading/color_input";
+import grade_svg from "../grading/grade_svg";
 import "../styles.css";
 
 
@@ -56,36 +54,6 @@ const styles = {
 };
 
 const parser = new DOMParser();
-
-function interpolate(inputSvg: string) {
-  var doc = parser.parseFromString(inputSvg, "image/svg+xml");
-  const svg = doc.getElementsByTagName("svg")[0];
-  const scale = 500 / svg.viewBox.baseVal.width;
-
-  var paths = svg.getElementsByTagName("path");
-  var coords: number[][][] = [];
-  for (var i = 0; i < paths.length; i++) {
-    coords[i] = pathsToCoords(
-      [paths[i]],
-      scale,
-      paths[i].getTotalLength() * scale / 10,
-      0,
-      0
-    );
-  }
-  var totalLengths = getTotalLengthAllPaths(paths) * scale;
-  return { coords, totalLengths };
-}
-
-function recolor_canvas() {
-  const canvasSvg = document.getElementById("react-sketch-canvas");
-  const paths = canvasSvg?.getElementsByTagName("path");
-  if (paths) {
-    for (var i = 0; i < paths.length; i++) {
-      paths[i].setAttribute("stroke", "rgba(0, 255, 127, 0.8)");
-    }
-  }
-}
 
 function Draw(this: any) {
   const canvas: any = useRef<any>();
@@ -145,22 +113,6 @@ function Draw(this: any) {
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
-        <button
-          className="save-kanji"
-          style={styles.button}
-          onClick={() => {
-            canvas.current
-              .exportSvg()
-              .then((data: any) => {
-                interpolate(data);
-              })
-              .catch((e: any) => {
-                console.log(e);
-              });
-          }}
-        >
-          <SaveAltIcon></SaveAltIcon>
-        </button>
         <button 
           className="clear-kanji"
           style={styles.button}
@@ -183,10 +135,13 @@ function Draw(this: any) {
       <button
         className="recolor-canvas"
         onClick={() => {
-          recolor_canvas();
-        }}
+          canvas.current.exportSvg().then((data: any) => {
+          grade_svg(data, kanji);
+        }).catch((e: any) => {
+          console.log(e);
+        })}}
         >
-          Recolor Canvas
+          Grade SVG
         </button>
     </div>
   );
