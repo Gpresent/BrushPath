@@ -25,13 +25,6 @@ h2 {
     margin: 10px;
 }
 
-.interpolate-kanji {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin: 10px;
-}
-
 .kanji-input-typed {
     margin-top: 5px;
     border: 1px solid  rgba(77, 77, 77, 1);
