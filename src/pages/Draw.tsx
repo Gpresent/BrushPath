@@ -59,6 +59,7 @@ function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
 
   useEffect(() => {
@@ -107,7 +108,7 @@ function Draw(this: any) {
       <div style={styles.canvas}>
         <ReactSketchCanvas
           ref={canvas}
-          style={{width: '99%', height: '99%', borderRadius: '10px'}}
+          style={{width: '99%', height: '99%', borderRadius: '10px', pointerEvents: readOnly ? 'none' : 'auto'}}
           strokeWidth={7}
           strokeColor="rgba(40, 40, 41, .75)"
           canvasColor="rgba(214, 90, 181, 0.01)"
@@ -118,6 +119,7 @@ function Draw(this: any) {
           style={styles.button}
           onClick={() => {
             canvas.current.clearCanvas();
+            setReadOnly(false);
           }}
         >
           <ClearIcon></ClearIcon>
@@ -135,6 +137,7 @@ function Draw(this: any) {
       <button
         className="recolor-canvas"
         onClick={() => {
+          setReadOnly(true);
           canvas.current.exportSvg().then((data: any) => {
           grade_svg(data, kanji);
         }).catch((e: any) => {
