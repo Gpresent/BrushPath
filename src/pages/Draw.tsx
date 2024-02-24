@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "../App.css";
-import { ReactSketchCanvas, CanvasPath } from "react-sketch-canvas";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 import pathsToCoords from "../coord-utils/pathsToCoords";
 import getTotalLengthAllPaths from "../coord-utils/getTotalLengthAllPaths";
 import { useEffect } from "react";
@@ -79,6 +79,16 @@ function interpolate(inputSvg: string) {
   return { coords, totalLengths };
 }
 
+function recolor_canvas() {
+  const canvasSvg = document.getElementById("react-sketch-canvas");
+  const paths = canvasSvg?.getElementsByTagName("path");
+  if (paths) {
+    for (var i = 0; i < paths.length; i++) {
+      paths[i].setAttribute("stroke", "rgba(0, 255, 127, 0.8)");
+    }
+  }
+}
+
 function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
@@ -97,8 +107,8 @@ function Draw(this: any) {
     }
 
     //svg size (have to change both equally)
-    svgElement.setAttribute('width', '300px');
-    svgElement.setAttribute('height', '300px');
+    svgElement.setAttribute('width', '100%');
+    svgElement.setAttribute('height', '100%');
 
     //temporary colors (33)
     const colors = [
@@ -249,14 +259,7 @@ function Draw(this: any) {
       <button
         className="recolor-canvas"
         onClick={() => {
-          canvas.current
-          .exportSvg().then((data: any) => {
-            const modifiedSvg = modifySVGColors(data);
-            setGradeSvgHtml({ __html: modifiedSvg });
-            canvas.current.clearCanvas();
-            setGradeSVG(!gradeSVG);
-            
-          })
+          recolor_canvas();
         }}
         >
           Recolor Canvas
