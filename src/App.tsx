@@ -13,6 +13,7 @@ function App(this: any) {
     <Layout>
       <Home message={'Welcome back'} user={'Charlotte'}></Home>
       <Draw />
+      <DictionaryView title={"My Words"} />
     </Layout>
   );
 }
