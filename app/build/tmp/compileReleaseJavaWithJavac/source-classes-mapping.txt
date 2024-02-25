@@ -1,0 +1,8 @@
+app/vercel/zenjilearn/twa/DelegationService.java
+ app.vercel.zenjilearn.twa.DelegationService
+app/vercel/zenjilearn/twa/BuildConfig.java
+ app.vercel.zenjilearn.twa.BuildConfig
+app/vercel/zenjilearn/twa/LauncherActivity.java
+ app.vercel.zenjilearn.twa.LauncherActivity
+app/vercel/zenjilearn/twa/Application.java
+ app.vercel.zenjilearn.twa.Application
