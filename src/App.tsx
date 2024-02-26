@@ -7,12 +7,13 @@ import Layout from './Layout';
 import DictionaryView from './pages/Dictionary';
 import Home from './pages/Home';
 import DeckLanding from './pages/DeckLanding'
+import SingleDeckView from './pages/SingleDeck';
 
  
 function App(this: any) {
   return (
     <Layout>
-      <DeckLanding user={"User1"} />
+      <SingleDeckView title={"Test Deck 1"} />
     </Layout>
   );
 }

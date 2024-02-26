@@ -3,11 +3,10 @@ import "../styles.css";
 import DeckList from "../components/DeckList";
 import HomeStats from "../components/HomeStats";
 import AddIcon from '@mui/icons-material/Add';
-import Add from "@mui/icons-material/Add";
 
 interface DeckProps {
     //message: string;
-    user: string;
+    title: string;
   }
 
 const decks = [
@@ -50,7 +49,7 @@ const decks = [
       }
 ]
 
-const Decks: React.FC<DeckProps> = (props) => {
+const DeckLandingView: React.FC<DeckProps> = ({title}) => {
     const handleAddDeck = () => {
         console.log('Add Deck');
       };
@@ -62,10 +61,10 @@ const Decks: React.FC<DeckProps> = (props) => {
             <AddIcon className="addButton" onClick={handleAddDeck}></AddIcon>
         </div>
         <input className="search-bar" />
-        <h2><HomeStats/></h2>
+        <HomeStats/>
         <DeckList decks={decks}></DeckList>
       </div>
     );
   };
   
-export default Decks;
+export default DeckLandingView;
