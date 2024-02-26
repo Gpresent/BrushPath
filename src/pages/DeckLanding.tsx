@@ -2,6 +2,8 @@ import React from "react";
 import "../styles.css";
 import DeckList from "../components/DeckList";
 import HomeStats from "../components/HomeStats";
+import AddIcon from '@mui/icons-material/Add';
+import Add from "@mui/icons-material/Add";
 
 interface DeckProps {
     //message: string;
@@ -49,9 +51,16 @@ const decks = [
 ]
 
 const Decks: React.FC<DeckProps> = (props) => {
+    const handleAddDeck = () => {
+        console.log('Add Deck');
+      };
+
     return (
       <div className="home-page">
-        <h2>Your Decks</h2>
+        <div className="header">
+            <h2>Your Decks</h2>
+            <AddIcon className="addButton" onClick={handleAddDeck}></AddIcon>
+        </div>
         <input className="search-bar" />
         <h2><HomeStats/></h2>
         <DeckList decks={decks}></DeckList>
