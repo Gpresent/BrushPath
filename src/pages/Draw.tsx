@@ -77,9 +77,12 @@ function Draw(this: any) {
           paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
         }
         const nums = svg.getElementsByTagName("text");
-        while (nums.length > 0) {
-          nums[0].remove();
+        for (var i = 0; i < nums.length; i++) {
+          nums[i].setAttribute("fill", "rgba(140, 140, 241, .75)");
         }
+        // while (nums.length > 0) {
+        //   nums[0].remove();
+        // }
         svgText = svg.outerHTML;
 
         setSvgHtml({ __html: svgText });
