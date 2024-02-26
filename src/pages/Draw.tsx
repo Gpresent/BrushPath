@@ -1,16 +1,12 @@
 import React, { useRef } from "react";
 import "../App.css";
-import { ReactSketchCanvas, CanvasPath } from "react-sketch-canvas";
-import pathsToCoords from "../coord-utils/pathsToCoords";
-import getTotalLengthAllPaths from "../coord-utils/getTotalLengthAllPaths";
+import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ClearIcon from '@mui/icons-material/Clear';
-import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
-import kanjiList from "../joyo_kanji.json";
-import JSZip from 'jszip';
+import color_input from "../grading/color_input";
+import grade_svg from "../grading/grade_svg";
 import "../styles.css";
 
 
@@ -59,117 +55,34 @@ const styles = {
 
 const parser = new DOMParser();
 
-function interpolate(inputSvg: string) {
-  var doc = parser.parseFromString(inputSvg, "image/svg+xml");
-  const svg = doc.getElementsByTagName("svg")[0];
-  const scale = 500 / svg.viewBox.baseVal.width;
-
-  var paths = svg.getElementsByTagName("path");
-  var coords: number[][][] = [];
-  for (var i = 0; i < paths.length; i++) {
-    coords[i] = pathsToCoords(
-      [paths[i]],
-      scale,
-      paths[i].getTotalLength() * scale / 10,
-      0,
-      0
-    );
-  }
-  var totalLengths = getTotalLengthAllPaths(paths) * scale;
-  return { coords, totalLengths };
-}
-
 function Draw(this: any) {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
-  const [gradeSvgHtml, setGradeSvgHtml] = React.useState({ __html: '' });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
-  const [gradeSVG, setGradeSVG] = React.useState<boolean>(false);
+  const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
-
-  const modifySVGColors = (inputSvg: any) => {
-    var doc = new DOMParser().parseFromString(inputSvg, "image/svg+xml")
-    //console.log("Here is the doc:", doc);
-    const svgElement = doc.getElementsByTagName('svg')[0];
-
-    if (!svgElement) {
-      console.error("SVG element not found in the parsed document.");
-    }
-
-    //svg size (have to change both equally)
-    svgElement.setAttribute('width', '300px');
-    svgElement.setAttribute('height', '300px');
-
-    //temporary colors (33)
-    const colors = [
-      "#FF5733", "#33FF57", "#3357FF", "#F333FF", "#FF3333", "#33FFFF",
-      "#FFD700", "#FF69B4", "#8A2BE2", "#00FF7F", "#DC143C", "#00008B",
-      "#008B8B", "#B8860B", "#A9A9A9", "#006400", "#BDB76B", "#8B008B",
-      "#556B2F", "#FF8C00", "#9932CC", "#8B0000", "#E9967A", "#8FBC8F",
-      "#483D8B", "#2F4F4F", "#00CED1", "#9400D3", "#FF1493", "#00BFFF",
-      "#696969", "#1E90FF", "#B22222"
-    ];
-    
-    var paths = svgElement.getElementsByTagName('path');
-
-    for (var i = 0; i < paths.length; i++) {
-      paths[i].setAttribute("stroke", colors[i % colors.length]);
-    }
-
-    return new XMLSerializer().serializeToString(svgElement);
-  }
-
-  const interpolate_stored = async () => {
-    const zip = new JSZip();
-  
-    for (var i = 0; i < kanjiList.length; i++) {
-      const svgModule = await fetch('/joyo_kanji/' + kanjiList[i] + '.svg');
-      const svgText = await svgModule.text();
-  
-      const { coords, totalLengths } = interpolate(svgText);
-  
-      // Convert data to JSON format
-      const data = JSON.stringify({ coords, totalLengths }, null, 2);
-  
-      // Add the JSON data to the zip folder
-      zip.file(kanjiList[i] + '.json', data);
-      console.log("Added " + kanjiList[i] + " to the zip file.");
-    }
-  
-    // Generate the zip file
-    zip.generateAsync({ type: 'blob' })
-      .then((blob) => {
-        // Create a URL for the blob
-        const url = window.URL.createObjectURL(blob);
-  
-        // Create a link element
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'interpolation_data.zip'; // Change the filename as needed
-  
-        // Append the link to the body
-        document.body.appendChild(link);
-  
-        // Click the link to trigger download
-        link.click();
-  
-        // Remove the link from the body
-        document.body.removeChild(link);
-      })
-      .catch((error) => {
-        console.error('Error generating zip file:', error);
-      });
-  };
 
   useEffect(() => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
         const svgModule = await fetch('/joyo_kanji/' + unicode + '.svg');
-        const svgText = await svgModule.text();
-        const modifiedSvg = modifySVGColors(svgText);
+        var svgText = await svgModule.text();
+        var doc = parser.parseFromString(svgText, "image/svg+xml");
+        const svg = doc.getElementsByTagName("svg")[0];
+        svg.setAttribute("width", "100%");
+        svg.setAttribute("height", "100%");
+        const paths = svg.getElementsByTagName("path");
+        for (var i = 0; i < paths.length; i++) {
+          paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
+        }
+        const nums = svg.getElementsByTagName("text");
+        while (nums.length > 0) {
+          nums[0].remove();
+        }
+        svgText = svg.outerHTML;
 
-        setSvgHtml({ __html: modifiedSvg });
+        setSvgHtml({ __html: svgText });
       } catch (e) {
 
       }
@@ -195,34 +108,18 @@ function Draw(this: any) {
       <div style={styles.canvas}>
         <ReactSketchCanvas
           ref={canvas}
-          style={{width: '99%', height: '99%', borderRadius: '10px'}}
+          style={{width: '99%', height: '99%', borderRadius: '10px', pointerEvents: readOnly ? 'none' : 'auto'}}
           strokeWidth={7}
           strokeColor="rgba(40, 40, 41, .75)"
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
-        {gradeSVG && <div dangerouslySetInnerHTML={gradeSvgHtml} style={styles.gradeSvg} />}
-        <button
-          className="save-kanji"
-          style={styles.button}
-          onClick={() => {
-            canvas.current
-              .exportSvg()
-              .then((data: any) => {
-                interpolate(data);
-              })
-              .catch((e: any) => {
-                console.log(e);
-              });
-          }}
-        >
-          <SaveAltIcon></SaveAltIcon>
-        </button>
         <button 
           className="clear-kanji"
           style={styles.button}
           onClick={() => {
             canvas.current.clearCanvas();
+            setReadOnly(false);
           }}
         >
           <ClearIcon></ClearIcon>
@@ -236,30 +133,18 @@ function Draw(this: any) {
         >
           {displaySVG ? <VisibilityOffIcon/> : <VisibilityIcon/>}
         </button>
-        <button
-          className="interpolate-kanji"
-          style={styles.button}
-          onClick={() => {
-            interpolate_stored();
-          }}
-        >
-          <HighlightAltIcon></HighlightAltIcon>
-        </button>
       </div>
       <button
         className="recolor-canvas"
         onClick={() => {
-          canvas.current
-          .exportSvg().then((data: any) => {
-            const modifiedSvg = modifySVGColors(data);
-            setGradeSvgHtml({ __html: modifiedSvg });
-            canvas.current.clearCanvas();
-            setGradeSVG(!gradeSVG);
-            
-          })
-        }}
+          setReadOnly(true);
+          canvas.current.exportSvg().then((data: any) => {
+          grade_svg(data, kanji);
+        }).catch((e: any) => {
+          console.log(e);
+        })}}
         >
-          Recolor Canvas
+          Grade SVG
         </button>
     </div>
   );
