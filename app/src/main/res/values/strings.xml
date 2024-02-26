@@ -28,7 +28,7 @@
         \"relation\": [\"delegate_permission/common.handle_all_urls\"],
         \"target\": {
             \"namespace\": \"web\",
-            \"site\": \"https://zenjilearn.vercel.app\"
+            \"site\": \"https://c846b6c1e0595832ba6186f6ee061605.serveo.net\"
         }
     }]
     

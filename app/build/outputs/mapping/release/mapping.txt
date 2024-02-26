@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 2.1.86
 # min_api: 19
-# pg_map_id: 89b63cb
+# pg_map_id: aa5329e
 # common_typos_disable
 android.support.customtabs.ICustomTabsCallback -> a.a.a.a:
     void onPostMessage(java.lang.String,android.os.Bundle) -> c
@@ -569,8 +569,6 @@ androidx.versionedparcelable.VersionedParcelParcel -> androidx.versionedparcelab
     void setOutputField(int) -> w
     void writeBoolean(boolean) -> y
 androidx.versionedparcelable.VersionedParcelable -> androidx.versionedparcelable.c:
-app.vercel.zenjilearn.twa.LauncherActivity -> app.vercel.zenjilearn.twa.LauncherActivity:
-    android.net.Uri getLaunchingUrl() -> g
 com.google.androidbrowserhelper.R$drawable -> c.a.a.a:
     int ic_site_settings -> a
 com.google.androidbrowserhelper.R$string -> c.a.a.b:
@@ -894,3 +892,5 @@ com.google.androidbrowserhelper.trusted.splashscreens.SystemBarColorPredictor$1 
 com.google.androidbrowserhelper.trusted.splashscreens.SystemBarColorPredictor$SupportedFeatures -> com.google.androidbrowserhelper.trusted.z.f$b:
     boolean navbarColorCustomization -> a
     boolean colorSchemeCustomization -> b
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity -> net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity:
+    android.net.Uri getLaunchingUrl() -> g

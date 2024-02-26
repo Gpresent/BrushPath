@@ -22,7 +22,7 @@
      the abbreviated format.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.vercel.zenjilearn.twa"
+    package="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa"
     android:versionCode="1"
     android:versionName="1" >
 
@@ -43,7 +43,7 @@
     </queries>
 
     <application
-        android:name="app.vercel.zenjilearn.twa.Application"
+        android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.Application"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher"
@@ -67,7 +67,7 @@
                 android:value="@string/launchUrl" />
         </activity>
         <activity
-            android:name="app.vercel.zenjilearn.twa.LauncherActivity"
+            android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity"
             android:alwaysRetainTaskState="true"
             android:exported="true"
             android:label="@string/launcherName" >
@@ -146,7 +146,7 @@
         </provider>
 
         <service
-            android:name="app.vercel.zenjilearn.twa.DelegationService"
+            android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.DelegationService"
             android:enabled="@bool/enableNotification"
             android:exported="@bool/enableNotification" >
             <meta-data

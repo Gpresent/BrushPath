@@ -22,7 +22,7 @@
 22     the abbreviated format.
 23-->
 24<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-25    package="app.vercel.zenjilearn.twa"
+25    package="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa"
 26    android:versionCode="1"
 27    android:versionName="1" >
 28
@@ -56,7 +56,7 @@
 44
 45    <application
 45-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:35:5-184:19
-46        android:name="app.vercel.zenjilearn.twa.Application"
+46        android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.Application"
 46-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:36:9-35
 47        android:allowBackup="true"
 47-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:37:9-35
@@ -103,7 +103,7 @@
 68        </activity>
 69        <activity
 69-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:72:9-145:20
-70            android:name="app.vercel.zenjilearn.twa.LauncherActivity"
+70            android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity"
 70-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:72:19-50
 71            android:alwaysRetainTaskState="true"
 71-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:73:13-49
@@ -258,7 +258,7 @@
 147
 148        <service
 148-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:162:9-177:19
-149            android:name="app.vercel.zenjilearn.twa.DelegationService"
+149            android:name="net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.DelegationService"
 149-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:163:13-46
 150            android:enabled="@bool/enableNotification"
 150-->/home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:164:13-55

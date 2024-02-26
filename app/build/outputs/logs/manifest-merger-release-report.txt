@@ -14,7 +14,7 @@ INJECTED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:22:1-
 INJECTED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:22:1-185:12
 INJECTED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:22:1-185:12
 	package
-		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:23:5-40
+		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:23:5-62
 		INJECTED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml
 		INJECTED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml
 	android:versionName
@@ -81,7 +81,7 @@ ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:66:13-68
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:68:17-50
 	android:name
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:67:17-83
-activity#app.vercel.zenjilearn.twa.LauncherActivity
+activity#net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity
 ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:72:9-145:20
 	android:label
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:74:13-49
@@ -233,7 +233,7 @@ ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:157:13-1
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:159:17-50
 	android:name
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:158:17-67
-service#app.vercel.zenjilearn.twa.DelegationService
+service#net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.DelegationService
 ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:162:9-177:19
 	android:enabled
 		ADDED from /home/cfhbookworm/BrushPath/app/src/main/AndroidManifest.xml:164:13-55

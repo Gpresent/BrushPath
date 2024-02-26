@@ -114,13 +114,13 @@
 # The proguard configuration file for the following section is /home/cfhbookworm/BrushPath/app/build/intermediates/aapt_proguard_file/release/aapt_rules.txt
 -keep class androidx.core.app.CoreComponentFactory { <init>(); }
 -keep class androidx.core.content.FileProvider { <init>(); }
--keep class app.vercel.zenjilearn.twa.Application { <init>(); }
--keep class app.vercel.zenjilearn.twa.DelegationService { <init>(); }
--keep class app.vercel.zenjilearn.twa.LauncherActivity { <init>(); }
 -keep class com.google.androidbrowserhelper.trusted.FocusActivity { <init>(); }
 -keep class com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity { <init>(); }
 -keep class com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity { <init>(); }
 -keep class com.google.androidbrowserhelper.trusted.WebViewFallbackActivity { <init>(); }
+-keep class net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.Application { <init>(); }
+-keep class net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.DelegationService { <init>(); }
+-keep class net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.LauncherActivity { <init>(); }
 -keep class androidx.browser.browseractions.BrowserActionsFallbackMenuView { <init>(android.content.Context, android.util.AttributeSet); }
 
 

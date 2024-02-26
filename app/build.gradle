@@ -21,12 +21,12 @@ plugins {
 }
 
 def twaManifest = [
-    applicationId: 'app.vercel.zenjilearn.twa',
-    hostName: 'zenjilearn.vercel.app', // The domain being opened in the TWA.
+    applicationId: 'net.serveo.c846b6c1e0595832ba6186f6ee061605.twa',
+    hostName: 'c846b6c1e0595832ba6186f6ee061605.serveo.net', // The domain being opened in the TWA.
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
-    name: 'Create React App Sample', // The application name.
-    launcherName: 'React App', // The name shown on the Android Launcher.
-    themeColor: '#000000', // The color used for the status bar.
+    name: 'Zenji', // The application name.
+    launcherName: 'Zenji', // The name shown on the Android Launcher.
+    themeColor: '#FFFFFF', // The color used for the status bar.
     themeColorDark: '#000000', // The color used for the dark status bar.
     navigationColor: '#000000', // The color used for the navigation bar.
     navigationColorDark: '#000000', // The color used for the dark navbar.
@@ -53,7 +53,7 @@ def twaManifest = [
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "app.vercel.zenjilearn.twa"
+        applicationId "net.serveo.c846b6c1e0595832ba6186f6ee061605.twa"
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 1
@@ -73,12 +73,12 @@ android {
             // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
             // is used by Chrome OS and Meta Quest to open the Web version of the PWA instead of
             // the TWA, as it will probably give a better user experience for non-mobile devices.
-            resValue "string", "webManifestUrl", 'https://zenjilearn.vercel.app/manifest.json'
+            resValue "string", "webManifestUrl", 'https://c846b6c1e0595832ba6186f6ee061605.serveo.net/manifest.json'
         
 
         
             // This is used by Meta Quest.
-            resValue "string", "fullScopeUrl", 'https://zenjilearn.vercel.app/'
+            resValue "string", "fullScopeUrl", 'https://c846b6c1e0595832ba6186f6ee061605.serveo.net/'
         
 
         

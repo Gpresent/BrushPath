@@ -23,6 +23,7 @@ androidx.annotation.Size
 androidx.browser.browseractions.BrowserServiceFileProvider
 androidx.core.view.MarginLayoutParamsCompat
 androidx.core.view.ActionProvider$VisibilityListener
+net.serveo.c5816fe993d5f46cfc80a513e1398e37.twa.LauncherActivity
 androidx.core.widget.NestedScrollView$OnScrollChangeListener
 androidx.browser.customtabs.CustomTabsService
 androidx.core.text.PrecomputedTextCompat$PrecomputedTextFutureTask
@@ -30,7 +31,6 @@ androidx.annotation.ContentView
 androidx.core.view.accessibility.AccessibilityViewCommand$MoveHtmlArguments
 androidx.core.content.res.FontResourcesParserCompat$ProviderResourceEntry
 androidx.core.provider.FontsContractCompat$4$2
-app.vercel.zenjilearn.twa.R$layout
 androidx.browser.trusted.NotificationApiHelperForO:
     private void <init>()
 androidx.annotation.IntRange
@@ -56,8 +56,8 @@ androidx.core.text.BidiFormatter$DirectionalityEstimator
 androidx.annotation.StringDef
 androidx.core.graphics.TypefaceCompatUtil
 androidx.browser.customtabs.CustomTabsSessionToken$MockCallback
-app.vercel.zenjilearn.twa.R$color
 androidx.concurrent.futures.AbstractResolvableFuture$1
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$bool
 androidx.versionedparcelable.ParcelUtils
 androidx.core.text.util.LinkifyCompat$LinkifyMask
 androidx.core.view.accessibility.AccessibilityEventCompat
@@ -82,6 +82,7 @@ androidx.core.os.TraceCompat
 androidx.core.app.ComponentActivity
 androidx.core.app.JobIntentService$GenericWorkItem
 androidx.browser.browseractions.BrowserActionsIntent$BrowserActionsFallDialogListener
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$styleable
 androidx.core.view.ScrollingView
 androidx.core.app.ActivityCompat:
     protected void <init>()
@@ -115,8 +116,8 @@ androidx.annotation.WorkerThread
 androidx.core.graphics.TypefaceCompatBaseImpl$2
 androidx.core.view.accessibility.AccessibilityManagerCompat
 androidx.core.view.GestureDetectorCompat$GestureDetectorCompatImplJellybeanMr2
-androidx.core.content.PermissionChecker
 androidx.browser.customtabs.CustomTabsSession$MockSession
+androidx.core.content.PermissionChecker
 com.google.androidbrowserhelper.R$attr
 android.support.customtabs.trusted.ITrustedWebActivityCallback$Stub:
     public void <init>()
@@ -154,6 +155,7 @@ android.support.customtabs.trusted.ITrustedWebActivityCallback$Stub$Proxy:
     public static android.support.customtabs.trusted.ITrustedWebActivityCallback sDefaultImpl
 androidx.core.app.JobIntentService$JobServiceEngineImpl$WrapperWorkItem
 androidx.core.view.ViewPropertyAnimatorCompat$ViewPropertyAnimatorListenerApi14
+app.vercel.zenjilearn.twa.DelegationService
 androidx.core.app.NotificationCompatSideChannelService$NotificationSideChannelStub
 androidx.versionedparcelable.VersionedParcelParcel:
     public void writeByteArray(byte[],int,int)
@@ -184,6 +186,7 @@ androidx.collection.ArrayMap:
     public boolean removeAll(java.util.Collection)
     public boolean retainAll(java.util.Collection)
 androidx.lifecycle.LifecycleOwner
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$string
 com.google.androidbrowserhelper.R$drawable:
     private void <init>()
     public static final int notification_action_background
@@ -206,11 +209,11 @@ android.support.customtabs.ICustomTabsService:
     public abstract boolean requestPostMessageChannelWithExtras(android.support.customtabs.ICustomTabsCallback,android.net.Uri,android.os.Bundle)
     public abstract int postMessage(android.support.customtabs.ICustomTabsCallback,java.lang.String,android.os.Bundle)
 androidx.core.content.SharedPreferencesCompat
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$integer
 androidx.browser.trusted.TrustedWebActivityCallback
 androidx.core.content.res.FontResourcesParserCompat$FetchStrategy
 androidx.core.content.IntentCompat
 androidx.annotation.InspectableProperty$EnumEntry
-app.vercel.zenjilearn.twa.R$integer
 androidx.core.view.GestureDetectorCompat$GestureDetectorCompatImpl
 com.google.androidbrowserhelper.trusted.TwaProviderPicker$LaunchMode
 androidx.core.database.CursorWindowCompat
@@ -219,6 +222,7 @@ androidx.annotation.LongDef
 androidx.core.app.ActivityRecreator$2
 androidx.concurrent.futures.AbstractResolvableFuture$Failure$1
 androidx.annotation.InspectableProperty$FlagEntry
+net.serveo.ef1a30e1eebcf8170401a3137c5d05e2.twa.DelegationService
 androidx.core.app.ServiceCompat
 com.google.androidbrowserhelper.R
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$RangeInfoCompat
@@ -269,7 +273,6 @@ androidx.core.content.ContextCompat:
     public static java.lang.String getSystemServiceName(android.content.Context,java.lang.Class)
     private static final java.lang.String TAG
 androidx.annotation.Dimension
-app.vercel.zenjilearn.twa.R$string
 androidx.core.widget.EdgeEffectCompat
 androidx.core.view.accessibility.AccessibilityViewCommand$SetSelectionArguments
 androidx.core.R$layout
@@ -286,6 +289,7 @@ com.google.androidbrowserhelper.trusted.ChromeOsSupport:
 androidx.core.app.ShareCompat$IntentReader
 androidx.annotation.MainThread
 androidx.versionedparcelable.VersionedParcel$ParcelException
+app.vercel.zenjilearn.twa.LauncherActivity
 androidx.core.app.BundleCompat$BundleCompatBaseImpl:
     private void <init>()
     public static android.os.IBinder getBinder(android.os.Bundle,java.lang.String)
@@ -321,7 +325,6 @@ androidx.core.telephony.mbms.MbmsHelper
 androidx.core.view.inputmethod.InputContentInfoCompat$InputContentInfoCompatApi25Impl
 androidx.core.app.ShareCompat$IntentBuilder
 androidx.annotation.NonNull
-app.vercel.zenjilearn.twa.R$dimen
 androidx.core.app.SharedElementCallback$OnSharedElementsReadyListener
 androidx.core.view.MenuCompat
 androidx.core.R$string
@@ -344,6 +347,7 @@ androidx.core.widget.AutoSizeableTextView
 androidx.core.view.accessibility.AccessibilityViewCommand$SetProgressArguments
 androidx.browser.browseractions.BrowserActionsIntent
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat
+net.serveo.ef1a30e1eebcf8170401a3137c5d05e2.twa.Application
 androidx.core.app.TaskStackBuilder
 androidx.versionedparcelable.VersionedParcelStream
 androidx.core.content.pm.PermissionInfoCompat$Protection
@@ -359,12 +363,11 @@ androidx.browser.trusted.ConnectionHolder$WrapperFactory
 androidx.core.widget.NestedScrollView
 androidx.core.provider.SelfDestructiveThread$3
 androidx.core.view.KeyEventDispatcher$Component
-app.vercel.zenjilearn.twa.R$drawable
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$layout
 com.google.androidbrowserhelper.trusted.NotificationUtils:
     private void <init>()
 com.google.androidbrowserhelper.R$integer
 androidx.collection.LongSparseArray
-app.vercel.zenjilearn.twa.R$id
 androidx.core.view.NestedScrollingChild2
 androidx.annotation.InterpolatorRes
 androidx.core.app.RemoteInput
@@ -381,6 +384,7 @@ androidx.lifecycle.FullLifecycleObserverAdapter:
     void <init>(androidx.lifecycle.FullLifecycleObserver)
     public void onStateChanged(androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Lifecycle$Event)
     private final androidx.lifecycle.FullLifecycleObserver mObserver
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R
 androidx.annotation.RequiresFeature
 androidx.core.content.ContentResolverCompat
 androidx.interpolator.R
@@ -396,6 +400,7 @@ androidx.browser.trusted.TrustedWebActivityDisplayMode:
     public static androidx.browser.trusted.TrustedWebActivityDisplayMode fromBundle(android.os.Bundle)
     public static final java.lang.String KEY_ID
 androidx.core.content.PermissionChecker$PermissionResult
+net.serveo.e43e2f212fe5297c2332df39b96529a4.twa.DelegationService
 androidx.core.app.ActivityCompat$SharedElementCallback21Impl$1
 android.support.v4.os.IResultReceiver$Stub$Proxy
 androidx.core.app.NotificationManagerCompat$Task
@@ -469,6 +474,7 @@ androidx.core.app.ActivityCompat$PermissionCompatDelegate:
     public abstract boolean onActivityResult(android.app.Activity,int,int,android.content.Intent)
 android.support.v4.os.ResultReceiver$MyRunnable
 androidx.core.view.inputmethod.InputContentInfoCompat$InputContentInfoCompatBaseImpl
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$dimen
 androidx.core.app.JobIntentService$CompatWorkEnqueuer
 androidx.annotation.AnyThread
 androidx.browser.R
@@ -540,12 +546,15 @@ androidx.browser.trusted.TrustedWebActivityServiceConnection$ResultArgs:
 androidx.browser.browseractions.BrowserServiceFileProvider$1
 androidx.core.text.HtmlCompat
 androidx.core.view.accessibility.AccessibilityRecordCompat
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$color
 androidx.versionedparcelable.VersionedParcelStream$FieldBuffer
+net.serveo.c5816fe993d5f46cfc80a513e1398e37.twa.Application
 androidx.core.view.animation.PathInterpolatorApi14
 androidx.core.content.ContextCompat$MainHandlerExecutor
 androidx.core.app.JobIntentService
 androidx.browser.trusted.splashscreens.SplashScreenParamKey
 androidx.core.view.accessibility.AccessibilityViewCommand$SetTextArguments
+app.vercel.zenjilearn.twa.Application
 androidx.core.view.ViewConfigurationCompat
 androidx.annotation.FractionRes
 com.google.androidbrowserhelper.trusted.NotificationDelegationExtraCommandHandler:
@@ -629,6 +638,7 @@ com.google.androidbrowserhelper.trusted.PrefUtils:
     private static final java.lang.String KEY_HAS_REQUESTED_NOTIFICATION_PERMISSION
 androidx.core.text.TextDirectionHeuristicsCompat$TextDirectionHeuristicLocale
 androidx.arch.core.internal.SafeIterableMap
+net.serveo.e43e2f212fe5297c2332df39b96529a4.twa.LauncherActivity
 androidx.browser.browseractions.BrowserActionsFallbackMenuAdapter$2
 androidx.core.content.res.ConfigurationHelper
 androidx.collection.ContainerHelpers:
@@ -684,9 +694,9 @@ androidx.core.app.ActivityOptionsCompat$ActivityOptionsCompatImpl
 androidx.browser.customtabs.CustomTabsClient$1
 androidx.core.app.ActivityRecreator
 androidx.annotation.UiThread
-app.vercel.zenjilearn.twa.R$bool
 androidx.versionedparcelable.NonParcelField
 androidx.browser.customtabs.PostMessageBackend
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$xml
 androidx.core.view.GravityCompat
 android.support.customtabs.trusted.ITrustedWebActivityCallback$Default
 androidx.annotation.IntegerRes
@@ -696,6 +706,7 @@ androidx.arch.core.internal.SafeIterableMap$IteratorWithAdditions
 androidx.annotation.InspectableProperty$ValueType
 androidx.core.content.res.FontResourcesParserCompat$FamilyResourceEntry
 androidx.core.R
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$style
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$CollectionItemInfoCompat
 androidx.core.view.ViewPropertyAnimatorListenerAdapter
 androidx.core.widget.ListViewAutoScrollHelper
@@ -716,8 +727,8 @@ android.support.customtabs.trusted.ITrustedWebActivityService$Stub:
     static final int TRANSACTION_getSmallIconId
     static final int TRANSACTION_getSmallIconBitmap
     static final int TRANSACTION_extraCommand
-androidx.core.app.ShareCompat
 androidx.core.content.SharedPreferencesCompat$EditorCompat
+androidx.core.app.ShareCompat
 androidx.core.view.accessibility.AccessibilityNodeProviderCompat$AccessibilityNodeProviderApi16
 androidx.core.view.NestedScrollingParent
 androidx.core.app.NotificationCompat$Extender
@@ -731,7 +742,6 @@ androidx.core.provider.FontsContractCompat$4$1
 androidx.core.os.LocaleListInterface
 androidx.core.widget.ContentLoadingProgressBar$2
 androidx.core.view.LayoutInflaterCompat$Factory2Wrapper
-app.vercel.zenjilearn.twa.R$styleable
 androidx.browser.trusted.sharing.ShareData:
     public static androidx.browser.trusted.sharing.ShareData fromBundle(android.os.Bundle)
     public static final java.lang.String KEY_TITLE
@@ -744,6 +754,7 @@ androidx.browser.trusted.sharing.ShareTarget$EncodingType
 androidx.core.app.NotificationCompat$CarExtender$UnreadConversation$Builder
 androidx.core.app.ComponentActivity$ExtraData
 androidx.core.view.accessibility.AccessibilityManagerCompat$AccessibilityStateChangeListener
+net.serveo.ef1a30e1eebcf8170401a3137c5d05e2.twa.LauncherActivity
 androidx.annotation.BinderThread
 androidx.core.content.res.GradientColorInflaterCompat$ColorStops
 com.google.androidbrowserhelper.BuildConfig
@@ -757,7 +768,6 @@ androidx.annotation.PluralsRes
 androidx.core.view.ViewPropertyAnimatorCompat$2
 androidx.core.content.pm.ShortcutManagerCompat$1
 androidx.core.app.JobIntentService$CompatWorkItem
-app.vercel.zenjilearn.twa.BuildConfig
 androidx.core.text.TextDirectionHeuristicsCompat
 android.support.customtabs.ICustomTabsService$Default
 androidx.annotation.Nullable
@@ -797,7 +807,9 @@ com.google.androidbrowserhelper.trusted.QualityEnforcer:
     static final java.lang.String CRASH
     static final java.lang.String KEY_CRASH_REASON
     static final java.lang.String KEY_SUCCESS
+net.serveo.e43e2f212fe5297c2332df39b96529a4.twa.Application
 androidx.arch.core.internal.SafeIterableMap$ListIterator
+net.serveo.c5816fe993d5f46cfc80a513e1398e37.twa.DelegationService
 androidx.browser.customtabs.TrustedWebUtils:
     private void <init>()
     public static void launchBrowserSiteSettings(android.content.Context,androidx.browser.customtabs.CustomTabsSession,android.net.Uri)
@@ -820,7 +832,6 @@ androidx.concurrent.futures.ResolvableFuture
 androidx.core.util.TimeUtils
 androidx.core.app.AppOpsManagerCompat
 androidx.annotation.ArrayRes
-app.vercel.zenjilearn.twa.R$mipmap
 androidx.annotation.StyleRes
 androidx.core.app.Person$Builder
 androidx.core.content.MimeTypeFilter
@@ -830,8 +841,11 @@ android.support.v4.os.ResultReceiver$MyResultReceiver
 androidx.core.widget.AutoScrollHelper
 androidx.core.os.ParcelableCompat$ParcelableCompatCreatorHoneycombMR2
 androidx.core.text.util.FindAddress$ZipRange
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$attr
 androidx.core.view.VelocityTrackerCompat
 androidx.core.text.PrecomputedTextCompat$PrecomputedTextFutureTask$PrecomputedTextCallback
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$id
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$raw
 androidx.browser.customtabs.CustomTabsSessionToken$1
 androidx.lifecycle.LifecycleRegistry$1
 androidx.core.app.ActivityRecreator$3
@@ -845,6 +859,7 @@ androidx.core.widget.TextViewCompat$AutoSizeTextType
 androidx.annotation.NavigationRes
 androidx.core.view.GestureDetectorCompat$GestureDetectorCompatImplBase$GestureHandler
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$mipmap
 androidx.browser.trusted.sharing.ShareTarget:
     public static androidx.browser.trusted.sharing.ShareTarget fromBundle(android.os.Bundle)
     public static final java.lang.String KEY_ACTION
@@ -859,8 +874,8 @@ androidx.core.internal.view.SupportMenu
 androidx.core.hardware.fingerprint.FingerprintManagerCompat$1
 androidx.browser.customtabs.CustomTabsIntent$ColorScheme
 androidx.core.text.util.LinkifyCompat$LinkSpec
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.BuildConfig
 androidx.core.graphics.PathUtils
-app.vercel.zenjilearn.twa.R$style
 androidx.core.app.NotificationCompat$WearableExtender
 androidx.browser.R$color
 androidx.core.view.WindowInsetsCompat
@@ -897,7 +912,6 @@ androidx.browser.customtabs.CustomTabsIntent$Builder:
     public androidx.browser.customtabs.CustomTabsIntent$Builder setStartAnimations(android.content.Context,int,int)
     public androidx.browser.customtabs.CustomTabsIntent$Builder setExitAnimations(android.content.Context,int,int)
     public androidx.browser.customtabs.CustomTabsIntent$Builder setDefaultColorSchemeParams(androidx.browser.customtabs.CustomTabColorSchemeParams)
-app.vercel.zenjilearn.twa.R$attr
 androidx.core.view.InputDeviceCompat
 androidx.browser.customtabs.CustomTabsIntent$ShareState
 androidx.core.app.AppLaunchChecker
@@ -986,11 +1000,10 @@ android.support.customtabs.ICustomTabsCallback$Stub:
 androidx.concurrent.futures.AbstractResolvableFuture$Cancellation
 androidx.core.view.ViewCompat
 androidx.core.text.PrecomputedTextCompat$Params
-app.vercel.zenjilearn.twa.R$raw
 androidx.browser.customtabs.CustomTabsService$Relation
+net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.R$drawable
 android.support.customtabs.trusted.ITrustedWebActivityCallback:
     public abstract void onExtraCallback(java.lang.String,android.os.Bundle)
-app.vercel.zenjilearn.twa.R$xml
 androidx.core.os.CancellationSignal
 androidx.core.app.NotificationCompat$BadgeIconType
 androidx.browser.browseractions.BrowserActionsFallbackMenuDialog$1
@@ -1132,7 +1145,6 @@ com.google.androidbrowserhelper.R$id
 androidx.annotation.IntDef
 androidx.core.os.CancellationSignal$OnCancelListener
 androidx.browser.R$string
-app.vercel.zenjilearn.twa.R
 androidx.versionedparcelable.VersionedParcel:
     private void writeCollection(java.util.Collection,int)
     private void writeCollection(java.util.Collection)
@@ -1350,8 +1362,8 @@ androidx.core.content.res.FontResourcesParserCompat$FontFamilyFilesResourceEntry
 androidx.versionedparcelable.VersionedParcelStream$1
 androidx.core.view.LayoutInflaterCompat
 com.google.androidbrowserhelper.R$xml
-androidx.browser.customtabs.CustomTabsService$1
 androidx.core.os.LocaleListCompatWrapper
+androidx.browser.customtabs.CustomTabsService$1
 androidx.core.view.MotionEventCompat
 androidx.core.view.NestedScrollingChildHelper
 androidx.core.content.pm.ShortcutInfoCompat$Builder

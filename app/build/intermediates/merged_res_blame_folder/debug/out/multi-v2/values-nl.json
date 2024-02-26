@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/cfhbookworm/BrushPath/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-nl/values-nl.xml",
+            "map": [
+                {
+                    "source": "/home/cfhbookworm/.gradle/caches/transforms-3/c3377e62246d17f587ccdd391b9ed483/transformed/core-1.1.0/res/values-nl/values-nl.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "469",
+                        "endColumns": "100",
+                        "endOffsets": "565"
+                    }
+                },
+                {
+                    "source": "/home/cfhbookworm/.gradle/caches/transforms-3/029ce34aebc7b10bd47a7963a221d29a/transformed/browser-1.4.0/res/values-nl/values-nl.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,158,259,370",
+                        "endColumns": "102,100,110,98",
+                        "endOffsets": "153,254,365,464"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -4,11 +4,11 @@
     <!-- Automatically generated file. DO NOT MODIFY -->
 
     <!-- Value from default config. -->
-    <string name="appName" translatable="false">Create React App Sample</string>
+    <string name="appName" translatable="false">Zenji</string>
     <!-- Value from default config. -->
     <color name="backgroundColor">#FFFFFF</color>
     <!-- Value from default config. -->
-    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimary">#FFFFFF</color>
     <!-- Value from default config. -->
     <color name="colorPrimaryDark">#000000</color>
     <!-- Value from default config. -->
@@ -18,15 +18,15 @@
     <!-- Value from default config. -->
     <string name="fallbackType" translatable="false">customtabs</string>
     <!-- Value from default config. -->
-    <string name="fullScopeUrl" translatable="false">https://zenjilearn.vercel.app/</string>
+    <string name="fullScopeUrl" translatable="false">https://c846b6c1e0595832ba6186f6ee061605.serveo.net/</string>
     <!-- Value from default config. -->
     <string name="generatorApp" translatable="false">bubblewrap-cli</string>
     <!-- Value from default config. -->
-    <string name="hostName" translatable="false">zenjilearn.vercel.app</string>
+    <string name="hostName" translatable="false">c846b6c1e0595832ba6186f6ee061605.serveo.net</string>
     <!-- Value from default config. -->
-    <string name="launchUrl" translatable="false">https://zenjilearn.vercel.app/</string>
+    <string name="launchUrl" translatable="false">https://c846b6c1e0595832ba6186f6ee061605.serveo.net/</string>
     <!-- Value from default config. -->
-    <string name="launcherName" translatable="false">React App</string>
+    <string name="launcherName" translatable="false">Zenji</string>
     <!-- Value from default config. -->
     <color name="navigationColor">#000000</color>
     <!-- Value from default config. -->
@@ -38,10 +38,10 @@
     <!-- Value from default config. -->
     <string name="orientation" translatable="false">default</string>
     <!-- Value from default config. -->
-    <string name="providerAuthority" translatable="false">app.vercel.zenjilearn.twa.fileprovider</string>
+    <string name="providerAuthority" translatable="false">net.serveo.c846b6c1e0595832ba6186f6ee061605.twa.fileprovider</string>
     <!-- Value from default config. -->
     <integer name="splashScreenFadeOutDuration">300</integer>
     <!-- Value from default config. -->
-    <string name="webManifestUrl" translatable="false">https://zenjilearn.vercel.app/manifest.json</string>
+    <string name="webManifestUrl" translatable="false">https://c846b6c1e0595832ba6186f6ee061605.serveo.net/manifest.json</string>
 
 </resources>
