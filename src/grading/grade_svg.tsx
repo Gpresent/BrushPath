@@ -5,9 +5,15 @@ import grade_angles from './grade_angles';
 import grade_lengths from './grade_lengths';
 import grade_center_points from './grade_center_points';
 
+class interp_data {
+    coords! : [];
+    totalLengths!: number;
+}
+
 export default function grade_svg(input: string, targetKanji: string) {
-        const targetInfoPromise = import("../interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json");
-        targetInfoPromise.then((targetInfo) => {
+        fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json").then(response => response.json())
+        .then(data => {
+            var targetInfo = data as unknown as interp_data;
             const tCoords = targetInfo.coords;
             const iCoords = interpolate(input, targetInfo.totalLengths);
             if (!iCoords.length) return;
@@ -43,5 +49,5 @@ export default function grade_svg(input: string, targetKanji: string) {
                 console.log("Grade: ", (grades[i] * 100).toPrecision(4), "%");
             }
             color_input(grades);
-        });
+    })
 }
