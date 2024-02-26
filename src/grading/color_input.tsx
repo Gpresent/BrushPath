@@ -1,8 +1,14 @@
 export default function color_input(grades: number[]) {
     const canvasSvg = document.getElementById("react-sketch-canvas");
     const paths = canvasSvg?.getElementsByTagName("path");
-    const passing = 0.6;
+    const passing = 0.5;
     if (paths) {
+      if (!grades.length) {
+        for (var i = 0; i < paths.length; i++) {
+          paths[i].setAttribute("stroke", "rgba(255, 0, 0, 0.8)");
+        }
+        return;
+      }
       for (var i = 0; i < paths.length; i++) {
         var color;
         if (grades[i] > passing) {
