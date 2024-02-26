@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles.css'; 
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { BsPerson } from "react-icons/bs";
 
 const Header: React.FC = () => {
   const handleEditProfile = () => {
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
     <div className="header">
         <div className="settingsButton"></div>
         <div className="title">Zenji</div>
-        <PersonOutlineOutlinedIcon className="settingsButton" onClick={handleEditProfile}></PersonOutlineOutlinedIcon>
+        <BsPerson className="settingsButton" onClick={handleEditProfile}></BsPerson>
     </div>
     </div>
   );

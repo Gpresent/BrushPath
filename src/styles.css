@@ -450,7 +450,7 @@ h2 {
     align-items: flex-start;
     /* width: 100%; */
     /* height: 56.03px; */
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 15px;
     margin-right: 25px;
     margin-left: 25px;
@@ -466,9 +466,9 @@ h2 {
     box-sizing: border-box;
 }
 
-.fiber-_manual-_record {
-    /* width: 100%; */
-    height: 25px;
+.icon-styling {
+    width: 100%;
+    height: 20px;
 }
 
 .footer-text {

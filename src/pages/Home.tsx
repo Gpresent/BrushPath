@@ -12,20 +12,17 @@ interface HomeProps {
 const decks = [
     {
         id: 0,
-        coverImage:
-          "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b",
-        name: "awesome deck 2",
+        coverImage: "./sample_deck.png",
+        name: "awesome deck 1",
       },
       {
         id: 1,
-        coverImage:
-          "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b",
+        coverImage: "./sample_deck.png",
         name: "awesome deck 2",
       },
       {
         id: 2,
-        coverImage:
-          "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b",
+        coverImage: "./sample_deck.png",
         name: "another dope deck",
       }
 ]
@@ -41,9 +38,8 @@ const Home: React.FC<HomeProps> = (props) => {
         newUser={false}
         suggestedDeck={{
           id: 0,
-          coverImage:
-            "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/dywxv8qwvzp-497%3A24178?alt=media&token=84fb6b9c-9a3a-4b4d-ab33-bbdbe677272b",
-          name: "le epic deck",
+          coverImage: "./sample_deck.png",
+          name: "JLPT N5"
         }}
       />
     <h2>Recent Decks</h2>

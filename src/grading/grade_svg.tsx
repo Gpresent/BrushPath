@@ -1,12 +1,17 @@
 import interpolate from './interpolate';
 import fit_bbox from './fit_bbox';
-import path_angles from './path_angles';
 import color_input from './color_input';
 import grade_angles from './grade_angles';
 
+class interp_data {
+    coords! : [];
+    totalLengths!: number;
+}
+
 export default function grade_svg(input: string, targetKanji: string) {
-        const targetInfoPromise = import("../interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json");
-        targetInfoPromise.then((targetInfo) => {
+        fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json").then(response => response.json())
+        .then(data => {
+            var targetInfo = data as unknown as interp_data;
             const tCoords = targetInfo.coords;
             const iCoords = interpolate(input, targetInfo.totalLengths);
             if (!iCoords.length) return;
@@ -24,5 +29,5 @@ export default function grade_svg(input: string, targetKanji: string) {
             }
             console.log("Grades: ", grades);
             color_input(grades);
-        });
+    })
 }
