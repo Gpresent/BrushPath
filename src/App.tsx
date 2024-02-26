@@ -1,5 +1,5 @@
 
-import './App.css';
+import './styles/App.css';
 // import Draw from './pages/Draw';
 // import Layout from './Layout';
 // import DictionaryView from './pages/Dictionary';

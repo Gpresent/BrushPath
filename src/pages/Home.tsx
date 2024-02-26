@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles.css";
+import '../styles/styles.css'
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
 import DeckList from "../components/DeckList";
