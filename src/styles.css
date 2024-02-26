@@ -24,6 +24,7 @@ h2 {
     bottom: 0;
     margin: 10px;
 }
+
 .interpolate-kanji {
     position: absolute;
     left: 0;
@@ -197,13 +198,19 @@ h2 {
     margin-bottom: 5px;
 }
 
+.deck-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 .word-card {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 98px;
-    width: 90%;
+    width: 100%;
     height: 52px;
     padding: 13px 10px 15px;
     border-top-width: 1px;
@@ -279,29 +286,21 @@ h2 {
 
 
 .dictionary-view {
+    padding-top: 30px;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 486px;
-    height: 928px;
+    height: 87vh;
+    width: 100%;
     box-sizing: border-box;
-}
-
-.background {
-    position: absolute;
-    top: 35px;
-    left: 37px;
-    width: 412px;
-    height: 858px;
+    gap: 20px;
 }
 
 .search-bar {
-    position: absolute;
-    top: 208px;
-    left: 50px;
-    width: 366px;
+    width: 100%;
+    padding-left: 10px;
     height: 36px;
     border: 1px solid rgba(0, 0, 0, 1);
     border-radius: 10px;
@@ -309,16 +308,14 @@ h2 {
 }
 
 .word-list {
-    position: absolute;
-    top: 265px;
-    left: 55px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 358px;
-    height: 549px;
     box-sizing: border-box;
+    width: 100%;
+    height: 60vh;
+    overflow-y: scroll;
 }
 
 .icon {
@@ -423,25 +420,14 @@ h2 {
 }
 
 .my-words {
-    position: absolute;
+    /* position: absolute;
     top: 163px;
-    left: 67px;
+    left: 67px; */
     color: rgba(0, 0, 0, 1);
     font-size: 32px;
     line-height: 69%;
     font-family: DM Sans, sans-serif;
     font-weight: 500;
-}
-
-.levels {
-    width: 140.5px;
-    height: 100%;
-}
-
-.home-indicator {
-    gap: 10px;
-    width: 393px;
-    height: 21px;
 }
 
 /* Footer */
@@ -464,7 +450,7 @@ h2 {
     align-items: flex-start;
     /* width: 100%; */
     /* height: 56.03px; */
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 15px;
     margin-right: 25px;
     margin-left: 25px;
@@ -480,9 +466,9 @@ h2 {
     box-sizing: border-box;
 }
 
-.fiber-_manual-_record {
-    /* width: 100%; */
-    height: 25px;
+.icon-styling {
+    width: 100%;
+    height: 20px;
 }
 
 .footer-text {

@@ -2,7 +2,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.your.package_name",
+      "package_name": "com.your.zenji",
       "sha256_cert_fingerprints": [
         "87:05:61:F6:34:B9:DA:E7:65:E1:EB:31:DB:C3:BA:1C:0D:ED:3C:72:68:CD:4F:A2:00:5A:46:84:03:03:2D:C6"
       ]
