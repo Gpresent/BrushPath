@@ -25,7 +25,12 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 precacheAndRoute(self.__WB_MANIFEST);
 
-precacheAndRoute(kanjiList);
+precacheAndRoute([{
+  url : "sample_deck.png"
+}, 
+{url : "/joyo_kanji/04f55.svg"}])
+
+// precacheAndRoute(kanjiList);
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
@@ -46,9 +51,7 @@ registerRoute(
     // If this looks like a URL for a resource, because it contains
     // a file extension, skip.
     if (url.pathname.match(fileExtensionRegexp)) {
-      // if(!url.pathname.includes("joyo_kanji")){
-        return false;
-      // }
+      return false;
     }
 
     // Return true to signal that we want to use the handler.
@@ -77,6 +80,18 @@ registerRoute(
   ({ request }) => request.url.startsWith(self.location.origin + '/joyo_kanji/'),
   new StaleWhileRevalidate({
     cacheName: 'kanji',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+registerRoute(
+  ({ request }) => request.url.startsWith(self.location.origin + '/interpolation_data/'),
+  new StaleWhileRevalidate({
+    cacheName: 'interp',
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
