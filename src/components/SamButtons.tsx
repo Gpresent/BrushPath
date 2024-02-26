@@ -4,6 +4,8 @@ import Character from "../types/Character";
 import { AuthContext } from "../utils/FirebaseContext";
 import { addDoc, collection, connectFirestoreEmulator, getDocs, query, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { json } from "body-parser";
+// import { kanjidata } from "./kanjiData";
 
 
 const addCharacter = async (db:any) => {
@@ -20,6 +22,27 @@ const addCharacter = async (db:any) => {
 
       });
       console.log("Document written with ID: ", characterRef.id);
+}
+
+const addCharacters = async (db:any) => {
+
+  fetch('/updated_kanji_data.json')
+      .then(response => response.json())
+      .then(jsonObject => {
+        // Perform the desired function
+        console.log(jsonObject);
+      })
+      .catch(error => {
+        console.error('Error fetching or parsing JSON:', error);
+      });
+  // const promises = kanjidata.map(async (kanji:any) => {
+  //   // const docRef = await addDoc(collection(db, "Character"), kanji);
+  //   return docRef
+  // })
+
+  // const numFruits = await Promise.all(promises)
+  // console.log(numFruits)
+  
 }
 
 const getCharacters =async  (db:any) => {
@@ -86,7 +109,7 @@ const WordCard: React.FC = () => {
     <button onClick={() => {signUp((contextValue as any).auth)}}>Sign Up</button>
     <button onClick={() => {console.log(contextValue)}}>User Info Log</button>
     <button onClick={() => {console.log(contextValue)}}>Add Character</button>
-    
+    <button onClick={() => {addCharacters((contextValue as any).db)}}>Add Characters</button>
     <button onClick={() => {addCharacter((contextValue as any).db)}}>Add Character</button>
     <button onClick={() => {getCharacters((contextValue as any).db)}}>Get Characters</button>
 
