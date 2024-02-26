@@ -6,13 +6,13 @@ import WordCard from './components/WordCard';
 import Layout from './Layout';
 import DictionaryView from './pages/Dictionary';
 import Home from './pages/Home';
+import DeckLanding from './pages/DeckLanding'
 
  
 function App(this: any) {
   return (
     <Layout>
-      <Draw />
-      <DictionaryView title={"My Words"} />
+      <DeckLanding user={"User1"} />
     </Layout>
   );
 }
