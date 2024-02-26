@@ -11,6 +11,7 @@ import Home from './pages/Home';
 function App(this: any) {
   return (
     <Layout>
+      <Home message={'Welcome back,'} user={'Charlotte'} />
       <Draw />
       <DictionaryView title={"My Words"} />
     </Layout>
