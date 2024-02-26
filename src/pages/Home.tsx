@@ -3,6 +3,7 @@ import "../styles.css";
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
 import DeckList from "../components/DeckList";
+import { useParams } from "react-router";
 
 interface HomeProps {
   message: string;
@@ -28,10 +29,11 @@ const decks = [
 ]
 
 const Home: React.FC<HomeProps> = (props) => {
+  const {user} = useParams<any>();
   return (
     <div className="home-page">
       <h2 className="home-greeting">
-        {props.message}, {props.user}
+        {props.message}, {user}
       </h2>
       <HomeStats />
       <HomeStudyPrompt
