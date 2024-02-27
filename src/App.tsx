@@ -13,7 +13,7 @@ import SingleDeckView from './pages/SingleDeck';
 function App(this: any) {
   return (
     <Layout>
-      <SingleDeckView title={"Test Deck 1"} />
+      <DeckLanding title={"Test Deck 1"} />
     </Layout>
   );
 }

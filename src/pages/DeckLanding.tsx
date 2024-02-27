@@ -54,6 +54,10 @@ const DeckLandingView: React.FC<DeckProps> = ({title}) => {
         console.log('Add Deck');
       };
 
+    const handleDeckClick = (deckId:any) => {
+        console.log('Deck clicked:', deckId);
+    };
+
     return (
       <div className="home-page">
         <div className="header">
@@ -62,7 +66,7 @@ const DeckLandingView: React.FC<DeckProps> = ({title}) => {
         </div>
         <input className="search-bar" />
         <HomeStats/>
-        <DeckList decks={decks}></DeckList>
+        <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>
       </div>
     );
   };

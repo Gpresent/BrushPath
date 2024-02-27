@@ -31,6 +31,9 @@ const decks = [
 ]
 
 const Home: React.FC<HomeProps> = (props) => {
+  const handleDeckClick = (deckId:any) => {
+    console.log('Deck clicked:', deckId);
+  };
   return (
     <div className="home-page">
       <h2 className="home-greeting">
@@ -47,7 +50,7 @@ const Home: React.FC<HomeProps> = (props) => {
         }}
       />
     <h2>Recent Decks</h2>
-    <DeckList decks={decks}></DeckList>
+    <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>
     </div>
   );
 };
