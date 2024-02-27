@@ -9,12 +9,17 @@ export default function grade_intersections(inputCoords: number[][][], targetCoo
         extraIntersections[i] = [];
         missingIntersections[i] = [];
         for (let j = 0; j < targetIntersections.length; j++) {
-            if (inputIntersections[i].includes(j) && !targetIntersections[i].includes(j)) {
-                extraIntersections[i].push(j);
+            if (inputIntersections[i][j][0] && !targetIntersections[i][j][0]) {
+                if (Math.abs(inputIntersections[i][j][1] - targetIntersections[i][j][1]) > 30)
+                    extraIntersections[i].push(j);
+                else extraIntersections[i].push(j * -1);
             }
-            if (!inputIntersections[i].includes(j) && targetIntersections[i].includes(j)) {
-                missingIntersections[i].push(j);
+            if (!inputIntersections[i][j][0] && targetIntersections[i][j][0]) {
+                if (Math.abs(inputIntersections[i][j][1] - targetIntersections[i][j][1]) > 30)
+                    missingIntersections[i].push(j);
+                else missingIntersections[i].push(j * -1);
             }
+
         }
     }
     return [extraIntersections, missingIntersections];
