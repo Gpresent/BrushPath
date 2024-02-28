@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="footer-wrapper">
         <div className="footer">
           <div className="icon">
-            <Link to="/home/Test">
+            <Link to="/">
               <RiHomeLine className="icon-styling"/>
               <p className="footer-text">Home</p>
             </Link>

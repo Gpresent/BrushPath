@@ -31,7 +31,7 @@ const ComponentRouter: React.FC = () => {
             <BrowserRouter>
             <Layout>
                 <Routes>
-                    <Route path="/home/:user" element={<Home message={'Welcome Back'} user={"Bart"}/>}></Route>
+                    <Route path="/" element={<Home/>}></Route>
                     <Route path="/draw" element={<Draw/>}></Route>
                     <Route path="/dictionary" element={<DictionaryView title={'TEST'}/>} />
                     <Route path="/character" element={<SingleWordView />} />
