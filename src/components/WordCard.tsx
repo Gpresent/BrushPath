@@ -11,7 +11,7 @@ const WordCard: React.FC<WordCardProps> = ({ character }) => {
     <>
     <div className="word-card">
       <p className="character">{character.unicode}</p>
-      <p className="hiragana">{character.hiragana}</p>
+      {/* <p className="hiragana">{character.hiragana}</p> */}
       <p className="meaning">{character.english}</p>
     </div>
     </>

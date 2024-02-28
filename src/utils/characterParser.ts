@@ -3,6 +3,8 @@ import Character from "../types/Character";
 
 function characterParser(data : any): Character {
     
+    console.log(data)
+
     var character : Character = {
         unicode: data.literal,
         on: [],
@@ -13,10 +15,10 @@ function characterParser(data : any): Character {
         stroke_count: 0,
         freq: data.freq,
         grade: data.grade,
-        jplt: data.jlpt,
+        jlpt: data.jlpt,
         compounds: data.compounds,
     }
-    data.readings.array.forEach((element: any) => {
+    data.readings.forEach((element: any) => {
         // TODO: add error handling in case type is undefined
         if(element.type == "ja_kun"){
             character.kun.push(element.value);
@@ -24,10 +26,12 @@ function characterParser(data : any): Character {
             character.on.push(element.value);
         }
     });
-    data.radicals.array.forEach((element: any) => {
+    data.radicals.forEach((element: any) => {
         character.radicals.push(element.value);
     });
    
 
     return character;
   }
+
+  export default characterParser;

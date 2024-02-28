@@ -8,7 +8,7 @@ type Character = {
     stroke_count: number;
     freq: number | null;
     grade: number | null;
-    jplt: number | null;
+    jlpt: number | null;
     compounds: any;
 };
   
