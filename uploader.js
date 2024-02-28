@@ -1,7 +1,10 @@
+//This script was used to populate the database from a JSON file.
+//Everything has been commented out for reference.
 var admin = require("firebase-admin");
 const fs = require('fs');
+const _ = require('lodash');
 
-const jsonFilePath = './updated_kanji_data.json';
+const jsonFilePath = './v3_kanji_dict.json';
 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 
@@ -16,24 +19,84 @@ admin.initializeApp({
 
 
 const db = admin.firestore();
-const start = 0;
-const chunkSize = 10;
-const totalItems = jsonData.length;
-console.log(totalItems)
-//Change the thing to length
-// for (let i = 0; i < 20; i += chunkSize) {
+
+
+// const charRef = db.collection('Character');
+// const snapshot = charRef.where('jlpt', '>', '').get().then((snapshot) => {
+//     if (!snapshot) {
+//         console.log('No matching documents.');
+//         return;
+//       }  
+//       map = {}
+//       snapshot.forEach((doc) => {
+//         // Access the document data using doc.data()
+//         if(!map[doc.data().jlpt]) {
+//             map[doc.data().jlpt]= [doc.data()]
+//         }
+//         else {
+//             map[doc.data().jlpt].(doc.data())
+//         }
+//       });
+//       console.log(JSON.stringify(map));
+// //     const result = _.groupBy(snapshot, ({ jlpt }) => jlpt);
+// // Object.keys(result).forEach((key) => {
+// //     console.log(key, ": ", result[key].length)
+// // })
+// });
+
+
+
+
+
+
+// const start = 0;
+// const chunkSize = 500;
+// //13108
+// const totalItems = jsonData.length;
+// console.log(totalItems)
+// //Change the thing to length
+// async function main() {
+// for (let i = 1000; i < totalItems; i += chunkSize) {
 
 //     const chunk = jsonData.slice(i, i + chunkSize);
     
 //     // Process the chunk
-//     processChunk(chunk);
+//     await processChunk(chunk);
+
+    
+// }
 // }
 
-// function processChunk(chunk) {
+// async function processChunk(chunk) {
 //     // Your processing logic for each chunk goes here
 //     console.log("Processing chunk:", chunk.length);
 //     // console.log(chunk[0])
-//     db.collection('Character').add(chunk[0]).then((doc) => {
+//     for (const doc of chunk) {
+//         await processDoc(doc);
+//       }
+
+    
+//     console.log("Chunk Processed")
+
+// }
+
+// async function processDoc(doc) {
+//     db.collection('Character').add(doc).then((doc) => {
+//         if (doc) {
+//             console.log("Worked")
+//         }
+//         else {
+//             console.log("nothing")
+//         }
+//     }).catch((reason) => {
+//         console.log(reason)
+//     })
+// }
+
+// main();
+
+
+// db.collection('Character').doc('chkzxdlv4dB0JjG3ZJDn').get().then((doc) => {
 //     if (doc.exists) {
 //         console.log(doc.data())
 //     }
@@ -41,28 +104,9 @@ console.log(totalItems)
 //         console.log("nothing")
 //     }
 
-//     }).catch((reason) => {
-//         console.log(reason)
-//     })
-//     console.log("Chunk Processed")
-
-// }
-
-const characterRef = await db.collection("Character");
-const q = query(characterRef, where('misc', '!=', 'sam'))
-
-const querySnapshot = await getDocs(q);
-db.collection('Character').doc('chkzxdlv4dB0JjG3ZJDn').get().then((doc) => {
-    if (doc.exists) {
-        console.log(doc.data())
-    }
-    else {
-        console.log("nothing")
-    }
-
-}).catch((reason) => {
-    console.log(reason)
-})
+// }).catch((reason) => {
+//     console.log(reason)
+// })
 
 
 // const path = require("path");
