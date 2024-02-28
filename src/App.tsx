@@ -5,10 +5,13 @@ import './styles/App.css';
 // import DictionaryView from './pages/Dictionary';
 // import Home from './pages/Home';
 import ComponentRouter from './router/router';
+import { AuthProvider } from './utils/FirebaseContext';
  
 function App(this: any) {
   return (
+    <AuthProvider>
     <ComponentRouter/>
+    </AuthProvider>
   );
 }
 

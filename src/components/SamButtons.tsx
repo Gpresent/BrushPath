@@ -76,7 +76,7 @@ const localSignOut =async  (auth: any) => {
 
 
 
-const WordCard: React.FC = () => {
+const SamButtons: React.FC = () => {
     const contextValue = useContext(AuthContext);
     
   return (
@@ -94,4 +94,4 @@ const WordCard: React.FC = () => {
   );
 };
 
-export default WordCard;
+export default SamButtons;

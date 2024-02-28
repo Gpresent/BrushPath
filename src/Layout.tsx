@@ -11,6 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <Header></Header>
       <body style={{  marginLeft: '20px', marginRight: '20px'}}>
+          
         {children}
       </body>
       <Footer></Footer>
