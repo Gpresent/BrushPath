@@ -4,11 +4,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Us
 
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../components/Login';
+import Loading from '../components/Loading';
 
 
 
 //Initialize Context
-export const AuthContext = createContext({});
+export const AuthContext = createContext<{user: null| User}>({user: null});
 
 export const useAuth = () => {
     return useContext(AuthContext)
@@ -18,6 +19,7 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
     
 
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const value = {
       
         user: user
@@ -25,7 +27,9 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser ) => {
+      setLoading(true);
       setUser(firebaseUser);
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -33,7 +37,7 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
       
     return (<AuthContext.Provider value={value}>
 
-        {user? children: <Login />}
+        {loading? <Loading /> : user? children: <Login />}
     </AuthContext.Provider>)
 }
 

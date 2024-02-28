@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import "../styles.css";
 import { AuthContext } from "../utils/FirebaseContext";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../utils/Firebase";
 
 const Login: React.FC = () => {
@@ -19,7 +19,13 @@ const Login: React.FC = () => {
         if(isRegister) {
             try {
         
-                await createUserWithEmailAndPassword(auth,email,password);
+                createUserWithEmailAndPassword(auth,email,password).then((user) => {
+                    if(user.user) {
+                        updateProfile(user.user,{
+                          displayName: user.user?.email?.split('@')[0]
+                        })
+                      }
+                });
                
             } catch (error) {
               console.error('Error signing up:', error);
@@ -29,7 +35,7 @@ const Login: React.FC = () => {
         else {
             try {
         
-                await signInWithEmailAndPassword(auth,'zenjiapp@gmail.com','T4aleC4pst0ne!');
+                await signInWithEmailAndPassword(auth,email,password);
                
               } catch (error) {
                 console.error('Error signing in:', error);
