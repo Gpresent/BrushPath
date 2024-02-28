@@ -7,6 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ClearIcon from '@mui/icons-material/Clear';
 import color_input from "../grading/color_input";
 import grade_svg from "../grading/grade_svg";
+import { interpretImage } from "../recognition/interpretImage";
 import "../styles.css";
 
 
@@ -98,7 +99,7 @@ function Draw(this: any) {
   return (
     <div style={styles.container}>
       <div className="kanji-input-wrapper">
-      <p className="kanji-input-prompt">Enter Kanji to Practice:</p>
+        <p className="kanji-input-prompt">Enter Kanji to Practice:</p>
         <input
           className="kanji-input-typed"
           placeholder="Enter Kanji"
@@ -107,17 +108,17 @@ function Draw(this: any) {
           }}
           value={kanji}
         />
-        </div>
+      </div>
       <div style={styles.canvas}>
         <ReactSketchCanvas
           ref={canvas}
-          style={{width: '99%', height: '99%', borderRadius: '10px', pointerEvents: readOnly ? 'none' : 'auto'}}
+          style={{ width: '99%', height: '99%', borderRadius: '10px', pointerEvents: readOnly ? 'none' : 'auto' }}
           strokeWidth={7}
           strokeColor="rgba(40, 40, 41, .75)"
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && <div dangerouslySetInnerHTML={svgHtml} style={styles.svg} />}
-        <button 
+        <button
           className="clear-kanji"
           style={styles.button}
           onClick={() => {
@@ -134,7 +135,7 @@ function Draw(this: any) {
             setDisplaySVG(!displaySVG);
           }}
         >
-          {displaySVG ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+          {displaySVG ? <VisibilityOffIcon /> : <VisibilityIcon />}
         </button>
       </div>
       <button
@@ -142,13 +143,27 @@ function Draw(this: any) {
         onClick={() => {
           setReadOnly(true);
           canvas.current.exportSvg().then((data: any) => {
-          grade_svg(data, kanji);
-        }).catch((e: any) => {
-          console.log(e);
-        })}}
-        >
-          Grade SVG
-        </button>
+            grade_svg(data, kanji);
+
+
+
+          }).catch((e: any) => {
+            console.log(e);
+          })
+
+          canvas.current.exportImage('jpeg').then((data: any) => {
+            interpretImage(data);
+
+          }).catch((e: any) => {
+            console.error(e);
+          });
+
+
+
+        }}
+      >
+        Grade SVG
+      </button>
     </div>
   );
 }
