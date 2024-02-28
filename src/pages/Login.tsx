@@ -28,7 +28,11 @@ const Login: React.FC = () => {
       case "auth/too-many-requests":
         setErrorMsg("Please wait before clicking again.");
         break;
+      case "auth/weak-password":
+        setErrorMsg("Password must be at least 6 characters.");
+        break;
       default:
+        console.log(error)
         setErrorMsg("An error occurred during authentication");
     }
   };

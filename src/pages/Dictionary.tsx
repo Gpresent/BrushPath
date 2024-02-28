@@ -3,6 +3,8 @@ import '../styles/styles.css'
 import Character from '../types/Character';
 import WordList from "../components/WordList";
 import HomeStats from "../components/HomeStats";
+import { db } from "../utils/Firebase";
+import { collection, getDocs, query, where, limit } from "firebase/firestore";
 
 
 interface DictionaryProps {
@@ -40,11 +42,37 @@ const jlptN5Kanji: Character[] = [
 ];
 
 const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const text = formData.get("text") as string;
+      console.log(text);
+
+      search(text);
+      
+  }
+  const search = async (text:string ) => {
+    const characterRef = await collection(db,"Character");
+
+    // const q = query(characterRef, where('meanings', 'array-contains', text));
+    const q = query(characterRef,
+      where('freq', 'array-contains', text),limit(10))
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc:any) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+    });
+  }
   return (
     <div className="dictionary-view">
 
-      <p className="my-words">My Words</p>
-      <input className="search-bar" />
+      <p  className="my-words">My Words</p>
+      <form onSubmit={handleSubmit} id='search-form'>
+      <input name="text" type="text" className="search-bar" />
+      <button type="submit">Search</button>
+      </form>
       <HomeStats />
       <WordList words={jlptN5Kanji}/>
       
