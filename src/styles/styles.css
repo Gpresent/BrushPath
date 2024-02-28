@@ -483,38 +483,6 @@ h2 {
     text-align: center;
 }
 
-/* Login page */
-
-.login-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-}
-
-
-.form-group {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    min-width: 10rem;
-    max-width: 20rem;
-    gap: 1rem
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-}
-
-
-.submit-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 /* Loading page */
 
 .loading-page {

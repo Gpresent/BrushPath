@@ -3,7 +3,7 @@ import app, { auth, db } from './Firebase'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, NextOrObserver } from "firebase/auth";
 
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import Login from '../components/Login';
+import Login from '../pages/Login';
 import Loading from '../components/Loading';
 
 
