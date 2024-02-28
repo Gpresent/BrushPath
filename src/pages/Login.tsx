@@ -33,12 +33,23 @@ const Login: React.FC = () => {
     }
   };
 
+  const isValidEmail = (email: string): boolean => {
+    // Simple email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+
+    if (!isValidEmail(email)) {
+      setErrorMsg('Please enter a valid email address');
+      return;
+  }
 
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
@@ -66,7 +77,7 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} id="login-form" className="form-group">
           <div className="input-group">
             <label htmlFor="email">email</label>
-            <input type="email" name="email" />
+            <input type="text" name="email" />
           </div>
           <div className="input-group">
             <label htmlFor="password">password</label>
