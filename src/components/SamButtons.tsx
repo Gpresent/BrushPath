@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "../styles.css";
+import "../styles/styles.css";
 import Character from "../types/Character"; 
 import { AuthContext } from "../utils/FirebaseContext";
 import { addDoc, collection, connectFirestoreEmulator, getDocs, query, where } from "firebase/firestore";
