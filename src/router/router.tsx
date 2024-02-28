@@ -8,6 +8,7 @@ import Deck from '../types/Deck';
 import SingleWordView from '../pages/SingleWord';
 import DeckLandingView from '../pages/DeckLanding';
 import SettingsView from '../pages/Settings';
+import ErrorComponent from '../pages/Error';
 
 const decks_info:Deck[] = [
     {
@@ -37,6 +38,7 @@ const ComponentRouter: React.FC = () => {
                     <Route path="/character" element={<SingleWordView />} />
                     <Route path="/decks" element={<DeckLandingView title="My Decks"/>}/>
                     <Route path="/settings" element={<SettingsView/>}/>
+                    <Route path="*" element={<ErrorComponent/>}></Route>
                 </Routes>
             </Layout>
             </BrowserRouter>
