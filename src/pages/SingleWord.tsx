@@ -1,9 +1,10 @@
+import Character from "../types/Character";
 
 interface SingleWordProps {
-    unicode: string;
+    character: Character;
 }
 
-const SingleWordView : React.FC<SingleWordProps> = ({unicode}) => {
+const SingleWordView : React.FC<SingleWordProps> = ({character}) => {
     return (
       <div className="single-word-view">
   
