@@ -1,9 +1,12 @@
-import React from "react";
-import '../styles/styles.css'
+import React, { useContext, useEffect } from "react";
+import "../styles/styles.css";
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
 import DeckList from "../components/DeckList";
 import { useParams } from "react-router";
+import { AuthContext } from "../utils/FirebaseContext";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../utils/Firebase";
 
 interface HomeProps {
   message: string;
@@ -29,11 +32,13 @@ const decks = [
 ]
 
 const Home: React.FC<HomeProps> = (props) => {
-  const {user} = useParams<any>();
+  //const {user} = useParams<any>();
+  const {user} = useContext(AuthContext);
+
   return (
     <div className="home-page">
       <h2 className="home-greeting">
-        {props.message}, {user}
+        {props.message}, {user?.displayName}
       </h2>
       <HomeStats />
       <HomeStudyPrompt
