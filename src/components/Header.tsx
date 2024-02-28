@@ -1,5 +1,6 @@
 import React from 'react';
-import '../styles.css'; 
+import '../styles/styles.css'
+
 import { BsPerson } from "react-icons/bs";
 
 const Header: React.FC = () => {

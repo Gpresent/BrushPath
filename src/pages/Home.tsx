@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles.css";
+import '../styles/styles.css'
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
 import DeckList from "../components/DeckList";
@@ -13,17 +13,17 @@ interface HomeProps {
 const decks = [
     {
         id: 0,
-        coverImage: "./sample_deck.png",
+        coverImage: "../sample_deck.png",
         name: "awesome deck 1",
       },
       {
         id: 1,
-        coverImage: "./sample_deck.png",
+        coverImage: "../sample_deck.png",
         name: "awesome deck 2",
       },
       {
         id: 2,
-        coverImage: "./sample_deck.png",
+        coverImage: "../sample_deck.png",
         name: "another dope deck",
       }
 ]
@@ -40,7 +40,7 @@ const Home: React.FC<HomeProps> = (props) => {
         newUser={false}
         suggestedDeck={{
           id: 0,
-          coverImage: "./sample_deck.png",
+          coverImage: "../sample_deck.png",
           name: "JLPT N5"
         }}
       />
