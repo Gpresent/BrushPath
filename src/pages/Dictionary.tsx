@@ -1,10 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import '../styles/styles.css'
 import Character from '../types/Character';
 import WordList from "../components/WordList";
 import HomeStats from "../components/HomeStats";
 import { db } from "../utils/Firebase";
-import { collection, getDocs, query, where, limit } from "firebase/firestore";
+import { collection, getDocs, query, where, limit, or } from "firebase/firestore";
 
 
 interface DictionaryProps {
@@ -42,6 +42,7 @@ const jlptN5Kanji: Character[] = [
 ];
 
 const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
+  const [characters,setCharacters] = useState<Character[]>(jlptN5Kanji)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,14 +57,33 @@ const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
     const characterRef = await collection(db,"Character");
 
     // const q = query(characterRef, where('meanings', 'array-contains', text));
+    // const q = query(characterRef,
+    //   or(or(where('meanings', 'array-contains', text),where('literal','==',text)),or(where('readings.value', '>=', text)
+    //   ,where('readings.value', '<=', text+ '\uf8ff'))),limit(10));
+
+    //TODO add support for readings search?
     const q = query(characterRef,
-      where('freq', 'array-contains', text),limit(10))
+      or(where('meanings','array-contains',text),where('literal','==',text)),limit(10));
 
     const querySnapshot = await getDocs(q);
+    const convertedCharacters:Character[] = []
     querySnapshot.forEach((doc:any) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
+      //TODO Replace with unified type
+      console.log(doc.id, " => ", doc.data());
+      convertedCharacters.push({
+        id: doc.id,
+        unicode: doc.data()['literal'],
+        hiragana:doc.data()['readings'].map((reading:any) => {if(reading.type === 'ja_kun') {
+          return reading.value
+        }}).join(''),
+        english:doc.data()['meanings'].join('/')
+      })
+      
+
     });
+    setCharacters(convertedCharacters);
+
+
   }
   return (
     <div className="dictionary-view">
@@ -74,7 +94,7 @@ const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
       <button type="submit">Search</button>
       </form>
       <HomeStats />
-      <WordList words={jlptN5Kanji}/>
+      <WordList words={characters}/>
       
     </div>
   )
