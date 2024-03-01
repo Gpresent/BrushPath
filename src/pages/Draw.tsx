@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import color_input from "../grading/color_input";
 import grade_svg from "../grading/grade_svg";
 import '../styles/styles.css'
+import Character from "../types/Character";
 
 
 const styles = {
@@ -55,12 +56,24 @@ const styles = {
 
 const parser = new DOMParser();
 
-function Draw(this: any) {
+interface DrawProps {
+  character?: Character;
+}
+
+const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: '' });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
+  const [askInput, setAskInput] = React.useState<boolean>(true);
+
+  useLayoutEffect(()=>{
+    if(props.character){
+      setKanji(props.character.unicode);
+      setAskInput(false);
+    }
+  })
 
   useEffect(() => {
     const loadSvg = async (unicode: string) => {
@@ -97,6 +110,7 @@ function Draw(this: any) {
 
   return (
     <div style={styles.container}>
+      {askInput && (
       <div className="kanji-input-wrapper">
       <p className="kanji-input-prompt">Enter Kanji to Practice:</p>
         <input
@@ -108,6 +122,7 @@ function Draw(this: any) {
           value={kanji}
         />
         </div>
+        )}
       <div style={styles.canvas}>
         <ReactSketchCanvas
           ref={canvas}

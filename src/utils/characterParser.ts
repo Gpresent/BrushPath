@@ -20,9 +20,9 @@ function characterParser(data : any): Character {
     }
     data.readings.forEach((element: any) => {
         // TODO: add error handling in case type is undefined
-        if(element.type == "ja_kun"){
+        if(element.type === "ja_kun"){
             character.kun.push(element.value);
-        }else if(element.type == "ja_on"){
+        }else if(element.type === "ja_on"){
             character.on.push(element.value);
         }
     });
