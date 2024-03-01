@@ -11,7 +11,9 @@ const SingleWordView: React.FC<SingleWordProps> = ({ character }) => {
   return (
     <div className="single-word-view">
       <div className="character-header">
-        <div className="character-kanji"></div>
+        <div className="character-kanji">
+            {character.unicode}
+        </div>
         <div className="character-meanings">
           {character.english.map((meaning) => {
             return <span>{meaning}, </span>;

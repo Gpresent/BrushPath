@@ -12,7 +12,7 @@ function characterParser(data : any): Character {
         nanori: data.nanori,
         radicals: [],
         english: data.meanings,
-        stroke_count: 0,
+        stroke_count: data.stroke_count,
         freq: data.freq,
         grade: data.grade,
         jlpt: data.jlpt,
