@@ -1,21 +1,19 @@
 import React from "react";
-import '../styles/styles.css'
-
-import Deck from "../types/Deck"; 
+import "../styles/styles.css";
+import Deck from "../types/Deck";
 
 interface DeckCardProps {
   deck: Deck;
+  onClick: () => void;
 }
 
-const DeckCard: React.FC<DeckCardProps> = ({ deck }) => {
+const DeckCard: React.FC<DeckCardProps> = ({ deck, onClick }) => {
   return (
-    <>
-    <div className="deck-card clip-contents">
+    <div className="deck-card clip-contents" onClick={onClick}>
         <div className="cover-image" style={{ backgroundImage: `url(${deck.coverImage})` }}>
         </div>
         <p className="title">{deck.name}</p>
     </div>
-    </>
   );
 };
 

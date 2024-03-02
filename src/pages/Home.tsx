@@ -59,6 +59,9 @@ const charData = {
 
 
 const Home: React.FC<HomeProps> = (props) => {
+  const handleDeckClick = (deckId:any) => {
+    console.log('Deck clicked:', deckId);
+  };
   //const {user} = useParams<any>();
   const {user} = useContext(AuthContext);
 
@@ -80,7 +83,7 @@ const Home: React.FC<HomeProps> = (props) => {
         }}
       />
     <h2>Recent Decks</h2>
-    <DeckList decks={decks}></DeckList>
+    <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>
     </div>
   );
 };

@@ -28,8 +28,14 @@ const Login: React.FC = () => {
       case "auth/too-many-requests":
         setErrorMsg("Please wait before clicking again.");
         break;
+      case "auth/weak-password":
+        setErrorMsg("Password must be 6 characters or longer.");
+        break;
+      case "auth/email-already-in-use":
+        setErrorMsg("Email already in use.");
+        break;
       default:
-        setErrorMsg("An error occurred during authentication");
+        setErrorMsg("An error occurred during authentication: "+error.code);
     }
   };
 

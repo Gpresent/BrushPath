@@ -6,6 +6,7 @@ import Layout from '../Layout'
 import DeckList from '../components/DeckList';
 import Deck from '../types/Deck';
 import SingleWordView from '../pages/SingleWord';
+import DeckLandingView from '../pages/DeckLanding';
 
 const decks_info:Deck[] = [
     {
@@ -33,7 +34,7 @@ const ComponentRouter: React.FC = () => {
                     <Route path="/draw" element={<Draw/>}></Route>
                     <Route path="/dictionary" element={<DictionaryView title={'TEST'}/>} />
                     <Route path="/character" element={<SingleWordView />} />
-                    <Route path="/decks" element={<DeckList decks={decks_info}/>}/>
+                    <Route path="/decks" element={<DeckLandingView title="My Decks"/>}/>
                 </Routes>
             </Layout>
             </BrowserRouter>
