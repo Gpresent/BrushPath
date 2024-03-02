@@ -38,6 +38,7 @@ const styles = {
     // alignItems: "center",
     height: "100%",
     width: "100%",
+    maxWidth: "500px"
   },
   svg: {
     position: "absolute" as "absolute",
@@ -162,7 +163,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           console.log(e);
         })}}
         >
-          Grade SVG
+          Check
         </button>
     </div>
   );
