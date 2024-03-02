@@ -17,7 +17,7 @@ interface HomeProps {
 }
 
 const decks = [
-    {
+     {
         id: 0,
         coverImage: "../sample_deck.png",
         name: "awesome deck 1",

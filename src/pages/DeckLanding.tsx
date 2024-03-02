@@ -51,7 +51,7 @@ const decks = [
       }
 ]
 
-const jlptN5Kanji: Character[] = [
+const jlptN5Kanji: any = [
   { id: 1, unicode: '一', hiragana: 'いち', english: 'one' },
   { id: 2, unicode: '二', hiragana: 'に', english: 'two' },
   { id: 3, unicode: '三', hiragana: 'さん', english: 'three' },

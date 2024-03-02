@@ -4,7 +4,7 @@ import "../styles/styles.css";
 interface Kanji {
     id: number;
     unicode: string;
-    hiragana: string;
+    hiragana?: string;
     english: string;
     isSelected?: boolean;
 }
