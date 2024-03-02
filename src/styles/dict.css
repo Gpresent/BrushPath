@@ -1,0 +1,73 @@
+.dictionary-view {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.single-word-view {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 10px;
+}
+
+.word-list {
+    height: unset;
+    max-height: 70vh;
+}
+
+.character-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+}
+
+.character-kanji {
+    font-size: 64px;
+    font-weight: 400;
+    margin: 10px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.character-meanings {
+    font-size: 28px;
+    font-weight: 500;
+    text-align: end;
+    max-height: 80px;
+    overflow: hidden;
+}
+
+.character-info{
+    width: 100%;
+    max-width: 500px;
+    gap: 50px;
+    font-size: 20px;
+    font-weight: 300;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 1);
+    columns: 2;
+}
+
+.info-line {
+    /* min-height: 32px; */
+} 
+
+.mastery-desc {
+    font-size: 24px;
+    margin-top: 10px;
+}

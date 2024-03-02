@@ -5,18 +5,35 @@ body {
     sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'DM Sans', sans-serif;
-  margin-bottom: 70px;
-  margin-top: 50px;
+  font-family: 'DM Sans', sans-serif, -apple-system;
+  margin-bottom: 90px;
+  margin-top: 56px;
   display: 'flex';
   flex-direction: 'column';
   justify-content: 'space-between';
   align-content: center;
   align-items: 'center';
-  /* padding-top: 20px; */
+}
+
+button {
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid  rgba(77, 77, 77, 1);
+  font-size: 18px;
+  font-family: 'DM Sans', sans-serif, -apple-system;
+  font-weight: 500;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:any-link {
+  text-decoration: none;
+  color: unset;
 }

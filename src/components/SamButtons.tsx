@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "../styles/styles.css";
 import Character from "../types/Character"; 
 import { AuthContext } from "../utils/FirebaseContext";
-import { addDoc, collection, connectFirestoreEmulator, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, connectFirestoreEmulator, getDocs, limit, query, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 
@@ -26,7 +26,7 @@ const getCharacters =async  (db:any) => {
     try {
         const characterRef = await collection(db,"Character");
 
-        const q = query(characterRef, where('character_text', '!=', 'sam'))
+        const q = query(characterRef, where('character_text', '!=', 'sam'), limit(10))
 
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc:any) => {

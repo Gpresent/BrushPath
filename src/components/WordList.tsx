@@ -10,7 +10,7 @@ const WordList: React.FC<WordListProps> = ({ words }) => {
   return (
     <div className="word-list">
       {words.map((word) => (
-        <WordCard key={word.id} character={word} />
+        <WordCard key={word.unicode} character={word} />
       ))}
     </div>
   );

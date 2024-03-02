@@ -246,6 +246,8 @@ h2 {
     font-family: DM Sans, sans-serif;
     font-weight: 400;
     text-align: right;
+    overflow: hidden;
+    height: 100%;
 }
 
 .header {
@@ -285,18 +287,7 @@ h2 {
 /* Dictionary view */
 
 
-.dictionary-view {
-    padding-top: 30px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    height: 87vh;
-    width: 100%;
-    box-sizing: border-box;
-    gap: 20px;
-}
+
 
 .search-bar {
     width: 100%;
