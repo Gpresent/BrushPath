@@ -1,5 +1,5 @@
 import React from "react"
-import "../styles.css"
+import "../styles/styles.css"
 import Character from '../types/Character';
 import WordList from "../components/WordList";
 import HomeStats from "../components/HomeStats";

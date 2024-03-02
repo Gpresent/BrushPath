@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles.css";
+import "../styles/styles.css";
 
 interface Kanji {
     id: number;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../styles.css";
+import "../styles/styles.css";
 import DeckList from "../components/DeckList";
 import HomeStats from "../components/HomeStats";
 import AddIcon from '@mui/icons-material/Add';
