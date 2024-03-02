@@ -66,7 +66,7 @@ const Home: React.FC<HomeProps> = (props) => {
 
   return (
     <div className="home-page">
-      <SingleWordView character={character}/>
+      {/* <SingleWordView character={character}/> */}
       <h2 className="home-greeting">
         {/* {props.message}, {user?.displayName} */}
       </h2>
