@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles.css";
+import '../styles/styles.css'
 import Character from "../types/Character"; 
 
 interface WordCardProps {

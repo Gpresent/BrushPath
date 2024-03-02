@@ -10,9 +10,10 @@
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { precacheAndRoute, createHandlerBoundToURL, PrecacheEntry } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import { kanjiList } from './list_kanji';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -24,6 +25,12 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 precacheAndRoute(self.__WB_MANIFEST);
 
+precacheAndRoute([{
+  url : "sample_deck.png"
+}, 
+{url : "/joyo_kanji/04f55.svg"}])
+
+// precacheAndRoute(kanjiList);
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
@@ -61,6 +68,30 @@ registerRoute(
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: 'images',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+registerRoute(
+  ({ request }) => request.url.startsWith(self.location.origin + '/joyo_kanji/'),
+  new StaleWhileRevalidate({
+    cacheName: 'kanji',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+registerRoute(
+  ({ request }) => request.url.startsWith(self.location.origin + '/interpolation_data/'),
+  new StaleWhileRevalidate({
+    cacheName: 'interp',
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
