@@ -1,5 +1,6 @@
 import { auth } from '../utils/Firebase';
 import { signOut } from 'firebase/auth';
+import "../styles/settings.css";
 
 const SettingsView: React.FC = () => {
     return (

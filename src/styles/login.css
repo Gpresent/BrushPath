@@ -3,9 +3,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    height: 80vh;
 }
 
+.login-prompt{
+    width: 250px;
+    text-align: center;
+}
+
+label {
+    font-size: 16px;
+    color:  rgba(77, 77, 77, 1);
+}
 
 .form-group {
     padding: 2rem;
@@ -14,6 +23,12 @@
     min-width: 10rem;
     max-width: 20rem;
     gap: 1rem
+}
+
+.check-group{
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
 .input-group {

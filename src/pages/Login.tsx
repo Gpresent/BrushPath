@@ -80,6 +80,9 @@ const Login: React.FC = () => {
   return (
     <>
       <div className="login-page">
+        <div className="login-prompt">
+          To access Zenji, please <b>log in</b> or <b>create an account</b>.
+        </div>
         <form onSubmit={handleSubmit} id="login-form" className="form-group">
           <div className="input-group">
             <label htmlFor="email">email</label>
