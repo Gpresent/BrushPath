@@ -5,6 +5,7 @@ import WordList from "../components/WordList";
 import HomeStats from "../components/HomeStats";
 import { db } from "../utils/Firebase";
 import { collection, getDocs, query, where, limit, or } from "firebase/firestore";
+import { addToStore, getAllItemsFromStore} from "../indexed_db/character";
 
 
 interface DictionaryProps {
@@ -62,11 +63,14 @@ const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
     //   ,where('readings.value', '<=', text+ '\uf8ff'))),limit(10));
 
     //TODO add support for readings search?
-    const q = query(characterRef,
-      or(where('meanings','array-contains',text),where('literal','==',text)),limit(10));
+    // const q = query(characterRef,
+    //   or(where('meanings','array-contains',text),where('literal','==',text)),limit(10));
+
+    const q = query(characterRef,limit(10));
 
     const querySnapshot = await getDocs(q);
     const convertedCharacters:Character[] = []
+
     querySnapshot.forEach((doc:any) => {
       //TODO Replace with unified type
       console.log(doc.id, " => ", doc.data());
@@ -82,6 +86,11 @@ const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
 
     });
     setCharacters(convertedCharacters);
+    addToStore('Character',convertedCharacters).then(() => {
+      getAllItemsFromStore('Character').then((result: any) => {
+        console.log(result)
+      })
+    });
 
 
   }
