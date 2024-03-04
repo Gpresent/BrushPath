@@ -146,6 +146,11 @@
     gap: 10px;
 }
 
+.deck-list-container {
+    max-height: 72vh;
+    overflow-y: scroll;
+}
+
 .deck-landing {
     display: flex;
     flex-direction: column;
@@ -458,8 +463,8 @@
     /* height: 56.03px; */
     margin-top: 10px;
     margin-bottom: 15px;
-    margin-right: 25px;
-    margin-left: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
     /* box-sizing: border-box; */
 }
 
@@ -470,6 +475,7 @@
     align-items: center;
     height: fit-content;
     box-sizing: border-box;
+    width: 60px;
 }
 
 .icon-styling {

@@ -67,7 +67,9 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       </div>
       <input className="search-bar" />
       {/* <HomeStats /> */}
-      <DeckList decks={decks} onDeckClick={handleDeckClick} />
+      <div className="deck-list-container">
+        <DeckList decks={decks} onDeckClick={handleDeckClick} />
+      </div>
       <KanjiModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
