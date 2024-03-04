@@ -86,10 +86,8 @@ const SamButtons: React.FC = () => {
     <button onClick={() => {signUp((contextValue as any).auth)}}>Sign Up</button>
     <button onClick={() => {console.log(contextValue)}}>User Info Log</button>
     <button onClick={() => {console.log(contextValue)}}>Add Character</button>
-    
     <button onClick={() => {addCharacter((contextValue as any).db)}}>Add Character</button>
     <button onClick={() => {getCharacters((contextValue as any).db)}}>Get Characters</button>
-
     </>
   );
 };

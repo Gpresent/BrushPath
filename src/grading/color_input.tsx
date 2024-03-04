@@ -1,7 +1,7 @@
 export default function color_input(grades: number[]) {
     const canvasSvg = document.getElementById("react-sketch-canvas");
     const paths = canvasSvg?.getElementsByTagName("path");
-    const passing = 0.5;
+    const passing = 0.6;
     if (paths) {
       if (!grades.length) {
         for (var i = 0; i < paths.length; i++) {
