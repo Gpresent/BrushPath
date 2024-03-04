@@ -72,7 +72,7 @@ const Home: React.FC = (props) => {
     <div className="home-page">
       {/* <SingleWordView character={character}/> */}
       <h2 className="home-greeting">
-        {/* {props.message}, {user?.displayName} */}
+        Hello, {user?.displayName}
       </h2>
       <HomeStats />
       <HomeStudyPrompt
