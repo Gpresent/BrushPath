@@ -20,17 +20,17 @@ const decks = [
      {
         id: 0,
         coverImage: "../sample_deck.png",
-        name: "awesome deck 1",
+        name: "JLPT N5",
       },
       {
         id: 1,
-        coverImage: "../sample_deck.png",
-        name: "awesome deck 2",
+        coverImage: "../deck-covers/sample1.jpeg",
+        name: "JLPT N4",
       },
       {
         id: 2,
-        coverImage: "../sample_deck.png",
-        name: "another dope deck",
+        coverImage: "../deck-covers/sample2.jpeg",
+        name: "JLPT N3",
       }
 ]
 
@@ -69,11 +69,10 @@ const Home: React.FC<HomeProps> = (props) => {
 
   return (
     <div className="home-page">
-      {/* <SingleWordView character={character}/> */}
       <h2 className="home-greeting">
-        {/* {props.message}, {user?.displayName} */}
+        {props.message}, {user?.displayName}
       </h2>
-      <HomeStats />
+      {/* <HomeStats /> */}
       <HomeStudyPrompt
         newUser={false}
         suggestedDeck={{

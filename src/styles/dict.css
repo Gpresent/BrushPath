@@ -18,12 +18,12 @@
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
-    gap: 10px;
+    gap: 20px;
 }
 
 .word-list {
     height: unset;
-    max-height: 70vh;
+    max-height: 72vh;
 }
 
 .character-header {
