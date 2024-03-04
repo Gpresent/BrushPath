@@ -15,7 +15,6 @@ export default function grade_crosses(inputCoords: number[][][], targetCoords: n
             if (!inputIntersections[i][j] && targetIntersections[i][j]) {
                 missingCrosses[i].push(j);
             }
-
         }
     }
     return [extraCrosses, missingCrosses];

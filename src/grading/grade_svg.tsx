@@ -50,10 +50,11 @@ export default function grade_svg(input: string, targetKanji: string) {
                 const centerScore = Math.max((meanCenterDiffs[i] - 30) / 60, 0)
                 const intersectionScore = 
                     extraIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0) + missingIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0);
+                const crossScore = extraCrosses[i].length + missingCrosses[i].length;
 
                 console.log("Stroke ", i + 1, " Angle Score: ", (1 - angleScore) * 100, "%, Length Score: ", ((1 - lengthScore) * 100).toPrecision(4), "%, Center Score: ", ((1 - centerScore) * 100).toPrecision(4), "%, Correct Intersections: ", intersectionScore === 0 ? "Yes" : "No");
 
-                grades[i] = Math.max(1 - intersectionScore - Number(angleScore) - Number(aspectScore) - Number(lengthScore) - Number(centerScore), 0);
+                grades[i] = Math.max(1 - intersectionScore - crossScore - Number(angleScore) - Number(aspectScore) - Number(lengthScore) - Number(centerScore), 0);
 
                 console.log("Grade: ", (grades[i] * 100).toPrecision(4), "%");
             }
