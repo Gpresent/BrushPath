@@ -1,6 +1,6 @@
 import app, { auth, db } from './Firebase'
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, NextOrObserver } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, NextOrObserver, GoogleAuthProvider } from "firebase/auth";
 
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../pages/Login';
@@ -14,6 +14,8 @@ export const AuthContext = createContext<{user: null| User}>({user: null});
 export const useAuth = () => {
     return useContext(AuthContext)
 };
+
+export const GoogleProvider = new GoogleAuthProvider();
 
 export const AuthProvider = ({children}: { children:ReactNode}) => {
     

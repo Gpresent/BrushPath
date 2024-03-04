@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "../styles/login.css";
-import { AuthContext } from "../utils/FirebaseContext";
+import { AuthContext, GoogleProvider } from "../utils/FirebaseContext";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -136,9 +136,9 @@ const handleoAuth = async (e: any) => {
             </div>
           </div>
         </form>
-        <button type="submit" onClick={handleoAuth}>
+        {/* <button type="submit" onClick={handleoAuth}>
           {"Sign in with Google"}
-        </button>
+        </button> */}
         <div className="login-error">{errorMsg}</div>
       </div>
     </>
