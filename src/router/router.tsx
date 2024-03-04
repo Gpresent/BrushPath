@@ -31,6 +31,7 @@ const ComponentRouter: React.FC = () => {
             <BrowserRouter>
             <Layout>
                 <Routes>
+                    <Route path="" element={<Home message={'Welcome back'} user={"Bart"}/>}></Route>
                     <Route path="/" element={<Home message={'Welcome back'} user={"Bart"}/>}></Route>
                     <Route path="/home/:user" element={<Home message={'Welcome back'} user={"Bart"}/>}></Route>
                     <Route path="/draw" element={<Draw/>}></Route>
