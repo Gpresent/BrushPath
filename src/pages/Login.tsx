@@ -6,7 +6,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signInWithPopup, 
-  GoogleAuthProvider
+  GoogleAuthProvider,
+  getAuth
 } from "firebase/auth";
 import { auth } from "../utils/Firebase";
 import { FirebaseError } from "firebase/app";
@@ -21,6 +22,8 @@ const Login: React.FC = () => {
   const contextValue = useContext(AuthContext);
   const [isRegister, setIsRegister] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const googAuth = getAuth();
 
   const displayError = (error: FirebaseAuthError) => {
     switch (error.code) {
