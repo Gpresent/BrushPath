@@ -1,11 +1,8 @@
 import {initializeApp}  from "firebase/app";
 
-import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-
-import React, { createContext } from 'react';
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 
@@ -32,7 +29,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);
+const offline_db = initializeFirestore(app, 
+  {localCache: 
+    persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()})
+  });
+
+export const db = offline_db;
 
 export const auth = getAuth(app);
 
