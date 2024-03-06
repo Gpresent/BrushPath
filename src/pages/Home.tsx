@@ -11,11 +11,13 @@ import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
 
-interface HomeProps {
-  message: string;
-  user: string;
-}
+// interface HomeProps {
+//   message: string;
+//   user: string;
+// }
 
+
+// also will be pulled from api
 const decks = [
      {
         id: 0,
@@ -58,7 +60,7 @@ const charData = {
 }
 
 
-const Home: React.FC<HomeProps> = (props) => {
+const Home: React.FC = (props) => {
   const handleDeckClick = (deckId:any) => {
     console.log('Deck clicked:', deckId);
   };
@@ -70,7 +72,7 @@ const Home: React.FC<HomeProps> = (props) => {
   return (
     <div className="home-page">
       <h2 className="home-greeting">
-        {props.message}, {user?.displayName}
+        Hello, {user?.displayName}
       </h2>
       {/* <HomeStats /> */}
       <HomeStudyPrompt

@@ -1,4 +1,6 @@
-
+body {
+    user-select: none;
+}
 
 .save-kanji {
     position: absolute;
