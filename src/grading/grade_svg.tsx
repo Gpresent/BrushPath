@@ -42,6 +42,7 @@ export default function grade_svg(input: string, targetKanji: string) {
             const passing = 0.6;
 
             const [inputCoords, targetCoords, aspectWarp] = fit_bbox(iCoords, tCoords);
+            console.log(inputCoords, targetCoords)
             if (inputCoords.length !== targetCoords.length) {
                 console.log("Input and target have different number of strokes");
                 color_input([]);
