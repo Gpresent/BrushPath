@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import "../App.css";
+import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -9,6 +9,8 @@ import color_input from "../grading/color_input";
 import grade_svg from "../grading/grade_svg";
 import { interpretImage } from "../recognition/interpretImage";
 import "../styles.css";
+
+
 
 
 const styles = {

@@ -1,6 +1,6 @@
 import Footer from './components/Footer'
 import Header from './components/Header'
-import './styles.css'
+import './styles/styles.css'
 
 export default function RootLayout({
   children,
@@ -11,6 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <Header></Header>
       <body style={{  marginLeft: '20px', marginRight: '20px'}}>
+          
         {children}
       </body>
       <Footer></Footer>

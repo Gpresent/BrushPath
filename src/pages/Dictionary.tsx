@@ -1,8 +1,11 @@
-import React from "react"
-import "../styles.css"
+import React, { useState } from "react"
+import '../styles/styles.css'
 import Character from '../types/Character';
 import WordList from "../components/WordList";
 import HomeStats from "../components/HomeStats";
+import { db } from "../utils/Firebase";
+import { collection, getDocs, query, where, limit, or } from "firebase/firestore";
+import { addToStore, getAllItemsFromStore} from "../indexed_db/character";
 
 
 interface DictionaryProps {
@@ -40,13 +43,67 @@ const jlptN5Kanji: Character[] = [
 ];
 
 const DictionaryView : React.FC<DictionaryProps> = ({title}) => {
+  const [characters,setCharacters] = useState<Character[]>(jlptN5Kanji)
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const text = formData.get("text") as string;
+      console.log(text);
+
+      search(text);
+      
+  }
+  const search = async (text:string ) => {
+    const characterRef = await collection(db,"Character");
+
+    // const q = query(characterRef, where('meanings', 'array-contains', text));
+    // const q = query(characterRef,
+    //   or(or(where('meanings', 'array-contains', text),where('literal','==',text)),or(where('readings.value', '>=', text)
+    //   ,where('readings.value', '<=', text+ '\uf8ff'))),limit(10));
+
+    //TODO add support for readings search?
+    // const q = query(characterRef,
+    //   or(where('meanings','array-contains',text),where('literal','==',text)),limit(10));
+
+    const q = query(characterRef,limit(10));
+
+    const querySnapshot = await getDocs(q);
+    const convertedCharacters:Character[] = []
+
+    querySnapshot.forEach((doc:any) => {
+      //TODO Replace with unified type
+      console.log(doc.id, " => ", doc.data());
+      convertedCharacters.push({
+        id: doc.id,
+        unicode: doc.data()['literal'],
+        hiragana:doc.data()['readings'].map((reading:any) => {if(reading.type === 'ja_kun') {
+          return reading.value
+        }}).join(''),
+        english:doc.data()['meanings'].join('/')
+      })
+      
+
+    });
+    setCharacters(convertedCharacters);
+    addToStore('Character',convertedCharacters).then(() => {
+      getAllItemsFromStore('Character').then((result: any) => {
+        console.log(result)
+      })
+    });
+
+
+  }
   return (
     <div className="dictionary-view">
 
-      <p className="my-words">My Words</p>
-      <input className="search-bar" />
+      <p  className="my-words">My Words</p>
+      <form onSubmit={handleSubmit} id='search-form'>
+      <input name="text" type="text" className="search-bar" />
+      <button type="submit">Search</button>
+      </form>
       <HomeStats />
-      <WordList words={jlptN5Kanji}/>
+      <WordList words={characters}/>
       
     </div>
   )
