@@ -10,13 +10,34 @@ const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 var serviceAccount = require("./zenji-1e015-firebase-adminsdk-zbq4u-39991f3582.json");
 
+const outPathLocal = 'firebase_out_schema.txt';
 const outPath = 'firebase_out.txt';
 
   const levelPath = 'kanjiJLPTLevels.json'
+  const partsPath = 'kanjiJLPTParts.json'
+
+function getCoords (str) {
+  try {
+  const coords = JSON.parse(fs.readFileSync('./public/interpolation_data/'+str+'.json', 'utf8'));
+    return coords.coords;
+  }
+  catch{
+    return []
+  }
+}
+function getSVG (str) {
+  try {
+  const coords = JSON.parse(fs.readFileSync('./public/interpolation_data/'+str+'.json', 'utf8'));
+    return coords.coords;
+  }
+  catch{
+    return []
+  }
+}
 
 const chars = JSON.parse(fs.readFileSync(outPath, 'utf8'));
 const levelMap = JSON.parse(fs.readFileSync(levelPath, 'utf8'));
-console.log(levelMap);
+const partsMap = JSON.parse(fs.readFileSync(partsPath, 'utf8'));
 const convertedChars = chars.map((char) => {
   
   return {
@@ -24,22 +45,29 @@ const convertedChars = chars.map((char) => {
     ...char,
     data: {
       ...char.data,
-      jlpt: levelMap[char.data.literal]? levelMap[char.data.literal]:"",
-
+      jlpt: partsMap[char.data.literal]? partsMap[char.data.literal]["JLPT"]:"",
+      one_word_meaning:"",
+      unicode_str:char.data.literal.codePointAt(0)?.toString(16).padStart(5, '0'),
+      meanings_str:char.data.meanings.join(" "),
+      parts: partsMap[char.data.literal]? partsMap[char.data.literal].Parts:[],
+      // svg:
+      coords: getCoords(char.data.literal.codePointAt(0)?.toString(16).padStart(5, '0')),
+      //Ja_kun
+      kun: char.data.readings.filter((reading) => reading.type === "ja_kun").map((reading) => reading.value),
+      //ja_on
+      on:char.data.readings.filter((reading) => reading.type === "ja_on").map((reading) => reading.value)
+      //one-word-meanings
+        //needs mr gpt
     }
   }
 })
 
-let counts = {};
-convertedChars.forEach((char) => {
-  if( counts[char.data.jlpt]) {
-    counts[char.data.jlpt] += 1;
-  }else {
-    counts[char.data.jlpt] = 1;
-  }
-})
-console.log(counts);
+const onlyJoyo = convertedChars.filter((char) => char.data.coords.length > 0)
 
+for(let i = 0; i < 100; i++) {
+  console.log(onlyJoyo[i])
+}
+console.log(onlyJoyo.length)
 // fs.writeFile(outPath, JSON.stringify(arr), (err) => {
 //   if (err) {
 //       console.error('Error writing to file:', err);
