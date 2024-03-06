@@ -11,16 +11,15 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^17.0.45",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "d3": "^7.8.5",
-    "fs": "^0.0.1-security",
-    "jszip": "^3.10.1",
-    "ngrok": "^5.0.0-beta.2",
     "firebase": "^10.8.0",
     "firebase-admin": "^12.0.0",
     "firebaseui": "^6.1.0",
+    "fs": "^0.0.1-security",
+    "jszip": "^3.10.1",
+    "ngrok": "^5.0.0-beta.2",
     "pathologist": "^0.1.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +27,6 @@
     "react-router-dom": "^6.22.1",
     "react-scripts": "5.0.1",
     "react-sketch-canvas": "^6.2.0",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",
     "workbox-broadcast-update": "^6.6.0",
@@ -66,5 +64,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3"
   }
 }
