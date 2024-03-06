@@ -39,12 +39,13 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
     const inputCrosses: number[][] = [];
     for (let i = 0; i < inputCoords.length; i++) inputCrosses[i] = [];
 
+    let endpoints = 3;
     for (let i = 0; i < inputCoords.length; i++) {
         for (let j = 0; j < inputCoords.length; j++) {
             inputCrosses[i][j] = 0;
             if (i === j) continue;
-            for (let k = 1; k < inputCoords[i].length - 2; k++) {
-                for (let l = 1; l < inputCoords[j].length - 2; l++) {
+            for (let k = endpoints; k < inputCoords[i].length - 1 - endpoints; k++) {
+                for (let l = endpoints; l < inputCoords[j].length - 1 - endpoints; l++) {
                     const ix1 = inputCoords[i][k][0];
                     const iy1 = inputCoords[i][k][1];
                     const ix2 = inputCoords[i][k + 1][0];
