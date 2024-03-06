@@ -58,7 +58,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList }) =
               onChange={(e) => setDeckTitle(e.target.value)}
             />
           </div>
-          <ul>
+          <ul className="add-word-list">
             {kanjiList.map(kanji => (
               <li key={kanji.id}>
                 <input 

@@ -15,10 +15,33 @@ body {
   align-items: 'center';
 }
 
+p {
+  margin: 0;
+}
+
+h2 {
+  margin: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+}
+
+input {
+  padding-left: 10px;
+  height: 36px;
+  border: 1px solid rgba(77, 77, 77, 1);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
 button {
   border-radius: 10px;
+  height: fit-content;
   background-color: white;
   border: 1px solid  rgba(77, 77, 77, 1);
+  color: black;
   font-size: 18px;
   font-family: 'DM Sans', sans-serif, -apple-system;
   font-weight: 500;
