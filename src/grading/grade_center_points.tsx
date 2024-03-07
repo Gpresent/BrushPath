@@ -12,7 +12,7 @@ export default function grade_center_points(inputCoords: number[][][], targetCoo
                 let y = 0;
                 let points = 0;
                 for (let i = 0; i < inputCoords.length; i++) {
-                    if (i === stroke || skip_indices.includes(i)) continue;
+                    if (skip_indices.includes(i)) continue;
                     for (let j = 0; j < inputCoords[i].length; j++) {
                         x += inputCoords[i][j][0];
                         y += inputCoords[i][j][1];
@@ -26,7 +26,7 @@ export default function grade_center_points(inputCoords: number[][][], targetCoo
                 let y = 0;
                 let points = 0;
                 for (let i = 0; i < targetCoords.length; i++) {
-                    if (i === stroke || skip_indices.includes(i)) continue;
+                    if (skip_indices.includes(i)) continue;
                     for (let j = 0; j < targetCoords[i].length; j++) {
                         x += targetCoords[i][j][0];
                         y += targetCoords[i][j][1];

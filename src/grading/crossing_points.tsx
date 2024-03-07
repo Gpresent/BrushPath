@@ -39,12 +39,13 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
     const inputCrosses: number[][] = [];
     for (let i = 0; i < inputCoords.length; i++) inputCrosses[i] = [];
 
+    let endpoints = 2;
     for (let i = 0; i < inputCoords.length; i++) {
         for (let j = 0; j < inputCoords.length; j++) {
             inputCrosses[i][j] = 0;
             if (i === j) continue;
-            for (let k = 1; k < inputCoords[i].length - 2; k++) {
-                for (let l = 1; l < inputCoords[j].length - 2; l++) {
+            for (let k = endpoints; k < inputCoords[i].length - 1 - endpoints; k++) {
+                for (let l = endpoints; l < inputCoords[j].length - 1 - endpoints; l++) {
                     const ix1 = inputCoords[i][k][0];
                     const iy1 = inputCoords[i][k][1];
                     const ix2 = inputCoords[i][k + 1][0];
@@ -54,8 +55,17 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
                     const tx4 = inputCoords[j][l + 1][0];
                     const ty4 = inputCoords[j][l + 1][1];
                     if (doIntersect(ix1, iy1, ix2, iy2, tx3, ty3, tx4, ty4)) {
-                        inputCrosses[i][j] = 1;
-                        break;
+                        var cross = 1;
+                        const strokeStart = inputCoords[i][0];
+                        const strokeEnd = inputCoords[i][inputCoords[i].length - 1];
+                        for (let m = 0; m < inputCoords[j].length; m++) {
+                            const startDiff = Math.sqrt((inputCoords[j][m][0] - strokeStart[0]) ** 2 + (inputCoords[j][m][1] - strokeStart[1]) ** 2);
+                            const endDiff = Math.sqrt((inputCoords[j][m][0] - strokeEnd[0]) ** 2 + (inputCoords[j][m][1] - strokeEnd[1]) ** 2);
+                            if (startDiff <= 20 || endDiff <= 20) {
+                                cross = 0;
+                            }
+                        }
+                        inputCrosses[i][j] = cross;
                     }
                 }
             }
