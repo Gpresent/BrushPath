@@ -104,8 +104,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
       }
     };
-    const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, '0') || '';
-
+    // const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, '0') || '';
+    const unicode = props.character?.unicode_str ? props.character?.unicode_str: "";
     loadSvg(unicode);
   }, [kanji]);
 

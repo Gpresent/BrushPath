@@ -9,11 +9,12 @@ function characterParser(data : any): Character {
     }
 
     // console.log(data)
-
+    
     var character : Character = {
         unicode: data.literal,
-        on: [],
-        kun: [],
+        unicode_str: data.unicode_str,
+        on: data.kun,
+        kun: data.on,
         nanori: data.nanori,
         radicals: [],
         english: data.meanings,
@@ -22,15 +23,10 @@ function characterParser(data : any): Character {
         grade: data.grade,
         jlpt: data.jlpt,
         compounds: data.compounds,
+        parts: data.parts
+        
     }
-    data.readings.forEach((element: any) => {
-        // TODO: add error handling in case type is undefined
-        if(element.type === "ja_kun"){
-            character.kun.push(element.value);
-        }else if(element.type === "ja_on"){
-            character.on.push(element.value);
-        }
-    });
+    
     data.radicals.forEach((element: any) => {
         character.radicals.push(element.value);
     });
