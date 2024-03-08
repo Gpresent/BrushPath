@@ -9,9 +9,12 @@ import { AuthProvider } from './utils/FirebaseContext';
  
 function App(this: any) {
   return (
-    <AuthProvider>
-    <ComponentRouter/>
-    </AuthProvider>
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+      <AuthProvider>
+      <ComponentRouter/>
+      </AuthProvider>
+    </>
   );
 }
 
