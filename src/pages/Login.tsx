@@ -12,6 +12,8 @@ import {
 import { auth } from "../utils/Firebase";
 import { FirebaseError } from "firebase/app";
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 interface FirebaseAuthError {
   code: string;
   message: string;
@@ -40,7 +42,7 @@ const Login: React.FC = () => {
         setErrorMsg("Email already in use.");
         break;
       default:
-        setErrorMsg("An error occurred during authentication: "+error.code);
+        setErrorMsg("An error occurred during authentication: " + error.code);
     }
   };
 
@@ -48,7 +50,31 @@ const Login: React.FC = () => {
     // Simple email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-};
+  };
+
+  const handleoAuth = async (e: any) => {
+    e.preventDefault();
+    signInWithPopup(googAuth, GoogleProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
 
 const handleoAuth = async (e: any) => {
   e.preventDefault();
@@ -82,9 +108,9 @@ const handleoAuth = async (e: any) => {
     const password = formData.get("password") as string;
 
     if (!isValidEmail(email)) {
-      setErrorMsg('Please enter a valid email address');
+      setErrorMsg("Please enter a valid email address");
       return;
-  }
+    }
 
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
@@ -136,9 +162,9 @@ const handleoAuth = async (e: any) => {
             </div>
           </div>
         </form>
-        {/* <button type="submit" onClick={handleoAuth}>
+        <button type="submit" onClick={handleoAuth}>
           {"Sign in with Google"}
-        </button> */}
+        </button>
         <div className="login-error">{errorMsg}</div>
       </div>
     </>

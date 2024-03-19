@@ -5,7 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Us
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-
+import { GoogleAuthProvider } from "firebase/auth";
 
 
 //Initialize Context
