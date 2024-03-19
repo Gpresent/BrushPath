@@ -7,18 +7,12 @@ import {
   updateProfile,
   signInWithPopup, 
   GoogleAuthProvider,
-  getAuth
-} from "firebase/auth";
-import { auth } from "../utils/Firebase";
-import { FirebaseError } from "firebase/app";
-
-import {
   getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
   signInWithCredential,
   getRedirectResult
 } from "firebase/auth";
+import { auth } from "../utils/Firebase";
+import { FirebaseError } from "firebase/app";
 import { useGoogleLogin, GoogleLogin } from "@react-oauth/google";
 
 
