@@ -105,6 +105,7 @@ const Login: React.FC = () => {
 
     // The signed-in user info.
     const user = result!.user;
+
     // IdP data available using getAdditionalUserInfo(result)
     // ...
   }).catch((error) => {
@@ -117,6 +118,7 @@ const Login: React.FC = () => {
     const credential = GoogleAuthProvider.credentialFromError(error);
     // ...
   });
+  
 
   return (
     <>
@@ -148,10 +150,12 @@ const Login: React.FC = () => {
             </div>
           </div>
         </form>
+        
 
-        <button onClick={()=>{signInWithRedirect(auth, GoogleProvider)}}>Sign in with Google</button>
+        <button onClick={()=>{signInWithPopup(auth, GoogleProvider)}}>Sign in with Google</button>
         <div className="login-error">{errorMsg}</div>
       </div>
+
     </>
   );
 };
