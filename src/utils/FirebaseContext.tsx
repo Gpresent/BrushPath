@@ -28,7 +28,10 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
     }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((firebaseUser ) => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      console.log("auth state changed")
+      console.log(firebaseUser);
+      console.log(auth)
       setLoading(true);
       setUser(firebaseUser);
       setLoading(false);
@@ -38,7 +41,6 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
   }, []);
       
     return (<AuthContext.Provider value={value}>
-
         {loading? <Loading /> : user? children: <Login />}
     </AuthContext.Provider>)
 }
