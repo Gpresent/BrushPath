@@ -1,9 +1,8 @@
 import { doc, DocumentReference, runTransaction } from "firebase/firestore";
 import { db } from "./Firebase";
 
-export const getDecksFromRefs = async (deckRefs: any) => {
+export const getDecksFromRefs =  async (deckRefs: any) => {
   try {
-    console.log("Number of deckRefs:", deckRefs.length);
 
     // Ensure each reference in deckRefs has a get() method
     // const invalidRefs = deckRefs.filter((ref:any) => typeof ref.get !== 'function');
@@ -11,7 +10,7 @@ export const getDecksFromRefs = async (deckRefs: any) => {
     //     console.error("Invalid references found:", invalidRefs);
     //     throw new Error("Invalid Firestore references");
     // }
-    await runTransaction(db, async (transaction) => {
+    const decks = await runTransaction(db, async (transaction) => {
       let deckPromises: any[] = [];
       deckRefs.forEach((ref: DocumentReference) => {
         deckPromises.push(transaction.get(ref));
@@ -22,12 +21,16 @@ export const getDecksFromRefs = async (deckRefs: any) => {
         .map((snap) => (snap.exists ? snap.data() : null))
         .filter((data) => data !== null);
 
-      console.log(decks);
-      return decks;
+        console.log(decks);
+        return decks;
     });
+    console.log(decks);
+    return decks;
+
   } catch (error) {
     console.error("Error fetching user decks:", error);
     throw error;
+    return [];
   }
 };
 
