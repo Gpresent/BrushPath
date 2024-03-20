@@ -29,7 +29,7 @@ const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({
       </div>
       <div
         className="image-wrapper"
-        style={{ backgroundImage: `url(${suggestedDeck.coverImage})` }}
+        style={{ backgroundImage: `url(${suggestedDeck.image})` }}
       >
         <div />
       </div>

@@ -48,7 +48,7 @@ const charData = {
     { type: 'ja_kun', value: 'えのき' }
   ],
   nanori: [],
-  radicals: [ { rad_type: 'classical', value: '75' } ],
+  radicals: [{ rad_type: 'classical', value: '75' }],
   grade: '8',
   jlpt: '1',
   freq: '1626',
@@ -56,23 +56,23 @@ const charData = {
     { cp_type: 'ucs', value: '6734' },
     { cp_type: 'jis208', value: '1-43-49' }
   ],
-  compounds: { '素朴': [ 'simple', 'artless', 'naive', 'unsophisticated' ] },
-  meanings: [ 'crude', 'simple', 'plain', 'docile' ],
+  compounds: { '素朴': ['simple', 'artless', 'naive', 'unsophisticated'] },
+  meanings: ['crude', 'simple', 'plain', 'docile'],
   stroke_count: '6',
   literal: '朴'
 }
 
 
 const Home: React.FC = (props) => {
-  const handleDeckClick = (deckId:any) => {
+  const handleDeckClick = (deckId: any) => {
     console.log('Deck clicked:', deckId);
   };
 
-  
-  //const {user} = useParams<any>();
-  const {user, userData, getUserData} = useContext(AuthContext);
 
-  const [decks,setDecks] = useState<any>([]);
+  //const {user} = useParams<any>();
+  const { user, userData, getUserData } = useContext(AuthContext);
+
+  const [decks, setDecks] = useState<any>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -81,38 +81,39 @@ const Home: React.FC = (props) => {
     // const fetchDecks = async () => {if(userData) {
     //   return await getDecksFromRefs(userData.decks);
     // }}
-    
-       
-    
-    
+
+
+
+
     // fetchDecks().then((decksResult) => {
     //   setDecks(decksResult);
     //   setLoading(false);
     // });
-    
-  },[]);
+
+  }, []);
 
   useEffect(() => {
-    const fetchDecks = async () => {if(userData) {
-      return await getDecksFromRefs(userData.decks);
+    const fetchDecks = async () => {
+      if (userData) {
+        return await getDecksFromRefs(userData.decks);
+      }
     }
-  }
 
     fetchDecks().then((decksResult) => {
       setDecks(decksResult);
       setLoading(false);
     })
-    
-       
-    
-    
-    
-    
-  },[userData]);
 
 
 
-  const character : Character = characterParser(charData);
+
+
+
+  }, [userData]);
+
+
+
+  const character: Character = characterParser(charData);
 
   return (
     <div className="home-page">
@@ -124,13 +125,13 @@ const Home: React.FC = (props) => {
         newUser={false}
         suggestedDeck={{
           id: 0,
-          coverImage: "../sample_deck.png",
+          image: "../sample_deck.png",
           name: "JLPT N5"
         }}
       />
-    <h2>Recent Decks</h2>
-    {(loading || decks === null || decks === undefined) ?<LoadingSpinner />: <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
-    {/* {JSON.stringify(userData)}
+      <h2>Recent Decks</h2>
+      {(loading || decks === null || decks === undefined) ? <LoadingSpinner /> : <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
+      {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div>
   );
