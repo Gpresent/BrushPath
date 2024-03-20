@@ -45,8 +45,8 @@ class SpacedRepetitionSystem {
         item.easeFactor = Math.max(1.3, item.easeFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
         item.nextReviewDate = new Date(Date.now() + item.interval * 24 * 60 * 60 * 1000);
 
-        console.log(`Next review for item ${item.id} is in ${item.interval} days.`);
-        console.log(item.nextReviewDate)
+        // console.log(`Next review for item ${item.id} is in ${item.interval} days.`);
+        // console.log(item.nextReviewDate)
     }
 }
 
