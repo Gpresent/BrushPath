@@ -1,51 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../styles/styles.css";
 import DeckList from "../components/DeckList";
 import HomeStats from "../components/HomeStats";
 import AddIcon from "@mui/icons-material/Add";
 import KanjiModal from "../components/KanjiModal";
 import Character from "../types/Character";
+import { AuthContext } from "../utils/FirebaseContext";
+import { getDecksFromRefs } from "../utils/FirebaseQueries";
 
 interface DeckProps {
   //message: string;
   title: string;
 }
 
-const decks = [
-  {
-    id: 0,
-    coverImage: "../sample_deck.png",
-    name: "JLPT N5",
-  },
-  {
-    id: 1,
-    coverImage: "../deck-covers/sample1.jpeg",
-    name: "JLPT N4",
-  },
-  {
-    id: 2,
-    coverImage: "../deck-covers/sample2.jpeg",
-    name: "JLPT N3",
-  },
-  {
-    id: 3,
-    coverImage: "../deck-covers/sample3.jpeg",
-    name: "JLPT N2",
-  },
-  {
-    id: 4,
-    coverImage: "../deck-covers/sample4.jpeg",
-    name: "JLPT N1",
-  },
-  {
-    id: 5,
-    coverImage: "../deck-covers/sample5.jpeg",
-    name: "Custom Deck",
-  },
-];
+// const decks = [
+//   {
+//     id: 0,
+//     coverImage: "../sample_deck.png",
+//     name: "JLPT N5",
+//   },
+//   {
+//     id: 1,
+//     coverImage: "../deck-covers/sample1.jpeg",
+//     name: "JLPT N4",
+//   },
+//   {
+//     id: 2,
+//     coverImage: "../deck-covers/sample2.jpeg",
+//     name: "JLPT N3",
+//   },
+//   {
+//     id: 3,
+//     coverImage: "../deck-covers/sample3.jpeg",
+//     name: "JLPT N2",
+//   },
+//   {
+//     id: 4,
+//     coverImage: "../deck-covers/sample4.jpeg",
+//     name: "JLPT N1",
+//   },
+//   {
+//     id: 5,
+//     coverImage: "../deck-covers/sample5.jpeg",
+//     name: "Custom Deck",
+//   },
+// ];
 
 const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { userData } = useContext(AuthContext);
+  const [decks, setDecks] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchDecks = async () => {
+      if (userData && userData.decks) {
+
+        const fetchedDecks = await getDecksFromRefs(userData.decks);
+        setDecks(fetchedDecks);
+      }
+    };
+
+    fetchDecks();
+  }, [userData]);
 
   const handleAddDeck = () => {
     setModalOpen(true);
