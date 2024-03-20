@@ -21,23 +21,23 @@ import { getDecksFromRefs } from "../utils/FirebaseQueries";
 
 
 // also will be pulled from api
-const decks = [
-     {
-        id: 0,
-        coverImage: "../sample_deck.png",
-        name: "JLPT N5",
-      },
-      {
-        id: 1,
-        coverImage: "../deck-covers/sample1.jpeg",
-        name: "JLPT N4",
-      },
-      {
-        id: 2,
-        coverImage: "../deck-covers/sample2.jpeg",
-        name: "JLPT N3",
-      }
-]
+// const decks = [
+//      {
+//         id: 0,
+//         coverImage: "../sample_deck.png",
+//         name: "JLPT N5",
+//       },
+//       {
+//         id: 1,
+//         coverImage: "../deck-covers/sample1.jpeg",
+//         name: "JLPT N4",
+//       },
+//       {
+//         id: 2,
+//         coverImage: "../deck-covers/sample2.jpeg",
+//         name: "JLPT N3",
+//       }
+// ]
 
 
 const charData = {
@@ -72,32 +72,41 @@ const Home: React.FC = (props) => {
   //const {user} = useParams<any>();
   const {user, userData, getUserData} = useContext(AuthContext);
 
-  const [decksp,setDecks] = useState<any>(null);
+  const [decks,setDecks] = useState<any>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getUserData();
-    if(userData) {
-      setDecks(getDecksFromRefs(userData.decks));
-    }
+    // const fetchDecks = async () => {if(userData) {
+    //   return await getDecksFromRefs(userData.decks);
+    // }}
     
        
     
     
-    setLoading(false);
+    // fetchDecks().then((decksResult) => {
+    //   setDecks(decksResult);
+    //   setLoading(false);
+    // });
     
   },[]);
 
   useEffect(() => {
-    if(userData) {
-      setDecks(getDecksFromRefs(userData.decks));
+    const fetchDecks = async () => {if(userData) {
+      return await getDecksFromRefs(userData.decks);
     }
+  }
+
+    fetchDecks().then((decksResult) => {
+      setDecks(decksResult);
+      setLoading(false);
+    })
     
        
     
     
-    setLoading(false);
+    
     
   },[userData]);
 
@@ -120,9 +129,9 @@ const Home: React.FC = (props) => {
         }}
       />
     <h2>Recent Decks</h2>
-    {loading? <LoadingSpinner />: <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
-    {JSON.stringify(userData)}
-    {JSON.stringify(decksp)}
+    {(loading || decks === null || decks === undefined) ?<LoadingSpinner />: <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
+    {/* {JSON.stringify(userData)}
+    {JSON.stringify(decks)} */}
     </div>
   );
 };
