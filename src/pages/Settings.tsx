@@ -7,13 +7,20 @@ const SettingsView: React.FC = () => {
   return (
     <div className="settings-page">
       <button
-        onClick={async () => {
-          await signOut(auth);
-          googleLogout();
-        }}
-      >
-        Log out
-      </button>
+          onClick={() => {
+            
+          }}
+        >
+          Settings
+        </button>
+        <button
+          onClick={async () => {
+            await signOut(auth);
+            googleLogout();
+          }}
+        >
+          Log out
+        </button>
     </div>
   );
 };

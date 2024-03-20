@@ -1,7 +1,11 @@
 .settings-page{
     height: 80vh;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
     justify-content: center;
     align-items: center;
 }
+
+
 
