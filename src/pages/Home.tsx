@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/styles.css";
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
@@ -10,6 +10,9 @@ import { auth } from "../utils/Firebase";
 import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { userInfo } from "os";
+import { getDecksFromRefs } from "../utils/FirebaseQueries";
 
 // interface HomeProps {
 //   message: string;
@@ -64,8 +67,41 @@ const Home: React.FC = (props) => {
   const handleDeckClick = (deckId:any) => {
     console.log('Deck clicked:', deckId);
   };
+
+  
   //const {user} = useParams<any>();
-  const {user} = useContext(AuthContext);
+  const {user, userData, getUserData} = useContext(AuthContext);
+
+  const [decksp,setDecks] = useState<any>(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    getUserData();
+    if(userData) {
+      setDecks(getDecksFromRefs(userData.decks));
+    }
+    
+       
+    
+    
+    setLoading(false);
+    
+  },[]);
+
+  useEffect(() => {
+    if(userData) {
+      setDecks(getDecksFromRefs(userData.decks));
+    }
+    
+       
+    
+    
+    setLoading(false);
+    
+  },[userData]);
+
+
 
   const character : Character = characterParser(charData);
 
@@ -84,7 +120,9 @@ const Home: React.FC = (props) => {
         }}
       />
     <h2>Recent Decks</h2>
-    <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>
+    {loading? <LoadingSpinner />: <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
+    {JSON.stringify(userData)}
+    {JSON.stringify(decksp)}
     </div>
   );
 };
