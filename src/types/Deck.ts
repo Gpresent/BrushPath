@@ -1,7 +1,7 @@
 type Deck = {
     id: number;
-    coverImage: string;
+    image: string;
     name: string;
 };
-  
+
 export default Deck;

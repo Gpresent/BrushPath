@@ -4,18 +4,18 @@ import Deck from '../types/Deck';
 
 interface DeckListProps {
   decks: any[];
-  onDeckClick: (deckId: number) => void; 
+  onDeckClick: (deckId: number) => void;
 }
 
 const DeckList: React.FC<DeckListProps> = ({ decks, onDeckClick }) => {
-  console.log(JSON.stringify(decks))
+
   return (
     <div className="deck-list">
-      {decks.map((deck) => (
-        <DeckCard 
-          key={deck.id} 
-          deck={deck} 
-          onClick={() => onDeckClick(deck.id)} 
+      {decks.map((deck, index) => (
+        <DeckCard
+          key={index} // Using the index as a key
+          deck={deck}
+          onClick={() => onDeckClick(deck.id)}
         />
       ))}
 
