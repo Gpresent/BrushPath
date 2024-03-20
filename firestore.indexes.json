@@ -1,0 +1,51 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "Character",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "literal",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "readings.value",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "Character",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "meanings",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "literal",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "readings.value",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "Character",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "meanings",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "readings.value",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

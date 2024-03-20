@@ -5,11 +5,11 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Us
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-import { Timestamp, doc, runTransaction } from 'firebase/firestore';
+import { DocumentData, Timestamp, doc, runTransaction } from 'firebase/firestore';
 
 
 //Initialize Context
-export const AuthContext = createContext<{user: null| User}>({user: null});
+export const AuthContext = createContext<{user: null| User, userData: null| DocumentData , getUserData: () => void}>({user: null,userData: null , getUserData: () => {}});
 
 export const useAuth = () => {
     return useContext(AuthContext)
@@ -22,10 +22,39 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
 
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const value = {
-      
-        user: user
+    const [userData, setUserData] = useState<any>(null);
+
+    
+    
+    const getUserData = async () => {
+      if(user === null || user.email === null) {
+        return;
+      }
+      try {
+        const userRef = await doc(db, "User", user.email);
+        await runTransaction(db, async (transaction) => {
+          
+          const userDoc = await transaction.get(userRef);
+          if (!userDoc.exists()) {
+            throw "Document doesn't exists!";
+          }
+          setUserData(userDoc.data()); 
+          console.log(userDoc.data());          
+        });
+
+        console.log("Transaction successfully committed!");
+        
+        
+      } catch (e) {
+        console.log("Transaction failed: ", e);
+      }
     }
+
+    const value = {
+      userData: userData,
+      getUserData: getUserData,
+      user: user
+  }
 
     const updateUserDatabase = async (user:any) => {
       try {
@@ -34,7 +63,9 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
           
           const userDoc = await transaction.get(userRef);
           if (userDoc.exists()) {
+            getUserData();
             throw "Document exists!";
+            
           }
       
           
@@ -47,6 +78,7 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
             name: user.displayName,
             total_use_time: 0,
           });
+          getUserData();
           
           //Add character_progress collection?
         });
@@ -65,6 +97,7 @@ export const AuthProvider = ({children}: { children:ReactNode}) => {
       setUser(firebaseUser);
       if(firebaseUser != null) {
         updateUserDatabase(firebaseUser);
+        
       }
       setLoading(false);
     });
