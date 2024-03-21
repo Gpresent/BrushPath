@@ -8,6 +8,8 @@ interface DeckCardProps {
 }
 
 const DeckCard: React.FC<DeckCardProps> = ({ deck, onClick }) => {
+
+
   return (
     <div className="deck-card clip-contents" onClick={onClick}>
       <div className="cover-image" style={{ backgroundImage: `url(${deck.image})` }}>
