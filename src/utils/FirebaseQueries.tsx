@@ -1,5 +1,7 @@
-import { doc, DocumentReference, runTransaction, getDoc } from "firebase/firestore";
+import { doc, DocumentReference, runTransaction, getDoc, getDocFromCache } from "firebase/firestore";
 import { db } from "./Firebase";
+import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
+import { FirebaseError } from "firebase/app";
 
 
 //Sam code
@@ -37,25 +39,62 @@ import { db } from "./Firebase";
 //   }
 // };
 
+
+// Fetching system will first hit the cache to see if deck exists 
+// Else it will then fetch from Firebase
+// In case of Character Refs, need to find a way to effeicently store characters in cache, paginate store them all at once? 
+
 export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   try {
-    const deckPromises = deckRefs.map(ref => getDoc(ref));
-    const deckSnaps = await Promise.all(deckPromises);
 
-    const decks = deckSnaps.map(snap => {
-      if (snap.exists()) {
-        console.log(`Data for ${snap.id} came from ${snap.metadata.fromCache ? 'cache' : 'server'}.`);
-        return snap.data();
-      }
-      return null;
-    }).filter(data => data !== null);
-    console.log(decks);
-    return decks;
+
+    const deckPromises = deckRefs.map(ref =>
+      fetchDocument(ref.parent.id, ref.id)
+    );
+
+    const deckSnaps = await Promise.all(deckPromises);
+    const validDecks = deckSnaps.filter(deck => deck !== null);
+
+    return validDecks;
   } catch (error) {
     console.error("Error fetching user decks:", error);
     throw error;
   }
 };
+
+
+const fetchDocument = async (collectionName: string, documentId: string) => {
+  const docRef = doc(db, collectionName, documentId);
+
+  try {
+
+    const docFromCache = await getDocFromCache(docRef);
+
+    console.log("Retrieved document from cache");
+    return docFromCache.data();
+  } catch (error) {
+    console.error("Document not in cache or error fetching from cache:", error);
+
+
+    try {
+      const docFromServer = await getDoc(docRef);
+      if (docFromServer.exists()) {
+
+        console.log("Retrieved document from server:");
+        return docFromServer.data();
+
+      } else {
+        console.log("Document does not exist in Firestore.");
+        return null;
+      }
+    } catch (serverError) {
+      console.error("Error fetching document from server:", serverError);
+      return null;
+    }
+  }
+};
+
+
 
 //DO NOT USE UNTIL WE FIGURE OUT CACHING
 export const getCharsFromRefs = async (charRefs: any) => {
