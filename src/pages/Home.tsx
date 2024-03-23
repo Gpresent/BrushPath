@@ -13,6 +13,7 @@ import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { userInfo } from "os";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
+import { useNavigate } from "react-router-dom";
 
 // interface HomeProps {
 //   message: string;
@@ -64,8 +65,12 @@ const charData = {
 
 
 const Home: React.FC = (props) => {
+  const navigate = useNavigate();
+  
   const handleDeckClick = (deckId: any) => {
     console.log('Deck clicked:', deckId);
+    navigate(`/deck/${deckId}`);
+
   };
 
 
@@ -100,6 +105,7 @@ const Home: React.FC = (props) => {
     }
 
     fetchDecks().then((decksResult) => {
+      console.log(decksResult);
       setDecks(decksResult);
       setLoading(false);
     })

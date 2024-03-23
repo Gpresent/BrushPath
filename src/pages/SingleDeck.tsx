@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/styles.css"
 import Character from '../types/Character';
 import WordList from "../components/WordList";
@@ -6,6 +6,10 @@ import HomeStats from "../components/HomeStats";
 import characterParser from "../utils/characterParser";
 import AddIcon from "@mui/icons-material/Add";
 import DeckEditModal from "../components/DeckEditModal";
+import { useParams } from "react-router-dom";
+import { DocumentData } from "firebase/firestore";
+import { getDeckFromID } from "../utils/FirebaseQueries";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 interface DeckProp {
@@ -19,10 +23,33 @@ interface DeckProp {
     hiragana: string;
     english: string;
 };, where unicode is the kanji*/
-
+type RetrievableData = {
+  data: DocumentData| null, loading: boolean, error:string
+}
 
 const SingleDeckView : React.FC<DeckProp> = ({title}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deck, setDeck] = useState<RetrievableData>({data: null, loading: true, error: ""});
+
+
+  let { id } = useParams();
+
+  useEffect(() => {
+    if(id) {
+      getDeckFromID(id).then((deckData) => {
+        if(deckData) {
+          setDeck({data:deckData,loading:false, error:"Deck not found"})
+        }
+        else {
+          setDeck({data:null,loading:false, error:"Deck not found"})
+        }
+      });
+      
+    }
+    else {
+      setDeck({data: null, loading: false, error: "No url parameter"})
+    }
+  },[])
 
   const handleEditDeck = () => {
       setIsEditModalOpen(!isEditModalOpen);
@@ -30,15 +57,20 @@ const SingleDeckView : React.FC<DeckProp> = ({title}) => {
 
   var jlptN5Kanji: Character[] = jlptN5KanjiBase.map((character) =>
     characterParser(character)
-);
+  );
 
   return (
+    
     <div className="deck-landing">
+      {deck.loading ? <LoadingSpinner />:
+      deck.data === null? <div> {deck.error}</div>
+      :
+      <>
       <div className="deck-header">
-          <h2 className="deck-title">{title}</h2>
+          <h2 className="deck-title">{id}</h2>
           <AddIcon className="addButton" onClick={handleEditDeck} />
       </div>
-      <p className="my-words">{title}</p>
+      <p className="my-words">{deck.data?.name}</p>
       <input className="search-bar" />
       <HomeStats />
       <WordList words={jlptN5Kanji}/>
@@ -50,7 +82,11 @@ const SingleDeckView : React.FC<DeckProp> = ({title}) => {
               deckName={title} 
           />
       )}
+      </>
+      }
+    
     </div>
+      
   )
 }
 

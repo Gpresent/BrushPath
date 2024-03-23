@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/styles.css";
 import Deck from "../types/Deck";
+import { Link } from "react-router-dom";
 
 interface DeckCardProps {
   deck: Deck;

@@ -71,7 +71,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
     const docFromCache = await getDocFromCache(docRef);
 
     console.log("Retrieved document from cache");
-    return docFromCache.data();
+    return {...docFromCache.data(), _id:docFromCache.id};
   } catch (error) {
     console.error("Document not in cache or error fetching from cache:", error);
 
@@ -81,7 +81,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
       if (docFromServer.exists()) {
 
         console.log("Retrieved document from server:");
-        return docFromServer.data();
+        return {...docFromServer.data(), _id:docFromServer.id};
 
       } else {
         console.log("Document does not exist in Firestore.");
@@ -94,28 +94,22 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
   }
 };
 
+// Fetching system will first hit the cache to see if deck exists 
+// Else it will then fetch from Firebase
+// In case of Character Refs, need to find a way to effeicently store characters in cache, paginate store them all at once? 
 
-
-//DO NOT USE UNTIL WE FIGURE OUT CACHING
-export const getCharsFromRefs = async (charRefs: any) => {
+export const getDeckFromID = async (deckId: string) => {
   try {
 
-    await runTransaction(db, async (transaction) => {
-      let deckPromises: any[] = [];
-      charRefs.forEach((ref: DocumentReference) => {
-        deckPromises.push(transaction.get(ref));
-      });
-      const charSnaps = await Promise.all(deckPromises);
+    const deckSnap = await fetchDocument("Deck",deckId)
 
-      const decks = charSnaps
-        .map((snap) => (snap.exists ? snap.data() : null))
-        .filter((data) => data !== null);
-
-      console.log(decks);
-      return decks;
-    });
+    return deckSnap;
   } catch (error) {
-    console.error("Error fetching user chars:", error);
+    console.error("Error fetching user decks:", error);
     throw error;
   }
 };
+
+
+
+
