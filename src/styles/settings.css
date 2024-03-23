@@ -1,10 +1,51 @@
 .settings-page{
-    height: 80vh;
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: center;
     align-items: center;
+}
+.settings-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 20px;
+}
+.title {
+    color: rgba(0, 0, 0, 1);
+    font-size: 35px;
+    line-height: 69%;
+    font-family: DM Sans, sans-serif;
+    font-weight: 500;
+}
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+    padding: 10px 15px; 
+}
+
+.toggle-button {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    background-color: white;
+    transition: background-color 0.3s;
+}
+
+.toggle-button.active {
+    background-color: #333;
 }
 
 
