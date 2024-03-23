@@ -73,6 +73,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
 
   const handleDeckClick = (deckId: any) => {
     console.log("Deck clicked:", deckId);
+
   };
 
   return (
@@ -84,6 +85,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       <input className="search-bar" />
       {/* <HomeStats /> */}
       <div className="deck-list-container">
+        
         <DeckList decks={decks} onDeckClick={handleDeckClick} />
       </div>
       <KanjiModal

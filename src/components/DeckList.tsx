@@ -15,7 +15,7 @@ const DeckList: React.FC<DeckListProps> = ({ decks, onDeckClick }) => {
         <DeckCard
           key={index} // Using the index as a key
           deck={deck}
-          onClick={() => onDeckClick(deck.id)}
+          onClick={() => onDeckClick(deck._id)}
         />
       ))}
 
