@@ -11,6 +11,30 @@ const SettingsView: React.FC = () => {
   const handleToggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+  const handleArrowClick = (spanName: string) => {
+    // Perform different actions based on spanName
+    switch (spanName) {
+      case 'Username':
+        console.log("Username Arrow Clicked")
+        break;
+      case 'Profile Picture':
+        console.log("Profile Picture Arrow Clicked")
+        break;
+      case 'Accessibility':
+        console.log("Accessibility Arrow Clicked")
+        break;
+      case 'Privacy Policy':
+        console.log("Privacy Policy Arrow Clicked")
+        break;
+      case 'Terms of Service':
+        console.log("Terms of Service Arrow Clicked")
+        break;
+
+      default:
+        console.log("Nothing to see here people 0_0")
+        break;
+    }
+  };
 
   return (
     <div className="settings-page">
@@ -19,12 +43,12 @@ const SettingsView: React.FC = () => {
         <p className="title">Settings</p>
         <div className="settings-list">
           <div className="settings-item">
-            <span>Username</span>
-            <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
+            <span onClick={() => handleArrowClick('Username')}>Username</span>
+            <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Username')} />
           </div>
           <div className="settings-item">
-            <span>Profile Picture</span>
-            <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
+            <span onClick={() => handleArrowClick('Profile Picture')}>Profile Picture</span>
+            <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Profile Picture')} />
           </div>
         </div>
 
@@ -39,20 +63,20 @@ const SettingsView: React.FC = () => {
             ></div>
           </div>
           <div className="settings-item">
-            <span>Accessibility</span>
-            <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
+            <span onClick={() => handleArrowClick('Accessibility')}>Accessibility</span>
+            <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Accessibility')} />
           </div>
         </div>
 
         <p className="title">About</p>
         <div className="settings-list">
           <div className="settings-item">
-            <span>Privacy Policy</span>
-            <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
+            <span onClick={() => handleArrowClick('Privacy Policy')}>Privacy Policy</span>
+            <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Privacy Policy')} />
           </div>
           <div className="settings-item">
-            <span>Terms of Service</span>
-            <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
+            <span onClick={() => handleArrowClick('Terms of Service')}>Terms of Service</span>
+            <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Terms of Service')} />
           </div>
           <div className="settings-item">
             <span>Contact Us</span>
