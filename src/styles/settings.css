@@ -52,4 +52,56 @@
 }
 
 
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    border: 2px solid #333;
+}
+
+.modal-title {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 1); 
+}
+
+.modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+}
+
+.input-label {
+    font-size: 15px;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left; 
+}
+
+.input-icon-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.modal-content input {
+    padding: 8px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    flex-grow: 1;
+}
+
+.right-arrow-modal {
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    margin-left: 10px;
+}
 
