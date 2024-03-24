@@ -4,9 +4,11 @@ import { signOut } from 'firebase/auth';
 import "../styles/settings.css";
 import { googleLogout } from "@react-oauth/google";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import UsernameModal from '../components/UsernameModal';
 
 const SettingsView: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
 
   const handleToggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -15,7 +17,7 @@ const SettingsView: React.FC = () => {
     // Perform different actions based on spanName
     switch (spanName) {
       case 'Username':
-        console.log("Username Arrow Clicked")
+        setShowUsernameModal(true);
         break;
       case 'Profile Picture':
         console.log("Profile Picture Arrow Clicked")
@@ -34,6 +36,15 @@ const SettingsView: React.FC = () => {
         console.log("Nothing to see here people 0_0")
         break;
     }
+  };
+
+  const closeUsernameModal = () => {
+    setShowUsernameModal(false);
+  };
+
+  const handleUsernameSubmit = (newUsername: string) => {
+    console.log("New Username Submitted:", newUsername);
+    closeUsernameModal();
   };
 
   return (
@@ -95,6 +106,12 @@ const SettingsView: React.FC = () => {
       >
         Sign Out
       </button>
+
+      <UsernameModal
+        isOpen={showUsernameModal}
+        onClose={closeUsernameModal}
+        onSubmit={handleUsernameSubmit}
+      />
     </div>
   );
 };
