@@ -170,6 +170,18 @@ body {
     position: relative;
 }
 
+.deck-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
 @media (min-width: 700px) {
     .deck-card {
         width: 49%;
@@ -399,7 +411,7 @@ body {
     border-radius: 10px;
 }
 
-.add-word-list{
+.add-word-list {
     overflow: scroll;
     max-height: 60vh;
 }

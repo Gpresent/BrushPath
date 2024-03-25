@@ -48,8 +48,16 @@ interface DeckProps {
 
 const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { userData } = useContext(AuthContext);
+  const { userData, getUserData } = useContext(AuthContext);
   const [decks, setDecks] = useState<any>([]);
+
+  useEffect(() => {
+    if(!userData) {
+      getUserData();
+    }
+
+
+  }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
@@ -70,10 +78,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
     setModalOpen(false);
   };
 
-  const handleDeckClick = (deckId: any) => {
-    console.log("Deck clicked:", deckId);
 
-  };
 
   return (
     <div className="deck-landing">
@@ -85,7 +90,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       {/* <HomeStats /> */}
       <div className="deck-list-container">
         
-        <DeckList decks={decks} onDeckClick={handleDeckClick} />
+        <DeckList decks={decks}  />
       </div>
       <KanjiModal
         isOpen={isModalOpen}

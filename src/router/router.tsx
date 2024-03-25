@@ -3,7 +3,6 @@ import DictionaryView from '../pages/Dictionary';
 import Home from '../pages/Home';
 import Draw from '../pages/Draw';
 import Layout from '../Layout'
-import DeckList from '../components/DeckList';
 import Deck from '../types/Deck';
 import SingleWordView from '../pages/SingleWord';
 import DeckLandingView from '../pages/DeckLanding';
