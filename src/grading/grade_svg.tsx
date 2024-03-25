@@ -51,6 +51,7 @@ export default function grade_svg(iCoords: number[][][], tCoords: number[][][], 
         const crossScore = (extraCrosses[i].length + missingCrosses[i].length) * 0.3;
 
         strokeInfo.push("Stroke ", (i + 1).toString(), " Angle Score: ", ((1 - angleScore) * 100).toString(), "%, Length Score: ", ((1 - lengthScore) * 100).toPrecision(4).toString(), "%, Center Score: ", ((1 - centerScore) * 100).toPrecision(4).toString(), "%, Correct Intersections: ", intersectionScore === 0 ? "Yes" : "No", ", Correct Crosses: ", crossScore === 0 ? "Yes" : "No");
+        console.log("Stroke ", (i + 1).toString(), " Angle Score: ", ((1 - angleScore) * 100).toString(), "%, Length Score: ", ((1 - lengthScore) * 100).toPrecision(4).toString(), "%, Center Score: ", ((1 - centerScore) * 100).toPrecision(4).toString(), "%, Correct Intersections: ", intersectionScore === 0 ? "Yes" : "No", ", Correct Crosses: ", crossScore === 0 ? "Yes" : "No");
 
         grades[i] = Math.max(1 - intersectionScore - crossScore - angleScore - aspectScore - lengthScore - centerScore, 0);
 

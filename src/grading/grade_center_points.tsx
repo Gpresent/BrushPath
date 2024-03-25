@@ -3,6 +3,8 @@ export default function grade_center_points(inputCoords: number[][][], targetCoo
     const center_diffs = [];
     const mean_center_diffs = [];
     const skip_indices: number[] = [];
+    console.log(inputCoords);
+    console.log(targetCoords);
 
     while (true) {
         for (let stroke = 0; stroke < inputCoords.length; stroke++){
@@ -57,6 +59,7 @@ export default function grade_center_points(inputCoords: number[][][], targetCoo
                 max_diff = mean_center_diffs[i];
             }
         }
+        console.log(center_diffs);
         const max_diff_index = mean_center_diffs.indexOf(max_diff);
 
         if (max_diff > 50) {
