@@ -65,7 +65,7 @@ const charData = {
 
 
 const Home: React.FC = (props) => {
-  
+
 
 
   //const {user} = useParams<any>();
@@ -76,7 +76,7 @@ const Home: React.FC = (props) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if(!userData) {
+    if (!userData) {
       getUserData();
     }
 
