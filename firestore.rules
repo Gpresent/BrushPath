@@ -1,0 +1,34 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Enforce the structure for the "Character" collection
+    match /Character/{characterId} {
+      allow read, write: if request.resource.data.keys().hasAll([
+        'character_text', 'components', 'hiragana', 'jlpt_level_n',
+        'katakana', 'meaning', 'number_of_strokes', 'radical',
+        'similar_kanji'
+      ]) &&
+      request.resource.data.character_text is string &&
+      request.resource.data.components is list &&
+      request.resource.data.hiragana is string &&
+      request.resource.data.jlpt_level_n is int &&
+      request.resource.data.katakana is string &&
+      request.resource.data.meaning is list &&
+      request.resource.data.number_of_strokes is int &&
+      request.resource.data.radical is string &&
+      request.resource.data.similar_kanji is string;
+
+      // Enforce the structure for the "Stroke" subcollection within "Character"
+      match /Stroke/{strokeId} {
+        allow read, write: if request.resource.data.keys().hasAll(['order', 'path_element']) &&
+        request.resource.data.order is int &&
+        request.resource.data.path_element is string;
+      }
+    }
+  }
+}
