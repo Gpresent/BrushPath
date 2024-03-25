@@ -14,8 +14,8 @@ export default function path_angles(inputCoords: number[][][], targetCoords: num
         targetAngles[i][j] = Math.atan2(targetCoords[i][j + 1][1] - targetCoords[i][j][1], targetCoords[i][j + 1][0] - targetCoords[i][j][0]) * 180 / Math.PI;
       }
     }
-    console.log("Input angles: ", inputAngles);
-    console.log("Target angles: ", targetAngles);
+    //console.log("Input angles: ", inputAngles);
+    //console.log("Target angles: ", targetAngles);
     const squiggle: number[] = [];
 
     targetAngles.forEach((strokeAngles, i) => {
@@ -26,6 +26,6 @@ export default function path_angles(inputCoords: number[][][], targetCoords: num
       const averageDifference = totalDifference / strokeAngles.length;
       squiggle.push(averageDifference);
     });
-    console.log("Squiggle: ", squiggle);
+    //console.log("Squiggle: ", squiggle);
     return [inputAngles, targetAngles, squiggle];
 }
