@@ -54,7 +54,6 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   useEffect(() => {
     const fetchDecks = async () => {
       if (userData && userData.decks) {
-
         const fetchedDecks = await getDecksFromRefs(userData.decks);
         setDecks(fetchedDecks);
       }

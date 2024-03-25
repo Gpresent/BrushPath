@@ -105,7 +105,7 @@ const Home: React.FC = (props) => {
     }
 
     fetchDecks().then((decksResult) => {
-      console.log(decksResult);
+      // console.log(decksResult);
       setDecks(decksResult);
       setLoading(false);
     })
