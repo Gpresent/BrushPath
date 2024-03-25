@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { auth } from '../utils/Firebase';
 import { signOut } from 'firebase/auth';
 import "../styles/settings.css";
@@ -6,9 +6,11 @@ import { googleLogout } from "@react-oauth/google";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import UsernameModal from '../components/UsernameModal';
 
+
 const SettingsView: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showUsernameModal, setShowUsernameModal] = useState(false);
+
 
   const handleToggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -43,7 +45,7 @@ const SettingsView: React.FC = () => {
   };
 
   const handleUsernameSubmit = (newUsername: string) => {
-    console.log("New Username Submitted:", newUsername);
+
     closeUsernameModal();
   };
 
@@ -67,8 +69,8 @@ const SettingsView: React.FC = () => {
         <div className="settings-list">
           <div className="settings-item">
             <span>Dark Mode</span>
-            <div 
-              id="toggleButton" 
+            <div
+              id="toggleButton"
               className={`toggle-button ${isDarkMode ? 'active' : ''}`} //if true/false, shorthand goes crazy
               onClick={handleToggleDarkMode}
             ></div>

@@ -4,7 +4,9 @@ import {
   runTransaction,
   getDoc,
   getDocFromCache,
+
 } from "firebase/firestore";
+import { getAuth, updateProfile } from "firebase/auth";
 import { db } from "./Firebase";
 import {
   getStorage,
@@ -102,7 +104,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
   try {
     const docFromCache = await getDocFromCache(docRef);
 
-    console.log("Retrieved document from cache");
+    // console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };
   } catch (error) {
     console.error("Document not in cache or error fetching from cache:", error);
@@ -110,10 +112,10 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
     try {
       const docFromServer = await getDoc(docRef);
       if (docFromServer.exists()) {
-        console.log("Retrieved document from server:");
+
         return { ...docFromServer.data(), _id: docFromServer.id };
       } else {
-        console.log("Document does not exist in Firestore.");
+
         return null;
       }
     } catch (serverError) {
@@ -135,5 +137,31 @@ export const getDeckFromID = async (deckId: string) => {
   } catch (error) {
     console.error("Error fetching user decks:", error);
     throw error;
+  }
+};
+
+
+
+//User name update
+export const updateUserName = async (newName: string) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      await updateProfile(user, {
+        displayName: newName,
+      });
+      //console.log("User display name updated successfully.");
+
+      await user.reload();
+      //console.log("User profile reloaded successfully.");
+      return true;
+    } catch (error) {
+      console.error("Error updating user display name:", error);
+      return false;
+    }
+  } else {
+    return false;
   }
 };
