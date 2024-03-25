@@ -46,8 +46,6 @@ import { FirebaseError } from "firebase/app";
 
 export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   try {
-
-
     const deckPromises = deckRefs.map(ref =>
       fetchDocument(ref.parent.id, ref.id)
     );
@@ -62,6 +60,22 @@ export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   }
 };
 
+
+export const getCharsFromRefs = async (charRefs: DocumentReference[]) => {
+  try {
+    const charPromises = charRefs.map(ref =>
+      fetchDocument(ref.parent.id, ref.id)
+    );
+
+    const charSnaps = await Promise.all(charPromises);
+    const validChars = charSnaps.filter(character => character !== null);
+
+    return validChars;
+  } catch (error) {
+    console.error("Error fetching deck characters:", error);
+    throw error;
+  }
+};
 
 const fetchDocument = async (collectionName: string, documentId: string) => {
   const docRef = doc(db, collectionName, documentId);
