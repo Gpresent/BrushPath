@@ -4,7 +4,7 @@ var admin = require("firebase-admin");
 const fs = require("fs");
 const _ = require("lodash");
 
-var serviceAccount = require("../zenji-1e015-firebase-adminsdk-zbq4u-39991f3582.json");
+var serviceAccount = require("./zenji-1e015-firebase-adminsdk-zbq4u-39991f3582.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -13,6 +13,8 @@ admin.initializeApp({
 const db = admin.firestore();
 
 const charactersRef = db.collection('Character');
+const decksRef = db.collection('Deck');
+
 
 // const characterRef = doc(db, "Character");
 
@@ -47,7 +49,7 @@ const charactersRef = db.collection('Character');
 // const jsonFilePath = './utils/singleMeanings.json';
 // const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
-const entries = require("../singleMeanings.json");
+const entries = require("./singleMeanings.json");
 
 async function updateCharacterMeanings() {
   // fetch('./singleMeanings.json')
@@ -78,7 +80,57 @@ async function updateCharacterMeanings() {
   }
 }
 
-updateCharacterMeanings();
+async function convertStringToReference() {
+  deckId = "JLPT_4";
+  try {
+    const deckSnapshot = await decksRef.doc(deckId).get();
+
+    if (!deckSnapshot.exists) {
+      console.log('Deck does not exist');
+      return;
+    }
+
+    const deckData = deckSnapshot.data();
+
+    // Check if the 'characters' field exists and is an array
+    if (Array.isArray(deckData.characters)) {
+      const charactersArray = deckData.characters;
+
+      // Iterate over the characters array
+      for (let i = 0; i < charactersArray.length; i++) {
+        const character = charactersArray[i];
+
+        // Check if the element is a string
+        if (typeof character === 'string') {
+          // Query the database to find the character reference
+          const characterSnapshot = await db.doc(character).get();
+
+          // If a character with the given Unicode exists
+          if (!characterSnapshot.empty) {
+            const characterRef = characterSnapshot.ref;
+            // Replace the string with the reference
+            charactersArray[i] = characterRef;
+          } else {
+            console.log(`Character with Unicode ${character} not found.`);
+          }
+        }
+      }
+
+      // Update the deck document with the modified characters array
+      await decksRef.doc(deckId).update({ characters: charactersArray });
+      console.log(`Converted strings to references for deck with ID ${deckId}`);
+    } else {
+      console.log('Characters field is not an array or does not exist');
+    }
+  } catch (error) {
+    console.error('Error converting strings to references:', error);
+  }
+}
+
+convertStringToReference();
+
+// updateCharacterMeanings();
+
 // const charsObject = JSON.parse(json);
 // const charsMap = new Map(Object.entries(charsObject));
 
