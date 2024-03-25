@@ -67,7 +67,6 @@ const charData = {
 const Home: React.FC = (props) => {
 
 
-
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
@@ -137,7 +136,7 @@ const Home: React.FC = (props) => {
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
-    </div>
+    </div >
   );
 };
 
