@@ -160,7 +160,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
         // console.log("Retrieved document from server:");
         return { ...docFromServer.data(), _id: docFromServer.id };
       } else {
-        console.log("Document does not exist in Firestore.");
+
         return null;
       }
     } catch (serverError) {
