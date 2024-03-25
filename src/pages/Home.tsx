@@ -65,13 +65,7 @@ const charData = {
 
 
 const Home: React.FC = (props) => {
-  const navigate = useNavigate();
   
-  const handleDeckClick = (deckId: any) => {
-    console.log('Deck clicked:', deckId);
-    navigate(`/deck/${deckId}`);
-
-  };
 
 
   //const {user} = useParams<any>();
@@ -82,18 +76,10 @@ const Home: React.FC = (props) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getUserData();
-    // const fetchDecks = async () => {if(userData) {
-    //   return await getDecksFromRefs(userData.decks);
-    // }}
+    if(!userData) {
+      getUserData();
+    }
 
-
-
-
-    // fetchDecks().then((decksResult) => {
-    //   setDecks(decksResult);
-    //   setLoading(false);
-    // });
 
   }, []);
 
@@ -136,7 +122,7 @@ const Home: React.FC = (props) => {
         }}
       />
       <h2>Recent Decks</h2>
-      {(loading || decks === null || decks === undefined) ? <LoadingSpinner /> : <DeckList decks={decks} onDeckClick={handleDeckClick}></DeckList>}
+      {(loading || decks === null || decks === undefined) ? <LoadingSpinner /> : <DeckList decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div>
