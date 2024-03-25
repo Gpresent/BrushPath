@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeckEditModal from "../components/DeckEditModal";
 import { useParams } from "react-router-dom";
 import { DocumentData } from "firebase/firestore";
-import { getDeckFromID } from "../utils/FirebaseQueries";
+import { getCharsFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 
@@ -30,7 +30,18 @@ type RetrievableData = {
 const SingleDeckView : React.FC<DeckProp> = ({title}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deck, setDeck] = useState<RetrievableData>({data: null, loading: true, error: ""});
+  const [characters, setCharacters] = useState<any>([]);
 
+  useEffect(() => {
+    const fetchChars = async () => {
+      if (deck && deck.data && deck.data.characters) {
+        const fetchedDecks = await getCharsFromRefs(deck.data.characters);
+        setCharacters(fetchedDecks);
+      }
+    };
+    fetchChars();
+    console.log(characters)
+  }, [deck]);
 
   let { id } = useParams();
 
@@ -38,7 +49,7 @@ const SingleDeckView : React.FC<DeckProp> = ({title}) => {
     if(id) {
       getDeckFromID(id).then((deckData) => {
         if(deckData) {
-          setDeck({data:deckData,loading:false, error:"Deck not found"})
+          setDeck({data:deckData,loading:false, error:""})
         }
         else {
           setDeck({data:null,loading:false, error:"Deck not found"})
