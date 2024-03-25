@@ -71,6 +71,6 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
             }
         }
     }
-    console.log(inputCrosses);
+    //console.log(inputCrosses);
     return inputCrosses;
 }

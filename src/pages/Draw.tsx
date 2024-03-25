@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ClearIcon from "@mui/icons-material/Clear";
-import color_input from "../grading/color_input";
-import grade_svg from "../grading/grade_svg";
+import grade from "../grading/grade_controller";
 import "../styles/styles.css";
 import Character from "../types/Character";
 
@@ -167,18 +166,14 @@ const Draw: React.FC<DrawProps> = (props) => {
         className="recolor-canvas"
         onClick={() => {
           setReadOnly(true);
-          canvas.current
-            .exportSvg()
-            .then((data: any) => {
-              grade_svg(data, kanji);
-            })
-            .catch((e: any) => {
-              console.log(e);
-            });
-        }}
-      >
-        Check
-      </button>
+          canvas.current.exportSvg().then((data: any) => {
+          grade(data, kanji);
+        }).catch((e: any) => {
+          console.log(e);
+        })}}
+        >
+          Check
+        </button>
     </div>
   );
 };
