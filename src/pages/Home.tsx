@@ -77,7 +77,6 @@ const Home: React.FC = (props) => {
 
   useEffect(() => {
     if (!userData) {
-
       getUserData();
 
 
