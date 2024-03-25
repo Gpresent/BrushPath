@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from "react";
 import "../styles/styles.css";
 import HomeStats from "../components/HomeStats";
 import HomeStudyPrompt from "../components/HomeStudyPrompt";
+import GetCharacterMeanings from "../components/getCharacterMeanings";
+
 import DeckList from "../components/DeckList";
 import { useParams } from "react-router";
 import { AuthContext } from "../utils/FirebaseContext";
@@ -75,6 +77,7 @@ const Home: React.FC = (props) => {
         Hello, {user?.displayName}
       </h2>
       {/* <HomeStats /> */}
+      <GetCharacterMeanings/>
       <HomeStudyPrompt
         newUser={false}
         suggestedDeck={{
