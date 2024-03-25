@@ -179,6 +179,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 1);
     border-radius: 10px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 
 @media (min-width: 700px) {
