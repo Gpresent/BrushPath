@@ -16,7 +16,6 @@
     gap: 20px;
 }
 .title {
-    color: rgba(0, 0, 0, 1);
     font-size: 35px;
     line-height: 69%;
     font-family: DM Sans, sans-serif;
@@ -35,18 +34,6 @@
     padding: 10px 15px; 
 }
 
-.toggle-button {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #333;
-    background-color: white;
-    transition: background-color 0.3s;
-    cursor: pointer;
-}
-.toggle-button.active {
-    background-color: #333;
-}
 .right-arrow {
     cursor: pointer;
 }
@@ -68,7 +55,7 @@
     font-weight: 600;
     margin-bottom: 20px;
     text-align: center;
-    color: rgba(0, 0, 0, 1); 
+    /*color: rgba(0, 0, 0, 1);*/
 }
 
 .modal-content form {

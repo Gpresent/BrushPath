@@ -114,7 +114,7 @@ body {
 }
 
 .continue-prompt {
-    color: rgba(0, 0, 0, 1);
+    /*color: rgba(0, 0, 0, 1);*/
     font-size: 20px;
     line-height: 110%;
     font-family: DM Sans, sans-serif;
@@ -125,7 +125,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: rgba(77, 77, 77, 1);
+    /*color: rgba(77, 77, 77, 1);*/
     font-size: 18px;
     line-height: 122%;
     font-family: DM Sans, sans-serif;
@@ -135,7 +135,7 @@ body {
 .image-wrapper {
     width: 125px;
     aspect-ratio: 1/1;
-    border: 1px solid rgba(0, 0, 0, 1);
+    /*border: 1px solid rgba(0, 0, 0, 1);*/
     border-radius: 10px;
     background-size: cover;
     background-position: center;
@@ -217,7 +217,7 @@ body {
 }
 
 .title {
-    color: rgba(0, 0, 0, 1);
+    /*color: rgba(0, 0, 0, 1);*/
     font-size: 20px;
     font-family: DM Sans, sans-serif;
     font-weight: 400;
@@ -233,29 +233,6 @@ body {
     gap: 10px;
 }
 
-.word-card {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 52px;
-    padding: 13px 10px 15px;
-    border-top-width: 1px;
-    border-color: rgba(0, 0, 0, 1);
-    border-top-style: solid;
-    box-sizing: border-box;
-    /* margin-top: 10px; */
-}
-
-.character {
-    color: rgba(0, 0, 0, 1);
-    font-size: 32px;
-    line-height: 69%;
-    font-family: DM Sans, sans-serif;
-    font-weight: 500;
-}
-
 .hiragana {
     color: rgba(0, 0, 0, 1);
     font-size: 20px;
@@ -263,46 +240,6 @@ body {
     font-family: DM Sans, sans-serif;
     font-weight: 500;
 }
-
-.meaning {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    color: rgba(0, 0, 0, 1);
-    font-size: 20px;
-    line-height: 110%;
-    font-family: DM Sans, sans-serif;
-    font-weight: 400;
-    text-align: right;
-    overflow: hidden;
-    height: 100%;
-}
-
-.header {
-    font-family: DM Sans, sans-serif;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: white;
-    color: black;
-}
-
-.header-wrapper {
-    z-index: 10;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    /* border-bottom: 1.9px solid #d1d3d6; */
-}
-
-.title {
-    font-family: DM Sans, sans-serif;
-    font-size: 20px;
-}
-
-
 
 .settingsButton {
     /* background-color: transparent; */
@@ -315,18 +252,6 @@ body {
 }
 
 /* Dictionary view */
-
-
-
-
-.search-bar {
-    width: 100%;
-    padding-left: 10px;
-    height: 36px;
-    border: 1px solid rgba(0, 0, 0, 1);
-    border-radius: 10px;
-    box-sizing: border-box;
-}
 
 .word-list {
     display: flex;
@@ -383,7 +308,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: rgba(64, 64, 64, 1);
+    /*color: rgba(64, 64, 64, 1);*/
     font-size: 12px;
     line-height: 183%;
     font-family: DM Sans, sans-serif;
@@ -440,44 +365,6 @@ body {
     height: 100%;
 }
 
-.my-words {
-    /* position: absolute;
-    top: 163px;
-    left: 67px; */
-    color: rgba(0, 0, 0, 1);
-    font-size: 24px;
-    line-height: 69%;
-    font-family: DM Sans, sans-serif;
-    font-weight: 500;
-}
-
-/* Footer */
-
-
-.footer-wrapper {
-    border-top: 1.9px solid #d1d3d6;
-    background-color: white;
-    z-index: 10;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    /* padding: 10px; */
-}
-
-.footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    /* width: 100%; */
-    /* height: 56.03px; */
-    margin-top: 10px;
-    margin-bottom: 15px;
-    margin-right: 20px;
-    margin-left: 20px;
-    /* box-sizing: border-box; */
-}
-
 .icon {
     display: flex;
     flex-direction: column;
@@ -497,7 +384,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: rgba(64, 64, 64, 1);
+    /*color: rgba(64, 64, 64, 1);*/
     font-size: 12px;
     line-height: 183%;
     font-family: DM Sans, sans-serif;
@@ -524,7 +411,7 @@ body {
     border-radius: 10px;
 }
 
-.add-word-list{
+.add-word-list {
     overflow: scroll;
     max-height: 60vh;
 }
