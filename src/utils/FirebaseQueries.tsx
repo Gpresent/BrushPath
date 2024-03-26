@@ -105,7 +105,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
     console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };
   } catch (error) {
-    console.error("Document not in cache or error fetching from cache:", error);
+    // console.error("Document not in cache or error fetching from cache:", error);
 
     try {
       const docFromServer = await getDoc(docRef);
