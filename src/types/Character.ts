@@ -6,6 +6,7 @@ type Character = {
     nanori: string[];
     radicals: number[];
     english: string[];
+    one_word_meaning : string;
     stroke_count: number;
     freq: number | null;
     grade: number | null;

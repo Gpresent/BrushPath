@@ -50,7 +50,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
         setCharacters(
           fetchedChars.map((character) => characterParser(character))
         );
-        // console.log(fetchedChars)
+        console.log(fetchedChars)
         setLoading(false);
       }
     };

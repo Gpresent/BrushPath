@@ -23,7 +23,8 @@ async function getCharacters(db: any): Promise<any[]> {
   let toReturn: any = [];
   try {
     const characterRef = await collection(db, "Character");
-    const q = query(characterRef, where('jlpt', '==', 'N4'), limit(30));
+    const q = query(characterRef, limit(100));
+    // where('jlpt', '==', 'N4')
 
     const querySnapshot = await getDocs(q);
     const convertedCharacters: Character[] = [];
