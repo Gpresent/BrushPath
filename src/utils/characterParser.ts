@@ -7,8 +7,6 @@ function characterParser(data : any): Character {
     if(data.id){
         data = data.data
     }
-
-    console.log(data)
     
     var character : Character = {
         unicode: data.literal,
