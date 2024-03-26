@@ -14,7 +14,7 @@ const WordCard: React.FC<WordCardProps> = ({ character }) => {
     <Link to={{ pathname: '/character' }} state={{character}} className="word-card">
       <p className="character">{character.unicode}</p>
       <p className="hiragana">{}</p>
-      <p className="meaning">{character.english[0]}</p>
+      <p className="meaning">{character.one_word_meaning}</p>
     </Link>
     </>
   );
