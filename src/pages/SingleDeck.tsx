@@ -44,18 +44,15 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
       setLoading(true);
 
       if (deck && deck.data && deck.data.characters) {
-        // console.log(deck)
         const fetchedChars = await getCharsFromRefs(deck.data.characters);
 
         setCharacters(
           fetchedChars.map((character) => characterParser(character))
         );
-        console.log(fetchedChars)
         setLoading(false);
       }
     };
     fetchChars();
-    // console.log(characters)
   }, [deck]);
 
   let { id } = useParams();
