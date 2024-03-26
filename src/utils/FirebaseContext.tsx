@@ -16,7 +16,9 @@ export const useAuth = () => {
 };
 
 export const GoogleProvider = new GoogleAuthProvider();
-
+GoogleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
