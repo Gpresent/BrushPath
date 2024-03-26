@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from '../utils/Firebase';
 import { signOut } from 'firebase/auth';
 import "../styles/settings.css";
@@ -12,9 +12,18 @@ const SettingsView: React.FC = () => {
   const [showUsernameModal, setShowUsernameModal] = useState(false);
 
 
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
+  
   const handleToggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+    setIsDarkMode(!isDarkMode); // This should toggle the isDarkMode state
   };
+
   const handleArrowClick = (spanName: string) => {
     // Perform different actions based on spanName
     switch (spanName) {

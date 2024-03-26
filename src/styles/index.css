@@ -13,8 +13,8 @@ body {
   justify-content: 'space-between';
   align-content: center;
   align-items: 'center';
-  background-color: white;
-  color:#333;
+  /*background-color: white;*/
+  /*color:#333;*/
 }
 
 p {
@@ -211,3 +211,55 @@ code {
 .toggle-button.active {
   background-color: #333;
 }
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #333;
+  color: #E0E0E0;
+}
+
+body.dark-mode .title,
+body.dark-mode .character,
+body.dark-mode .my-words,
+body.dark-mode .meaning,
+body.dark-mode .right-arrow,
+body.dark-mode .right-arrow-modal,
+body.dark-mode .footer,
+body.dark-mode .footer-wrapper,
+body.dark-mode .header,
+body.dark-mode .header-wrapper,
+body.dark-mode p,
+body.dark-mode h2,
+body.dark-mode li,
+body.dark-mode code,
+body.dark-mode .deck-card,
+body.dark-mode .word-card {
+  color: #E0E0E0; 
+  border-color: #7C7C7C;
+}
+
+body.dark-mode input,
+body.dark-mode .search-bar,
+body.dark-mode button {
+  background-color: #333; 
+  color: #E0E0E0; 
+  border-color: #7C7C7C; 
+}
+
+body.dark-mode .header,
+body.dark-mode .header-wrapper,
+body.dark-mode .footer-wrapper {
+  background-color: #333;
+  border-color: #7C7C7C; 
+}
+
+body.dark-mode .toggle-button {
+  border-color: #7C7C7C;
+  background-color: white; 
+}
+body.dark-mode .toggle-button.active {
+  background-color: #333; 
+}
+
