@@ -12,7 +12,7 @@ function generateCombinations<T>(arr: T[], size: number): T[][] {
 
     function generate(current: T[], start: number, sizeLeft: number) {
         if (sizeLeft === 0) {
-            result.push(current.slice());
+            result.push(current.slice(0));
             return;
         }
 
@@ -27,12 +27,12 @@ function generateCombinations<T>(arr: T[], size: number): T[][] {
     return result;
 }
 
-function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
+function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
     const n = iCoords.length;
     const array = Array.from({ length: n }, (_, index) => index + 1);
     const comboNumbers = generateCombinations(array, tCoords.length);
 
-    console.log("too many strokes!");
+    console.log("Too many strokes!");
     if (iCoords.length > Math.floor(tCoords.length * 1.25)) {
         console.log("Too many extra strokes, review model");
         color_input([]);
@@ -40,16 +40,13 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
     }
     const lengthdiff = iCoords.length - tCoords.length;
     var iCoordsCorrected = iCoords.slice(0, iCoords.length - lengthdiff);
-    var [grades, strokeInfo, feedback] = grade_svg(iCoordsCorrected, tCoords, passing);
+    var [grades, strokeInfo, feedback] = grade_svg(JSON.parse(JSON.stringify(iCoordsCorrected)), tCoords, passing);
     var avgGrade = 0
     var bestCombo = 0;
-    console.log(iCoords);
     const combos = generateCombinations(iCoords, tCoords.length);
-    console.log(combos)
-    console.log(tCoords)
     console.log("generated", combos.length, "combinations")
     for (let i = 0; i < combos.length; i++) {
-        const [newGrades, newStrokeInfo, newFeedback] = grade_svg(combos[i], tCoords, passing);
+        const [newGrades, newStrokeInfo, newFeedback] = grade_svg(JSON.parse(JSON.stringify(combos[i])), tCoords, passing);
         const newAvgGrade = newGrades.reduce((a, b) => a + b, 0) / newGrades.length;
         console.log("combo", i, ": average grade:", newAvgGrade)
         if (newAvgGrade > avgGrade) {
@@ -71,35 +68,55 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
             gradeColors.push(0);
         }
     }
-    console.log("Grade colors:", gradeColors);
     color_input(gradeColors);
     console.log(strokeInfo);
     console.log(feedback);
 }
 
-function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
+function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
+    const n = tCoords.length;
+    const array = Array.from({ length: n }, (_, index) => index + 1);
+    const comboNumbers = generateCombinations(array, iCoords.length);
+
+    console.log("Too few strokes!");
     if (iCoords.length < Math.ceil(tCoords.length * 0.75)) {
-        console.log("Too many missing strokes, review model");
+        console.log("Too many extra strokes, review model");
         color_input([]);
         return;
     }
     const lengthdiff = tCoords.length - iCoords.length;
     var tCoordsCorrected = tCoords.slice(0, tCoords.length - lengthdiff);
-    var [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoordsCorrected, passing);
-    var avgGrade = grades.reduce((a, b) => a + b, 0) / grades.length;
-    var lowestGrade = Math.min(...grades);
-    const combos = generateCombinations(tCoords, tCoords.length - lengthdiff);
+    var [grades, strokeInfo, feedback] = grade_svg(iCoords, JSON.parse(JSON.stringify(tCoordsCorrected)), passing);
+    var avgGrade = 0;
+    var bestCombo = 0;
+    const combos = generateCombinations(tCoords, iCoords.length);
+    console.log("generated", combos.length, "combinations");
     for (let i = 0; i < combos.length; i++) {
-        [grades, strokeInfo, feedback] = grade_svg(iCoords, combos[i], passing);
-        const newAvgGrade = grades.reduce((a, b) => a + b, 0) / grades.length;
-        const newLowestGrade = Math.min(...grades);
-        if (newAvgGrade > avgGrade && newLowestGrade > lowestGrade) {
+        const [newGrades, newStrokeInfo, newFeedback] = grade_svg(iCoords, JSON.parse(JSON.stringify(combos[i])), passing);
+        const newAvgGrade = newGrades.reduce((a, b) => a + b, 0) / newGrades.length;
+        console.log("combo", i, ": average grade:", newAvgGrade)
+        console.log("Combo Numbers", comboNumbers[i]);
+        if (newAvgGrade > avgGrade) {
             tCoordsCorrected = combos[i];
             avgGrade = newAvgGrade;
-            lowestGrade = newLowestGrade;
+            grades = newGrades;
+            strokeInfo = newStrokeInfo;
+            feedback = newFeedback;
+            bestCombo = i;
         }
     }
-    color_input(grades);
+    const gradeColors = [];
+    var j = 0;
+    for (var i = 1; i < tCoords.length + 1; i++) {
+        if (comboNumbers[bestCombo].includes(i)) {
+            gradeColors.push(grades[j]);
+            j++;
+        } 
+    }
+    console.log("Best Combo numbers", comboNumbers[bestCombo]);
+    console.log("Grades", grades);
+    console.log("Grade colors", gradeColors);
+    color_input(gradeColors);
     console.log(strokeInfo);
     console.log(feedback);
 }
@@ -111,24 +128,22 @@ export default function grade(input: string, targetKanji: string) {
     .then(data => {
         var targetInfo = data as unknown as interp_data;
         const tCoords = targetInfo.coords;
-        const iCoords = interpolate(input, targetInfo.totalLengths);
+        const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
         console.log(iCoords.length);
         console.log(tCoords.length);
         if (!iCoords.length) return;
         
         if (iCoords.length > tCoords.length) {
-            extraStrokes(iCoords, tCoords, passing);
+            extraStrokes(input, iCoords, tCoords, passing);
             return;
         } else if (iCoords.length < tCoords.length) {
-            missingStrokes(iCoords, tCoords, passing);
+            missingStrokes(input, iCoords, tCoords, passing);
             return;
         } 
 
         const [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
         color_input(grades);
-        for (const s of strokeInfo) {
-            console.log(s);
-        }
+        console.log(strokeInfo);
         console.log(feedback);
     });
 }

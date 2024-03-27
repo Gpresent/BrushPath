@@ -44,7 +44,9 @@ export default function grade_svg(iCoords: number[][][], tCoords: number[][][], 
         if (meanDiffs[i] > 90) meanDiffs[i] = 90;
 
         const angleScore = (meanDiffs[i] / 70) / (Math.sqrt(squiggle[i]));
-        const lengthScore = Math.min(Math.pow(lengthDiffs[i], 2) / (targetCoords[i].length * 10), 1);
+
+        const lengthScore = 1 - Math.min(Math.pow(1 - Math.abs(lengthDiffs[i]), 2), 1);
+        console.log("Length diff: ", lengthDiffs[i], " Length Score: ", lengthScore);
         const centerScore = Math.max((meanCenterDiffs[i] - 30) / 60, 0)
         const intersectionScore = 
             (extraIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0) + missingIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0)) * 0.3;
