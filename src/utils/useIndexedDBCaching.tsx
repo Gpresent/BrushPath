@@ -9,6 +9,7 @@ export type IndexedDBCaching = {
     
         data: DocumentData[] | null;
         loading: boolean;
+        search: MiniSearch<any>
     
 }
 
@@ -120,7 +121,7 @@ interface MyDBSchema extends DBSchema {
       checkCache();
     }, []);
   
-    return { data, loading };
+    return { data, loading, search };
   };
   
   export default useIndexedDBCaching;
