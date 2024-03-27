@@ -6,6 +6,7 @@ import Character from "../types/Character";
 import WordList from "../components/WordList";
 import characterParser from "../utils/characterParser";
 import app, { auth, db } from '../utils/Firebase'
+import { AuthContext } from "../utils/FirebaseContext";
 
 
 import MiniSearch from 'minisearch'
@@ -38,15 +39,7 @@ const staticKanjiData: KanjiCharacter[] = [
   // Add more kanji characters as needed
 ];
 
-const miniSearch = new MiniSearch({
-  fields: ['kanji', 'meanings'], // Adjusted to match KanjiCharacter properties
-  storeFields: ['kanji', 'meanings'], // Adjusted to match KanjiCharacter properties
-  idField: 'id'
-});
-
-miniSearch.addAll(staticKanjiData);
-
-
+const { characterCache } = useContext(AuthContext);
 
 
 const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
