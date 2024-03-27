@@ -5,13 +5,16 @@ import "../styles/dict.css";
 import Draw from "./Draw";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import React from "react";
 
 interface DrawReviewProps {
   setShowHeader: any;
 }
 
 const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader }) => {
-  // (document.getElementsByClassName('header-wrapper')[0]as any).style.visibility = 'none';
+
+  // const [] = React.useState<boolean>(false);
+
   useEffect(() => {
     setShowHeader(false);
   }, [setShowHeader]);
