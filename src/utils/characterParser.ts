@@ -2,9 +2,9 @@ import { darkScrollbar } from "@mui/material";
 import Character from "../types/Character";
 
 
-function characterParser(data : any) {
-    
-    let character : Character = {
+function characterParser(data: any) {
+
+    let character: Character = {
         unicode: "ERR",
         unicode_str: "ERR",
         on: ["ERR"],
@@ -21,14 +21,14 @@ function characterParser(data : any) {
         parts: []
     }
 
-    if(data == null){
+    if (data == null) {
         return null
     }
 
-    if(data.id){
+    if (data.id) {
         data = data.data
     }
-    
+
     character = {
         unicode: data.literal,
         unicode_str: data.unicode_str,
@@ -45,9 +45,9 @@ function characterParser(data : any) {
         compounds: data.compounds,
         parts: data.parts
     }
-    
-    if(character.one_word_meaning == ""){
-        if(character.english){
+
+    if (character.one_word_meaning == "") {
+        if (character.english) {
             character.one_word_meaning = character.english[0]
         }
     }
@@ -55,9 +55,9 @@ function characterParser(data : any) {
     data.radicals.forEach((element: any) => {
         character.radicals.push(element.value);
     });
-   
+
 
     return character;
-  }
+}
 
-  export default characterParser;
+export default characterParser;

@@ -31,42 +31,42 @@ interface KanjiCharacter {
   // Add other properties as needed
 }
 
-// Example static data
-const staticKanjiData: KanjiCharacter[] = [
-  { id: '1', kanji: 'sam_is_awesome', meanings: ['water', 'fluid', 'liquid'] },
-  { id: '2', kanji: '火', meanings: ['fire', 'flame', 'blaze'] },
 
-  // Add more kanji characters as needed
-];
 
-const { characterCache } = useContext(AuthContext);
+
 
 
 const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const contextValue = db;
 
-  // const [kanjiList, setkanjiList] = useState<Character[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>(staticKanjiData);
-  const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>(staticKanjiData);
+  const { characterCache } = useContext(AuthContext);
+  const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>([]);
+  const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
+    setLoading(true);
+
 
     if (query) {
-      const results = miniSearch.search(query, { fuzzy: 2 });
-      setFilteredKanjiList(results);
-      console.log(results)
+      const results = characterCache?.search.search(query, { fuzzy: 1 });
+      console.log(results);
+
+
+      const cleanResults = results?.filter(result => result !== undefined && result !== null)
+        .map((result: any) => characterParser(result)); //Could be faster?
+
+
+      setFilteredKanjiList(cleanResults ? cleanResults : []);
+      console.log(filteredKanjiList);
+      // console.log(filteredKanjiList);
     } else {
       setFilteredKanjiList(kanjiList);
     }
+    setLoading(false);
   };
 
-  // Logging kanjiList to console - can be removed after confirming it works
-  useEffect(() => {
-    console.log(kanjiList);
-  }, [kanjiList]);
 
 
   return (
@@ -75,7 +75,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
       <input className="search-bar" onChange={handleSearch}
         placeholder="Search kanji..." />
 
-      {JSON.stringify(filteredKanjiList)}
+      {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
     </div>
   );
 };
