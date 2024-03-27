@@ -6,7 +6,7 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
 import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
-import useIndexedDBCaching, { IndexedDBCaching } from './zenjiCache';
+import useIndexedDBCaching, { IndexedDBCaching } from './useIndexedDBCaching';
 
 
 //Initialize Context
