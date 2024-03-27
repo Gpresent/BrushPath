@@ -15,8 +15,8 @@ export default function interpolate(inputSvg: string, targetLength: number): num
     for (var i = 0; i < paths.length; i++) {
         coords[i] = pathsToCoords(
             [paths[i]],
-            scale,
-            paths[i].getTotalLength() * scale / 10,
+            1,
+            Math.floor(paths[i].getTotalLength() * scale / 10),
             0,
             0
         );
