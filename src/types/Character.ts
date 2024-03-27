@@ -12,6 +12,7 @@ type Character = {
     jlpt: number | null;
     compounds: any;
     parts: string[];
+
 };
-  
+
 export default Character;
