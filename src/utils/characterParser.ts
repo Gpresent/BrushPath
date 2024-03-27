@@ -2,15 +2,16 @@ import { darkScrollbar } from "@mui/material";
 import Character from "../types/Character";
 
 
-function characterParser(data : any): Character {
-    
-    if(data.id){
-        data = data.data
-    }
+function characterParser(data: any): Character {
 
-    // console.log(data)
-    
-    var character : Character = {
+    //console.log(data)
+    // if (data.id) {
+    //     data = data.data
+    // }
+
+
+
+    var character: Character = {
         unicode: data.literal,
         unicode_str: data.unicode_str,
         on: data.kun,
@@ -24,15 +25,15 @@ function characterParser(data : any): Character {
         jlpt: data.jlpt,
         compounds: data.compounds,
         parts: data.parts
-        
+
     }
-    
+
     data.radicals.forEach((element: any) => {
         character.radicals.push(element.value);
     });
-   
+
 
     return character;
-  }
+}
 
-  export default characterParser;
+export default characterParser;

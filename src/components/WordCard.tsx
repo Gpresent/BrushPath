@@ -1,6 +1,6 @@
 import React from "react";
 import '../styles/styles.css'
-import Character from "../types/Character"; 
+import Character from "../types/Character";
 import { Link } from "react-router-dom";
 
 interface WordCardProps {
@@ -8,14 +8,16 @@ interface WordCardProps {
 }
 
 const WordCard: React.FC<WordCardProps> = ({ character }) => {
-
+  // console.log(character)
   return (
     <>
-    <Link to={{ pathname: '/character' }} state={{character}} className="word-card">
-      <p className="character">{character.unicode}</p>
-      <p className="hiragana">{}</p>
-      <p className="meaning">{character.english[0]}</p>
-    </Link>
+
+
+      <Link to={{ pathname: '/character' }} state={{ character }} className="word-card">
+        <p className="character">{character.unicode}</p>
+        <p className="hiragana">{ }</p>
+        <p className="meaning">{character.english[0]}</p>
+      </Link>
     </>
   );
 };
