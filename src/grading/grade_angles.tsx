@@ -1,6 +1,6 @@
 import path_angles from './path_angles';
 
-export default function grade_angles(inputCoords: number[][][], targetCoords: number[][][]): [number[][], number[], number[]] {
+export default function grade_angles(inputCoords: number[][][], targetCoords: number[][][]): [number[][], number[][], number[], number[]] {
     const [inputAngles, targetAngles, squiggle] = path_angles(inputCoords, targetCoords);
     const angleDiffs: number[][] = [];
     for (let i = 0; i < targetAngles.length; i++) {
@@ -15,7 +15,7 @@ export default function grade_angles(inputCoords: number[][][], targetCoords: nu
         for (let i = 0; i < inputAngles.length; i++) {
             meanDiffs[i] = 180;
         }
-        return [angleDiffs, meanDiffs, squiggle];
+        return [targetAngles, angleDiffs, meanDiffs, squiggle];
     }
     for (let i = 0; i < targetAngles.length; i++) {
         for (let j = 0; j < targetAngles[i].length; j++) {
@@ -45,5 +45,5 @@ export default function grade_angles(inputCoords: number[][][], targetCoords: nu
         }
         meanDiffs[i] = angleDiffs[i].reduce((a, b) => a + b, 0) / angleDiffs[i].length;
     }
-    return [angleDiffs, meanDiffs, squiggle];
+    return [targetAngles, angleDiffs, meanDiffs, squiggle];
 }
