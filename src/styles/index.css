@@ -93,7 +93,7 @@ code {
   position: fixed;
   top: 0;
   width: 100%;
-  border-bottom: 1.9px solid #333;
+  /*border-bottom: 1.9px solid #333;*/
   /* border-bottom: 1.9px solid #d1d3d6; */
 }
 
