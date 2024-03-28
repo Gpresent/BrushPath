@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/styles.css";
+import "../styles/index.css";
 
 interface Kanji {
     id: number;
@@ -50,7 +51,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList }) =
         <div className="modal-content">
           <span className="close" onClick={handleClose}>&times;</span>
           <div className="deck-title-input">
-            <label htmlFor="deckTitle">Enter Deck Name:</label>
+            <label className="deckTitle" htmlFor="deckTitle">Enter Deck Name:</label>
             <input
               type="text"
               id="deckTitle"
