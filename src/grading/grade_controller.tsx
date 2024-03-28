@@ -27,7 +27,7 @@ function generateCombinations<T>(arr: T[], size: number): T[][] {
     return result;
 }
 
-function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
+function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[]] {
     const n = iCoords.length;
     const array = Array.from({ length: n }, (_, index) => index + 1);
     const comboNumbers = generateCombinations(array, tCoords.length);
@@ -36,7 +36,7 @@ function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][
     if (iCoords.length > Math.floor(tCoords.length * 1.25)) {
         console.log("Too many extra strokes, review model");
         color_input([]);
-        return;
+        return[[],[],[]];
     }
     const lengthdiff = iCoords.length - tCoords.length;
     var iCoordsCorrected = iCoords.slice(0, iCoords.length - lengthdiff);
@@ -68,12 +68,10 @@ function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][
             gradeColors.push(0);
         }
     }
-    color_input(gradeColors);
-    console.log(strokeInfo);
-    console.log(feedback);
+    return [gradeColors, strokeInfo, feedback]
 }
 
-function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6) {
+function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[]] {
     const n = tCoords.length;
     const array = Array.from({ length: n }, (_, index) => index + 1);
     const comboNumbers = generateCombinations(array, iCoords.length);
@@ -82,7 +80,7 @@ function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][
     if (iCoords.length < Math.ceil(tCoords.length * 0.75)) {
         console.log("Too many extra strokes, review model");
         color_input([]);
-        return;
+        return [[], [], []];
     }
     const lengthdiff = tCoords.length - iCoords.length;
     var tCoordsCorrected = tCoords.slice(0, tCoords.length - lengthdiff);
@@ -113,37 +111,32 @@ function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][
             j++;
         } 
     }
-    console.log("Best Combo numbers", comboNumbers[bestCombo]);
-    console.log("Grades", grades);
-    console.log("Grade colors", gradeColors);
-    color_input(gradeColors);
-    console.log(strokeInfo);
-    console.log(feedback);
+    return [gradeColors, strokeInfo, feedback]
 }
 
 export default function grade(input: string, targetKanji: string) {
-    const passing = 0.6;
-    console.log("grading");
+    const passing = 0.65;
+    console.log("GRADING");
     fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json").then(response => response.json())
     .then(data => {
         var targetInfo = data as unknown as interp_data;
         const tCoords = targetInfo.coords;
         const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
-        console.log(iCoords.length);
-        console.log(tCoords.length);
         if (!iCoords.length) return;
-        
+        let grades: number[], strokeInfo: string[], feedback: string[]; // Declare the types of the variables separately
         if (iCoords.length > tCoords.length) {
-            extraStrokes(input, iCoords, tCoords, passing);
-            return;
+            [grades, strokeInfo, feedback] = extraStrokes(input, iCoords, tCoords, passing);
         } else if (iCoords.length < tCoords.length) {
-            missingStrokes(input, iCoords, tCoords, passing);
-            return;
-        } 
-
-        const [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
+            [grades, strokeInfo, feedback] = missingStrokes(input, iCoords, tCoords, passing);
+        } else {
+            [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
+        }
         color_input(grades);
-        console.log(strokeInfo);
-        console.log(feedback);
+        strokeInfo.forEach(stroke => {
+            console.log(stroke)
+        });
+        feedback.forEach(string => {
+            console.log(string);
+        });
     });
 }
