@@ -119,7 +119,7 @@ export default function grade_svg(iCoords: number[][][], tCoords: number[][][], 
         if (meanDiffs[i] > 90) meanDiffs[i] = 90;
 
         const angleScore = (meanDiffs[i] / 70) / (Math.sqrt(squiggle[i]));
-        const lengthScore = Math.max(Math.min((targetCoords[i].length * Math.abs(lengthDiffs[i] - 1) - 2) / 25, 1), 0);
+        const lengthScore = Math.max(Math.min((targetCoords[i].length * Math.abs(lengthDiffs[i] - 1) - 3) / 25, 1), 0);
         const centerScore = Math.max((meanCenterDiffs[i] - 30) / 60, 0)
         const intersectionScore = 
             (extraIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0) + missingIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0)) * 0.3;
