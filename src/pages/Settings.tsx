@@ -8,7 +8,9 @@ import UsernameModal from '../components/UsernameModal';
 
 
 const SettingsView: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return JSON.parse(localStorage.getItem('darkMode') || 'false');
+  });
   const [showUsernameModal, setShowUsernameModal] = useState(false);
 
 
@@ -18,6 +20,8 @@ const SettingsView: React.FC = () => {
     } else {
       document.body.classList.remove('dark-mode');
     }
+
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
   }, [isDarkMode]);
   
   const handleToggleDarkMode = () => {
