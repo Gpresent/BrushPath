@@ -39,7 +39,7 @@
 }
 
 
-.modal-content {
+/* .modal-content {
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -48,22 +48,21 @@
     align-items: center;
     width: 75%;
     border: 2px solid #333;
-}
+} */
 
-.modal-title {
+/* .modal-title {
     font-size: 25px;
     font-weight: 600;
     margin-bottom: 20px;
     text-align: center;
-    /*color: rgba(0, 0, 0, 1);*/
-}
+} */
 
-.modal-content form {
+/* .modal-content form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start; 
-}
+} */
 
 .input-label {
     font-size: 15px;
@@ -78,12 +77,12 @@
     width: 100%;
 }
 
-.modal-content input {
+/* .modal-content input {
     padding: 8px;
     border: 1px solid #333;
     border-radius: 10px;
     flex-grow: 1;
-}
+} */
 
 .right-arrow-modal {
     cursor: pointer;
