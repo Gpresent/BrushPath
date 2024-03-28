@@ -68,6 +68,8 @@ function extraStrokes(input: string, iCoords: number[][][], tCoords: number[][][
             gradeColors.push(0);
         }
     }
+    console.log("Best combo:", bestCombo);
+    console.log("Strokes in combo:", comboNumbers[bestCombo].toString());
     return [gradeColors, strokeInfo, feedback]
 }
 
@@ -93,7 +95,6 @@ function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][
         const [newGrades, newStrokeInfo, newFeedback] = grade_svg(iCoords, JSON.parse(JSON.stringify(combos[i])), passing);
         const newAvgGrade = newGrades.reduce((a, b) => a + b, 0) / newGrades.length;
         console.log("combo", i, ": average grade:", newAvgGrade)
-        console.log("Combo Numbers", comboNumbers[i]);
         if (newAvgGrade > avgGrade) {
             tCoordsCorrected = combos[i];
             avgGrade = newAvgGrade;
@@ -111,6 +112,8 @@ function missingStrokes(input: string, iCoords: number[][][], tCoords: number[][
             j++;
         } 
     }
+    console.log("Best combo:", bestCombo);
+    console.log("Strokes in combo:", comboNumbers[bestCombo].toString());
     return [gradeColors, strokeInfo, feedback]
 }
 

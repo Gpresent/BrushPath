@@ -19,9 +19,7 @@ function classify_angle(angle: number): string {
 
 function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): string {
     var feedback = '';
-    console.log("generating angle feedback");
     const feedbackThreshold = angleDiffs.length / 5;
-    console.log("Feedback threshold:", feedbackThreshold);
     const angleThreshold = 15;
     var badLocations = [] as number[];
     for (let i = 0; i < angleDiffs.length; i++) {
@@ -41,20 +39,15 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
         }
     }   
     if (!badLocations.length) return '';
-    console.log("Bad locations: ", badLocations);
     var regions = [0];
     for (let i = 0; i < targetAngles.length; i++) {
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
-    console.log("Target regions:", regions);
-    console.log("Target lengths:", targetAngles.length);
-    console.log("Target angles:", targetAngles);
     feedback += 'The angle of this stroke is off. Make sure that';
     var startFeedback = false;
     var regionIndex = 0;
     for (let i = 0; i < badLocations.length; i++) {
-        console.log(regionIndex)
         if (regionIndex && badLocations[i] <= regions[regionIndex]) continue;
         for (let index = 0; index < regions.length; index++) {
             if (regions[index] > badLocations[i]) {
