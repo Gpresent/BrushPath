@@ -28,8 +28,6 @@ function characterParser(data : any) {
     if(data.id){
         data = data.data
     }
-
-    // console.log(data)
     
     character = {
         unicode: data.literal,

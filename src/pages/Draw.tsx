@@ -2,11 +2,11 @@ import React, { useLayoutEffect, useRef } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ClearIcon from "@mui/icons-material/Clear";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ClearIcon from '@mui/icons-material/Clear';
 import grade from "../grading/grade_controller";
-import "../styles/styles.css";
+import '../styles/styles.css'
 import Character from "../types/Character";
 
 const styles = {
