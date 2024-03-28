@@ -105,7 +105,7 @@ const Home: React.FC = (props) => {
 
 
 
-  const character: Character = characterParser(charData);
+  // const character: Character = characterParser(charData);
 
   return (
     <div className="home-page">
