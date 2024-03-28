@@ -6,14 +6,14 @@ import grade_intersections from './grade_intersections';
 import grade_crosses from './grade_crosses';
 
 function classify_angle(angle: number): string {
-    if (angle < 20 && angle > -20) return 'horizontally to the right';
-    if (angle < 70 && angle > 20) return 'diagonally to the lower right';
-    if (angle < 110 && angle > 70) return 'vertically down';
-    if (angle < 160 && angle > 110) return 'diagonally to the lower left';
-    if (angle < -160 || angle > 160) return 'horizontally to the left';
-    if (angle < -110 && angle > -160) return 'diagonally to the upper left';
-    if (angle < -110 && angle > -70) return 'vertically up';
-    if (angle < -70 && angle > -20) return 'diagonally to the upper right';
+    if (angle <= 20 && angle > -20) return 'horizontally to the right';
+    if (angle <= 70 && angle > 20) return 'diagonally to the lower right';
+    if (angle <= 110 && angle > 70) return 'vertically down';
+    if (angle <= 160 && angle > 110) return 'diagonally to the lower left';
+    if (angle <= -160 || angle > 160) return 'horizontally to the left';
+    if (angle <= -110 && angle > -160) return 'diagonally to the upper left';
+    if (angle <= -70 && angle > -110) return 'vertically up';
+    if (angle <= -20 && angle > -70) return 'diagonally to the upper right';
     return 'horizontal';
 }
 
@@ -44,6 +44,7 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
+    console.log("Regions: ", regions)
     feedback += 'The angle of this stroke is off. Make sure that';
     var startFeedback = false;
     var regionIndex = 0;
@@ -68,7 +69,8 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
                 } else {
                     startFeedback ? feedback += ' and ' : feedback += ' the stroke ';
                     const startRegion = Math.round(regions[index - 1] / targetAngles.length * 10) * 10
-                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index - 1]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the ' + Math.round(regions[index] / targetAngles.length * 10) * 10 + '% mark';
+                    var endRegion = Math.round(regions[index] / targetAngles.length * 10) * 10
+                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index - 1]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the ' + (endRegion === 100 ? 'end' : endRegion + '% mark');
                     startFeedback = true;
                     regionIndex = index;
                     break;
@@ -119,10 +121,10 @@ export default function grade_svg(iCoords: number[][][], tCoords: number[][][], 
         if (meanDiffs[i] > 90) meanDiffs[i] = 90;
 
         const angleScore = (meanDiffs[i] / 70) / (Math.sqrt(squiggle[i]));
-        const lengthScore = Math.max(Math.min((targetCoords[i].length * Math.abs(lengthDiffs[i] - 1) - 3) / 25, 1), 0);
+        const lengthScore = Math.max(Math.min((Math.pow(targetCoords[i].length, 3/4) * Math.abs(lengthDiffs[i] - 1) - 0.5) / 20, 1), 0);
         const centerScore = Math.max((meanCenterDiffs[i] - 30) / 60, 0)
         const intersectionScore = 
-            (extraIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0) + missingIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0)) * 0.3;
+            (extraIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0) + missingIntersections[i].reduce((sum: number, e: number) => sum + (e > 0 ? 1 : 0), 0)) * 0.1;
         const crossScore = (extraCrosses[i].length + missingCrosses[i].length) * 0.3;
 
         strokeInfo.push(("Stroke " + (i + 1).toString() + " Angle Score: " + Math.round((1 - angleScore) * 100).toString() + "%, Length Score: " + Math.round((1 - lengthScore) * 100).toPrecision(4).toString() + "%, Center Score: " + Math.round((1 - centerScore) * 100).toPrecision(4).toString() + "%, Correct Intersections: "+ (intersectionScore === 0 ? "Yes" : "No") + ", Correct Crosses: " + (crossScore === 0 ? "Yes" : "No")));
