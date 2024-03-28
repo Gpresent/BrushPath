@@ -112,7 +112,7 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   useEffect(() => {
     const checkDarkMode = () => {
-      setStrokeColor(document.body.classList.contains('dark-mode') ? 'white' : 'rgba(40, 40, 41, .75)');
+      setStrokeColor(document.body.classList.contains('dark-mode') ? 'rgba(224, 224, 224, .75)' : 'rgba(40, 40, 41, .75)');
     };
 
     checkDarkMode();
