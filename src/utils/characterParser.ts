@@ -2,13 +2,34 @@ import { darkScrollbar } from "@mui/material";
 import Character from "../types/Character";
 
 
-function characterParser(data : any): Character {
+function characterParser(data : any) {
     
+    let character : Character = {
+        unicode: "ERR",
+        unicode_str: "ERR",
+        on: ["ERR"],
+        kun: ["ERR"],
+        nanori: ["ERR"],
+        radicals: [],
+        english: ["ERR"],
+        one_word_meaning: "ERR",
+        stroke_count: 0,
+        freq: null,
+        grade: null,
+        jlpt: null,
+        compounds: undefined,
+        parts: []
+    }
+
+    if(data == null){
+        return null
+    }
+
     if(data.id){
         data = data.data
     }
     
-    var character : Character = {
+    character = {
         unicode: data.literal,
         unicode_str: data.unicode_str,
         on: data.on,

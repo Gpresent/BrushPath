@@ -1,0 +1,10 @@
+.draw-review {
+    display: flex;
+    flex-direction: column;
+}
+
+.character-prompt {
+    font-size: 24px;
+    margin-bottom: 20px;
+    align-self: center;
+}

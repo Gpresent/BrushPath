@@ -5,6 +5,15 @@ import {
   getDoc,
   getDocFromCache,
 } from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  startAfter,
+  limit,
+  getDocs,
+} from "firebase/firestore";
+
 import { db } from "./Firebase";
 import {
   getStorage,
@@ -68,27 +77,60 @@ export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   }
 };
 
-export const getCharsFromRefs = async (charRefs: DocumentReference[]) => {
+// pagination info from google cloud
+
+/*
+const first = query(collection(db, "cities"), orderBy("population"), limit(25));
+const documentSnapshots = await getDocs(first);
+
+// Get the last visible document
+const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+console.log("last", lastVisible);
+
+// Construct a new query starting at this document,
+// get the next 25 cities.
+const next = query(collection(db, "cities"),
+    orderBy("population"),
+    startAfter(lastVisible),
+    limit(25));
+*/
+
+export const getCharsFromRefs = async (
+  charRefsFull: DocumentReference[],
+  index: number
+) => {
+  let charRefs: DocumentReference[] = [];
+  for (let i = 0; i < 30; i++) {
+    charRefs.push(charRefsFull[index * 30 + i]);
+    if (index * 30 + i > charRefsFull.length) {
+      break;
+    }
+  }
   try {
-    let charPromises
+    let charPromises;
+
     try {
       charPromises = charRefs.map((ref) => {
         // console.log(typeof ref);
-        return fetchDocument(ref.parent.id, ref.id);
+        if (ref != null) {
+          return fetchDocument(ref.parent.id, ref.id);
+        }
       });
     } catch (error) {
       charPromises = charRefs.map((ref) => {
         // console.log(typeof ref);
-        let str_ref = ref as unknown as string
+        let str_ref = ref as unknown as string;
+        if (str_ref && typeof str_ref == "string") {
+          return fetchDocument(str_ref?.split("/")[0], str_ref.split("/")[1]);
+        }
         // str_ref = str_ref.split('/')
-        return fetchDocument(str_ref.split('/')[0], str_ref.split('/')[1]);
       });
     }
 
     const charSnaps = await Promise.all(charPromises);
     // const validChars = charSnaps.filter((character) => character !== null);
 
-    // console.log(charSnaps)
+    // console.log(charSnaps);
     return charSnaps;
   } catch (error) {
     console.error("Error fetching deck characters:", error);
@@ -102,7 +144,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
   try {
     const docFromCache = await getDocFromCache(docRef);
 
-    console.log("Retrieved document from cache");
+    // console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };
   } catch (error) {
     console.error("Document not in cache or error fetching from cache:", error);
@@ -110,7 +152,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
     try {
       const docFromServer = await getDoc(docRef);
       if (docFromServer.exists()) {
-        console.log("Retrieved document from server:");
+        // console.log("Retrieved document from server:");
         return { ...docFromServer.data(), _id: docFromServer.id };
       } else {
         console.log("Document does not exist in Firestore.");

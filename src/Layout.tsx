@@ -3,15 +3,15 @@ import Header from './components/Header'
 import './styles/styles.css'
 
 export default function RootLayout({
-  children,
+  children,showHeader
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  showHeader: boolean,
 }) {
   return (
     <html lang="en">
-      <Header></Header>
+      {showHeader && <Header></Header>}
       <body style={{  marginLeft: '20px', marginRight: '20px'}}>
-          
         {children}
       </body>
       <Footer></Footer>

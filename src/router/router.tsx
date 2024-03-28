@@ -9,6 +9,9 @@ import DeckLandingView from '../pages/DeckLanding';
 import SettingsView from '../pages/Settings';
 import ErrorComponent from '../pages/Error';
 import SingleDeckView from '../pages/SingleDeck';
+import { Drawer } from '@mui/material';
+import DrawReview from '../pages/DrawReview';
+import { useState } from 'react';
 
 const decks_info: Deck[] = [
   {
@@ -28,14 +31,17 @@ const decks_info: Deck[] = [
   }
 ]
 const ComponentRouter: React.FC = () => {
+  const [showHeader, setShowHeader] = useState(true);
+  
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout showHeader={showHeader}>
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/draw" element={<Draw />}></Route>
+          <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
           <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
           <Route path="/character" element={<SingleWordView />} />
+          <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader}/>}  />
           <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
           <Route path="/deck/:id" element={<SingleDeckView title="Deck"  />} />
           <Route path="/settings" element={<SettingsView />} />
