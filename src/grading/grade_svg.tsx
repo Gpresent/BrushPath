@@ -44,7 +44,6 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
-    console.log("Regions: ", regions)
     feedback += 'The angle of this stroke is off. Make sure that';
     var startFeedback = false;
     var regionIndex = 0;
