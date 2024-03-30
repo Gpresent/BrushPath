@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("Transaction failed: ", e);
     }
   }
+  const characterCache = useIndexedDBCaching();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
@@ -113,7 +114,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(firebaseUser);
       if (firebaseUser != null) {
         updateUserDatabase(firebaseUser);
-
+        characterCache.checkCache();
       }
       setLoading(false);
     });
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return unsubscribe;
   }, []);
 
-  const characterCache = useIndexedDBCaching();
+  
 
   const value = {
     userData: userData,
