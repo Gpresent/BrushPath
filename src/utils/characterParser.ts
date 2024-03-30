@@ -25,9 +25,9 @@ function characterParser(data: any) {
         return null
     }
 
-    if (data.id) {
-        data = data.data
-    }
+    // if (data.id) {
+    //     data = data.data
+    // }
 
     character = {
         unicode: data.literal,

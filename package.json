@@ -16,7 +16,6 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "d3": "^7.8.5",
-    "elasticlunr": "^0.9.5",
     "firebase": "^10.9.0",
     "firebase-admin": "^12.0.0",
     "firebaseui": "^6.1.0",
@@ -73,10 +72,6 @@
     ]
   },
   "devDependencies": {
-<<<<<<< HEAD
     "@types/react-infinite-scroller": "^1.2.5"
-=======
-    "@types/elasticlunr": "^0.9.9"
->>>>>>> 3a1439b2 (gutted dictionary)
   }
 }
