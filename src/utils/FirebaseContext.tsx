@@ -6,11 +6,11 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
 import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
-import useIndexedDBCaching, { IndexedDBCaching } from './useIndexedDBCaching';
+import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCaching';
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCaching | null }>({ user: null, userData: null, getUserData: () => { }, characterCache: null });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCachingResult | null }>({ user: null, userData: null, getUserData: () => { }, characterCache: null });
 
 export const useAuth = () => {
   return useContext(AuthContext)
@@ -81,7 +81,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (userDoc.exists()) {
           getUserData();
           return;
-
         }
 
 

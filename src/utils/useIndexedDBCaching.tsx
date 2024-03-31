@@ -5,7 +5,7 @@ import { db as firestoreDB } from "./Firebase";
 import MiniSearch from 'minisearch';
 
 
-export type IndexedDBCaching = {
+export type IndexedDBCachingResult = {
 
   data: DocumentData[] | null;
   loading: boolean;
@@ -39,8 +39,8 @@ const useIndexedDBCaching = () => {
 
       // Fetch data from Firebase
       const snapshot = await getDocs(collection(firestoreDB, "Character"));;
-      console.log("Snapshot got")
-      console.log(snapshot);
+      // console.log("Snapshot got")
+      // console.log(snapshot);
 
       // Extract data from the snapshot
       const newData = snapshot.docs.map((doc) => { return { _id: doc.id, ...doc.data() } });
@@ -85,7 +85,7 @@ const useIndexedDBCaching = () => {
         // Check if the object store already exists
         if (!db.objectStoreNames.contains(OBJECT_STORE_NAME)) {
           // Create the object store with a keyPath
-          console.log("Created in check")
+          // console.log("Created in check")
           const objectStore = db.createObjectStore(OBJECT_STORE_NAME, { keyPath: 'id' });
         }
       }
@@ -95,7 +95,7 @@ const useIndexedDBCaching = () => {
     const transaction = db.transaction(OBJECT_STORE_NAME, 'readonly');
     const objectStore = transaction.objectStore(OBJECT_STORE_NAME);
     const cachedData = await objectStore.getAll();
-    console.log("CachedData.length" + cachedData.length)
+    // console.log("CachedData.length" + cachedData.length)
     if (cachedData.length > 0) {
       // If data exists in IndexedDB, set the data state to the cached data
       setData(cachedData);
@@ -109,7 +109,7 @@ const useIndexedDBCaching = () => {
 
     } else {
       // If data doesn't exist in IndexedDB, fetch it
-      console.log("No Documents")
+      // console.log("No Documents")
       await fetchData();
     }
 

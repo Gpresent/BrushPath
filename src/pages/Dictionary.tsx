@@ -51,7 +51,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
 
     if (query) {
       const results = characterCache?.search.search(query, { fuzzy: 1 });
-      console.log(results);
+      // console.log(results);
 
 
       const cleanResults = results?.filter(result => result !== undefined && result !== null)
@@ -59,7 +59,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
 
 
       setFilteredKanjiList(cleanResults ? cleanResults : []);
-      console.log(filteredKanjiList);
+      // console.log(filteredKanjiList);
       // console.log(filteredKanjiList);
     } else {
       setFilteredKanjiList(kanjiList);

@@ -4,6 +4,9 @@ import {
   runTransaction,
   getDoc,
   getDocFromCache,
+  addDoc,
+  arrayUnion,
+  updateDoc,
 } from "firebase/firestore";
 import {
   collection,
@@ -21,6 +24,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { FirebaseError } from "firebase/app";
+import Character from "../types/Character";
 
 //Sam code
 
@@ -178,4 +182,46 @@ export const getDeckFromID = async (deckId: string) => {
     console.error("Error fetching user decks:", error);
     throw error;
   }
+};
+
+//TODO add image and public bool
+export const addUserDeck = async (userId:string, characters: Character[], desc: string, deckTitle:string ) => {
+  try {
+    // const userSnap = await fetchDocument("User", userId);
+    const userRef = doc(db,"User", userId);
+    
+
+    const characterPromises = characters.map((char) => doc(db,"Character", char.unicode_str));
+    const characterRefs = await Promise.all(characterPromises)
+    //TODO Filter Nulls?
+
+    const userDeck = {
+      name:deckTitle,
+      desc:desc,
+      public:false,
+      userRef: userRef,
+      image:"",
+      characters:characterRefs,
+    };
+    //TODO add transaction to prevent concurrency issues
+    
+    //Create Doc
+    const deckRef = await addDoc(collection(db, 'Deck'), userDeck);
+    console.log("Post document added with ID: ", deckRef.id);
+
+    //Add Ref to user
+    const userUpdateData = {
+      decks: arrayUnion(deckRef)
+      // 'newReference' is the reference you want to add to the array
+    };
+
+    await updateDoc(userRef, userUpdateData);
+    
+    // console.log(deckRef);
+    // return await fetchDocument("Deck",deckRef.id);
+  } catch (error) {
+    console.error("Error creating deck:", error);
+    throw error;
+  }
+  
 };

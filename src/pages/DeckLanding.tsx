@@ -48,7 +48,7 @@ interface DeckProps {
 
 const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { userData, getUserData } = useContext(AuthContext);
+  const { userData, getUserData, characterCache,user } = useContext(AuthContext);
   const [decks, setDecks] = useState<any>([]);
 
   useEffect(() => {
@@ -96,6 +96,9 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         kanjiList={jlptN5Kanji}
+        characterCache={characterCache}
+        userData={userData}
+        user = {user}
       />
     </div>
   );
