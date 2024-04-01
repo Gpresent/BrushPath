@@ -230,7 +230,7 @@ export default function grade(input: string, targetKanji: string) {
             [grades, strokeInfo, feedback] = missingStrokes(iCoords, tCoords, passing);
         } else {
             [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
-            alternateStrokeOrder(iCoords, tCoords, passing);
+            //alternateStrokeOrder(iCoords, tCoords, passing);
         }
         color_input(grades);
         strokeInfo.forEach(stroke => {
