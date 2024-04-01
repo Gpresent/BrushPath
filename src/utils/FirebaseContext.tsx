@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
-        setUserData(userDoc.data());
+        setUserData({ email: user.email, ...userDoc.data() });
         console.log("Data fetched successfully", userDoc.data());
         if (userDoc.metadata.fromCache) {
           console.log("You are currently offline. The data might be outdated.");

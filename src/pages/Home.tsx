@@ -12,7 +12,7 @@ import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { userInfo } from "os";
-import { getDecksFromRefs } from "../utils/FirebaseQueries";
+import { getDecksFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import { useNavigate } from "react-router-dom";
 
 // interface HomeProps {
@@ -65,19 +65,30 @@ const charData = {
 
 
 const Home: React.FC = (props) => {
-  
+
 
 
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
+  const [recentDeck, setRecentDeck] = useState<any>()
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if(!userData) {
+    if (!userData) {
+
       getUserData();
+
+
+
+    }
+    else {
+
+      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { setRecentDeck(result); });
+
+
     }
 
 
@@ -87,6 +98,7 @@ const Home: React.FC = (props) => {
     const fetchDecks = async () => {
       if (userData) {
         return await getDecksFromRefs(userData.decks);
+
       }
     }
 
@@ -118,11 +130,11 @@ const Home: React.FC = (props) => {
         suggestedDeck={{
           id: 0,
           image: "../sample_deck.png",
-          name: "JLPT N5"
+          name: recentDeck?.name || ""
         }}
       />
       <h2>Recent Decks</h2>
-      {(loading || decks === null || decks === undefined) ? <LoadingSpinner /> : <DeckList decks={decks} ></DeckList>}
+      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div>
