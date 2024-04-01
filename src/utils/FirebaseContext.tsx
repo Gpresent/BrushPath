@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  
+
 
   const updateUserDatabase = async (user: any) => {
     try {
@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           decks: [doc(db, "Deck/JLPT_1"), doc(db, "Deck/JLPT_2"), doc(db, "Deck/JLPT_3"), doc(db, "Deck/JLPT_4"), doc(db, "Deck/JLPT_5")],
           name: user.displayName,
           total_use_time: 0,
+          last_deck_studied: doc(db, "Deck/JLPT_1")
         });
         getUserData();
 
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return unsubscribe;
   }, []);
 
-  
+
 
   const value = {
     userData: userData,
