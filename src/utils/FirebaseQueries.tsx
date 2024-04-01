@@ -225,3 +225,31 @@ export const addUserDeck = async (userId:string, characters: Character[], desc: 
   }
   
 };
+
+export const updateUserDeck = async (deckId:string, characters: Character[], desc: string, deckTitle:string, imageUrl: string) => {
+  try {
+    const deckRef = doc(db,"Deck",deckId);
+    
+
+    const characterPromises = characters.map((char) => doc(db,"Character", char.unicode_str));
+    const characterRefs = await Promise.all(characterPromises)
+    //TODO Filter Nulls?
+
+    const userDeck = {
+      name:deckTitle,
+      desc:desc,
+      image:"",
+      characters:characterRefs,
+    };
+    //TODO add transaction to prevent concurrency issues
+    
+    //Create Doc
+    await updateDoc(deckRef, userDeck);
+    console.log("Post document added with ID: ", deckRef.id);
+    
+  } catch (error) {
+    console.error("Error creating deck:", error);
+    throw error;
+  }
+  
+};
