@@ -215,9 +215,10 @@ code {
 /* Modal */
 .username-modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 25% auto;
   padding: 20px;
-  width: 25%;
+  max-width: 50%;
+  width: 300px;
   border-radius: 10px;
 }
 
