@@ -7,6 +7,7 @@ import KanjiModal from "../components/KanjiModal";
 import Character from "../types/Character";
 import { AuthContext } from "../utils/FirebaseContext";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 interface DeckProps {
   //message: string;
@@ -48,11 +49,11 @@ interface DeckProps {
 
 const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { userData, getUserData } = useContext(AuthContext);
+  const { userData, getUserData, characterCache, user } = useContext(AuthContext);
   const [decks, setDecks] = useState<any>([]);
 
   useEffect(() => {
-    if(!userData) {
+    if (!userData) {
       getUserData();
     }
 
@@ -89,13 +90,18 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       <input className="search-bar" />
       {/* <HomeStats /> */}
       <div className="deck-list-container">
-        
-        <DeckList decks={decks}  />
+
+        {!userData ? <LoadingSpinner /> : <DeckList decks={decks}
+          user={userData} />
+        }
       </div>
       <KanjiModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         kanjiList={jlptN5Kanji}
+        characterCache={characterCache}
+        userData={userData}
+        user={user}
       />
     </div>
   );

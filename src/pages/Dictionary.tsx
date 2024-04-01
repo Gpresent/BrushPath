@@ -1,10 +1,15 @@
 import React, { Suspense, useContext, useEffect, useState } from "react";
+
 import "../styles/styles.css";
 import "../styles/dict.css";
 import Character from "../types/Character";
 import WordList from "../components/WordList";
 import characterParser from "../utils/characterParser";
 import app, { auth, db } from '../utils/Firebase'
+import { AuthContext } from "../utils/FirebaseContext";
+
+
+import MiniSearch from 'minisearch'
 
 import {
   collection,
@@ -19,46 +24,64 @@ interface DictionaryProps {
   title: string;
 }
 
-async function getCharacters(db: any): Promise<any[]> {
-  let toReturn: any = [];
-  try {
-    const characterRef = await collection(db, "Character");
-    const q = query(characterRef, limit(100));
-    // where('jlpt', '==', 'N4')
-
-    const querySnapshot = await getDocs(q);
-    const convertedCharacters: Character[] = [];
-
-    querySnapshot.forEach((doc: any) => {
-      toReturn.push(characterParser(doc.data()));
-    });
-    return toReturn;
-  } catch (error) {
-    console.error("Error getting documents:", error);
-    throw error;
-  }
+interface KanjiCharacter {
+  id: string; // Unique identifier for MiniSearch
+  kanji: string;
+  meanings: string[];
+  // Add other properties as needed
 }
+
+
+
+
+
 
 const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const contextValue = db;
 
-  const [kanjiList, setkanjiList] = useState<Character[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { characterCache } = useContext(AuthContext);
+  const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>([]);
+  const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const populateList = async () => {
-      setLoading(true);
-      setkanjiList(await getCharacters(contextValue));
-      setLoading(false);
-    };
-    populateList();
-  }, []);
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setLoading(true);
+
+
+    if (query) {
+      const results = characterCache?.search.search(query, {
+        
+          boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
+          fuzzy: 2,
+          prefix:true
+        
+      });
+      // console.log(results);
+
+
+      const cleanResults = results?.filter(result => result !== undefined && result !== null)
+        .map((result: any) => characterParser(result)); //Could be faster?
+
+
+      setFilteredKanjiList(cleanResults ? cleanResults : []);
+      console.log(filteredKanjiList);
+      // console.log(filteredKanjiList);
+    } else {
+      setFilteredKanjiList(kanjiList);
+    }
+    setLoading(false);
+  };
+
+
 
   return (
     <div className="dictionary-view">
       <p className="my-words">My Words</p>
-      <input className="search-bar" />
-      {loading? <Loading /> : <WordList words={kanjiList} />}
+      <input className="search-bar" onChange={handleSearch}
+        placeholder="Search kanji..." />
+
+      {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
     </div>
   );
 };

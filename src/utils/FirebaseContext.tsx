@@ -5,11 +5,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Us
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-import { DocumentData, Timestamp, doc, runTransaction, getDoc } from 'firebase/firestore';
+import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
+import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCaching';
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void }>({ user: null, userData: null, getUserData: () => { } });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCachingResult | null }>({ user: null, userData: null, getUserData: () => { }, characterCache: null });
 
 export const useAuth = () => {
   return useContext(AuthContext)
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
-        setUserData(userDoc.data());
+        setUserData({ email: user.email, ...userDoc.data() });
         console.log("Data fetched successfully", userDoc.data());
         if (userDoc.metadata.fromCache) {
           console.log("You are currently offline. The data might be outdated.");
@@ -69,11 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const value = {
-    userData: userData,
-    getUserData: getUserData,
-    user: user
-  }
+
 
   const updateUserDatabase = async (user: any) => {
     try {
@@ -83,8 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userDoc = await transaction.get(userRef);
         if (userDoc.exists()) {
           getUserData();
-          throw "Document exists!";
-
+          return;
         }
 
 
@@ -96,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           decks: [doc(db, "Deck/JLPT_1"), doc(db, "Deck/JLPT_2"), doc(db, "Deck/JLPT_3"), doc(db, "Deck/JLPT_4"), doc(db, "Deck/JLPT_5")],
           name: user.displayName,
           total_use_time: 0,
+          last_deck_studied: doc(db, "Deck/JLPT_1")
         });
         getUserData();
 
@@ -106,23 +103,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("Transaction failed: ", e);
     }
   }
+  const characterCache = useIndexedDBCaching();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-      console.log("auth state changed")
-      console.log(firebaseUser);
-      console.log(auth)
+      // console.log("auth state changed")
+      // console.log(firebaseUser);
+      // console.log(auth)
       setLoading(true);
       setUser(firebaseUser);
       if (firebaseUser != null) {
         updateUserDatabase(firebaseUser);
-
+        characterCache.checkCache();
       }
       setLoading(false);
     });
 
     return unsubscribe;
   }, []);
+
+
+
+  const value = {
+    userData: userData,
+    getUserData: getUserData,
+    user: user,
+    characterCache: characterCache,
+  }
 
   return (<AuthContext.Provider value={value}>
     {loading ? <Loading /> : user ? children : <Login />}

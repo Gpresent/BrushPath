@@ -4,6 +4,9 @@ import {
   runTransaction,
   getDoc,
   getDocFromCache,
+  addDoc,
+  arrayUnion,
+  updateDoc,
 } from "firebase/firestore";
 import {
   collection,
@@ -21,6 +24,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { FirebaseError } from "firebase/app";
+import Character from "../types/Character";
 
 //Sam code
 
@@ -77,16 +81,17 @@ export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   }
 };
 
+
 // pagination info from google cloud
 
 /*
 const first = query(collection(db, "cities"), orderBy("population"), limit(25));
 const documentSnapshots = await getDocs(first);
-
+ 
 // Get the last visible document
 const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
 console.log("last", lastVisible);
-
+ 
 // Construct a new query starting at this document,
 // get the next 25 cities.
 const next = query(collection(db, "cities"),
@@ -178,4 +183,95 @@ export const getDeckFromID = async (deckId: string) => {
     console.error("Error fetching user decks:", error);
     throw error;
   }
+};
+
+//TODO add image and public bool
+export const addUserDeck = async (userId: string, characters: Character[], desc: string, deckTitle: string) => {
+  try {
+    // const userSnap = await fetchDocument("User", userId);
+    const userRef = doc(db, "User", userId);
+
+
+    const characterPromises = characters.map((char) => doc(db, "Character", char.unicode_str));
+    const characterRefs = await Promise.all(characterPromises)
+    //TODO Filter Nulls?
+
+    const userDeck = {
+      name: deckTitle,
+      desc: desc,
+      public: false,
+      userRef: userRef,
+      image: "",
+      characters: characterRefs,
+    };
+    //TODO add transaction to prevent concurrency issues
+
+    //Create Doc
+    const deckRef = await addDoc(collection(db, 'Deck'), userDeck);
+    console.log("Post document added with ID: ", deckRef.id);
+
+    //Add Ref to user
+    const userUpdateData = {
+      decks: arrayUnion(deckRef)
+      // 'newReference' is the reference you want to add to the array
+    };
+
+    await updateDoc(userRef, userUpdateData);
+
+    // console.log(deckRef);
+    // return await fetchDocument("Deck",deckRef.id);
+  } catch (error) {
+    console.error("Error creating deck:", error);
+    throw error;
+  }
+
+};
+
+export const updateUserDeck = async (deckId: string, characters: Character[], desc: string, deckTitle: string, imageUrl: string) => {
+  try {
+    const deckRef = doc(db, "Deck", deckId);
+
+
+    const characterPromises = characters.map((char) => doc(db, "Character", char.unicode_str));
+    const characterRefs = await Promise.all(characterPromises)
+    //TODO Filter Nulls?
+
+    const userDeck = {
+      name: deckTitle,
+      desc: desc,
+      image: "",
+      characters: characterRefs,
+    };
+    //TODO add transaction to prevent concurrency issues
+
+    //Create Doc
+    await updateDoc(deckRef, userDeck);
+    console.log("Post document added with ID: ", deckRef.id);
+
+  } catch (error) {
+    console.error("Error creating deck:", error);
+    throw error;
+  }
+
+};
+
+
+//update user recent used deck 
+
+export const updateUserRecentDeck = async (userID: string, deckID: string) => {
+  try {
+    const deckRef = doc(db, "Deck", deckID);
+    const userRef = doc(db, "User", userID);
+
+
+    await updateDoc(userRef, {
+      last_deck_studied: deckRef
+    });
+    console.log("Post updated Recent Deck: ", deckRef.id);
+
+  } catch (error) {
+    console.error("Error creating deck:", error);
+    throw error;
+  }
+
 };

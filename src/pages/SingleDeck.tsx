@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import "../styles/styles.css";
 import WordList from "../components/WordList";
 import characterParser from "../utils/characterParser";
@@ -9,6 +9,7 @@ import { DocumentData } from "firebase/firestore";
 import { getCharsFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import Loading from "../components/Loading";
 import InfiniteScroll from "react-infinite-scroller";
+import { AuthContext } from "../utils/FirebaseContext";
 
 interface DeckProp {
   title: string;
@@ -29,6 +30,8 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
+
+  const { characterCache} = useContext(AuthContext);
 
   const fetchChars = useCallback(async () => {
     let curCharacters = characters;
@@ -104,8 +107,10 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
             <DeckEditModal
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
-              kanjiList={jlptN5Kanji_temp}
+              characterCache = {characterCache}
               deckName={title}
+              charRefs= {deck.data.characters}
+              deckId={deck.data._id}
             />
           )}
         </>
