@@ -50,7 +50,13 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
 
 
     if (query) {
-      const results = characterCache?.search.search(query, { fuzzy: 1 });
+      const results = characterCache?.search.search(query, {
+        
+          boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
+          fuzzy: 2,
+          prefix:true
+        
+      });
       // console.log(results);
 
 
@@ -59,7 +65,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
 
 
       setFilteredKanjiList(cleanResults ? cleanResults : []);
-      // console.log(filteredKanjiList);
+      console.log(filteredKanjiList);
       // console.log(filteredKanjiList);
     } else {
       setFilteredKanjiList(kanjiList);
