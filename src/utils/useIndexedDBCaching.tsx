@@ -28,7 +28,7 @@ const useIndexedDBCaching = () => {
   const [data, setData] = useState<DocumentData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<MiniSearch<any>>(new MiniSearch({
-    fields: ["on", "unicode_str", "one_word_meaning", "compounds", "literal", "meanings", "parts", "nanori", "kun", "radicals"], // fields to index for full-text search
+    fields: ["on", "unicode_str", "one_word_meaning", "compounds", "literal", "meanings", "parts", "nanori", "kun"], // fields to index for full-text search
     storeFields: ["id", "_id", "on", "stroke_count", "unicode_str", "one_word_meaning", "compounds", "jlpt", "freq", "codepoints", "totalLengths", "grade", "literal", "readings", "meanings", "parts", "nanori", "meanings_str", "kun", "coords", "radicals"] // fields to return with search results
   }));
 
