@@ -63,16 +63,6 @@
     align-items: flex-start; 
 } */
 
-.pp-modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    width: 80%;
-    border-radius: 10px;
-    max-height: 80vh; 
-    overflow-y: auto;
-}
-
 .input-label {
     font-size: 15px;
     margin-bottom: 5px;
@@ -97,5 +87,15 @@
     /*height: 24px;*/
     width: 24px;
     margin-left: 10px;
+}
+
+.pp-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 10px;
+    max-height: 80vh; 
+    overflow-y: auto;
 }
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import "../styles/settings.css";
+import "../styles/index.css";
 
 interface PrivacyPolicyModalProps {
   isOpen: boolean;
