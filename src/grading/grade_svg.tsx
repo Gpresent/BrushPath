@@ -223,8 +223,7 @@ export default function grade_svg(iCoords: number[][][], tCoords: number[][][], 
             if (lengthScore + 0.2 > 1 - passing) feedbackline += gen_feedback_lengths(lengthDiffs[i]);
             if (centerScore + 0.2 > 1 - passing) feedbackline += gen_feedback_center_points(centerDiffs[i]);
             if (intersectionScore) feedbackline += gen_feedback_intersections(extraIntersections[i].filter(num => num > 0), missingIntersections[i].filter(num => num > 0));
-            feedbackline += gen_feedback_crosses(extraCrosses[i], missingCrosses[i]);
-            feedbackline += gen_feedback_aspect(aspectScore);
+            if (crossScore) feedbackline += gen_feedback_crosses(extraCrosses[i], missingCrosses[i]);
             feedback[i] = feedbackline;
         } else {
             feedback[i] = "Stroke " + (i + 1) + " is good. Score = " + Math.round(grades[i] * 100) + "%\n";
