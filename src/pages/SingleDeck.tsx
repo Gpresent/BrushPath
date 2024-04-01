@@ -109,6 +109,8 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               onClose={() => setIsEditModalOpen(false)}
               characterCache = {characterCache}
               deckName={title}
+              charRefs= {deck.data.characters}
+              deckId={deck.data._id}
             />
           )}
         </>
