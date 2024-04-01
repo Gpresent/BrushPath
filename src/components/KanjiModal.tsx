@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "../styles/styles.css";
+import Character from "../types/Character";
+import { IndexedDBCachingResult } from "../utils/useIndexedDBCaching";
+import characterParser from "../utils/characterParser";
+import { DocumentData } from "firebase/firestore";
+import { addUserDeck } from "../utils/FirebaseQueries";
+import { User } from "firebase/auth";
 
 interface Kanji {
     id: number;
@@ -13,24 +19,53 @@ interface KanjiModalProps {
     isOpen: boolean;
     onClose: () => void;
     kanjiList: Kanji[];
+    characterCache: IndexedDBCachingResult |null,
+    userData: DocumentData|null,
+    user: User | null
 }
   
   
-const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList }) => {
-    const [selectedKanji, setSelectedKanji] = useState<Kanji[]>([]);
+const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, characterCache, userData, user }) => {
+    const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
     const [deckTitle, setDeckTitle] = useState("");
+
+    const characters: Character[] | undefined = useMemo(() => {
+      //return characterCache?.data?.map((docData) => characterParser(docData) ).filter((character) => character!==null)
+      return (characterCache?.data || []).map((docData) => characterParser(docData)).filter((character): character is Character => character !== null);
+  },[characterCache?.data])
   
-    const toggleKanjiSelection = (kanji: Kanji) => {
-      const isAlreadySelected = selectedKanji.some((k) => k.id === kanji.id);
+    const toggleKanjiSelection = (kanji: Character) => {
+      const isAlreadySelected = selectedKanji.some((k) => k.unicode === kanji.unicode);
       if (isAlreadySelected) {
-        setSelectedKanji(selectedKanji.filter((k) => k.id !== kanji.id));
+        setSelectedKanji(selectedKanji.filter((k) => k.unicode !== kanji.unicode));
       } else {
         setSelectedKanji([...selectedKanji, kanji]);
       }
     };
+
+    
   
     const handleSubmit = () => {
-      // add logic :)
+      // TODO add logic :)
+      console.log(user);
+      if(deckTitle === "") {
+        console.log("No deck title");
+        return;
+      }
+
+      if(!user?.email) {
+        console.log("User not found")
+        return;
+      }
+      if(selectedKanji.length === 0) {
+        console.log("No Kanji Selected");
+        return;
+      }
+      if(user?.email) {
+        addUserDeck(user?.email, selectedKanji, "", deckTitle);
+      }
+      
+      
   
       setSelectedKanji([]);
       setDeckTitle("");
@@ -59,14 +94,14 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList }) =
             />
           </div>
           <ul className="add-word-list">
-            {kanjiList.map(kanji => (
-              <li key={kanji.id}>
+            {characters?.map(kanji => (
+              <li key={kanji.unicode}>
                 <input 
                   type="checkbox" 
-                  checked={selectedKanji.some((k) => k.id === kanji.id)}
+                  checked={selectedKanji.some((k) => k.unicode === kanji.unicode)}
                   onChange={() => toggleKanjiSelection(kanji)}
                 />
-                {kanji.unicode} - {kanji.hiragana} - {kanji.english}
+                {kanji.unicode} - {kanji.one_word_meaning}
               </li>
             ))}
           </ul>
