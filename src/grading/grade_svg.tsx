@@ -182,9 +182,6 @@ function gen_feedback_crosses(extraCrosses: number[], missingCrosses: number[]):
     if (feedback) feedback += ".\n";
     return feedback;
 }
-function gen_feedback_aspect(aspectScore: number): string {
-    return '';
-}
 
 export default function grade_svg(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[]]{
     const [inputCoords, targetCoords, aspectWarp] = fit_bbox(iCoords, tCoords);

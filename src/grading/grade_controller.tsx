@@ -39,88 +39,77 @@ function alternateStrokeOrder(
     iCoords: number[][][],
     tCoords: number[][][],
     passing: number = 0.6,
-    maxDepth: number = 10 // Adjust the maximum depth as needed
+    maxDepth: number = 5 // Adjust the maximum depth as needed
   ): [number[], string[], string[]] {
+    function calculateAverageGrade(order: number[]): [number, number] {
+        const [grades] = grade_svg(generateOrderArray(JSON.parse(JSON.stringify(iCoords)), order), tCoords, passing);
+        return [grades.reduce((a, b) => a + b, 0) / grades.length, grades.filter(grade => grade < passing).length];
+    }
+
+    // BFS function to find the best stroke order
     function bfs(
         currentOrder: number[],
-        currentIndex: number,
-        bestCombo: number[],
         depth: number,
-        visited: Set<string> // Keep track of visited combinations
-      ): number[] {
-        // Base case: If we've reached the end of the array or maximum depth
-        if (currentIndex === currentOrder.length || depth === maxDepth) {
-          return bestCombo;
+        visited: Set<string>, // Keep track of visited combinations
+    ): [number[], number] {
+        if (depth === maxDepth) {
+            return [currentOrder, -1];
         }
-      
-        // Recursive case: Explore all possible swaps for the current index
-        for (let i: number = currentIndex; i < currentOrder.length; i++) {
-            
-          // Swap elements
-          [currentOrder[currentIndex], currentOrder[i]] = [
-            currentOrder[i],
-            currentOrder[currentIndex],
-          ];
-          console.log("depth:", depth);
-          console.log("currentIndex:", currentIndex);
-          console.log("i:", i);
-          const currentComboString = currentOrder.toString(); // Convert array to string for tracking
-          if (!visited.has(currentComboString)) {
-            visited.add(currentComboString); // Mark combination as visited
-            console.log("Current combo:", currentComboString);
-      
-            // Grade the current order
-            const [grades, strokeInfo, feedback] = grade_svg(
-              generateOrderArray(JSON.parse(JSON.stringify(iCoords)), currentOrder),
-              tCoords,
-              passing
-            );
-            const avgGrade =
-              grades.reduce((a, b) => a + b, 0) / grades.length;
-            const failingCount = grades.filter((grade) => grade < passing).length;
-      
-            // If the current order is better, update the bestCombo
-            if (
-              avgGrade > bestAvgGrade ||
-              (avgGrade === bestAvgGrade && failingCount < bestFailingCount)
-            ) {
-              bestAvgGrade = avgGrade;
-              bestFailingCount = failingCount;
-              bestCombo = JSON.parse(JSON.stringify(currentOrder));
+    
+        let bestOrder = currentOrder;
+        let [bestGrade, failingnum] = calculateAverageGrade(currentOrder);
+        if (failingnum === 0) return [currentOrder, 0];
+    
+        for (let i = 0; i < currentOrder.length; i++) {
+            for (let j = i + 1; j < currentOrder.length; j++) {
+                // Swap elements to generate new stroke order
+                const newOrder = [...currentOrder];
+                [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+    
+                // Check if the new order is visited
+                const orderKey = newOrder.join(',');
+                if (!visited.has(orderKey)) {
+                    visited.add(orderKey);
+                    //console.log("Visited:", visited.size, "combinations, Current:", orderKey);
+    
+                    // Recursively call bfs with the new order
+                    const [updatedOrder, failingnum2] = bfs(newOrder, depth + 1, visited);
+    
+                    // Calculate grade for the new order
+                    const [grade] = calculateAverageGrade(updatedOrder);
+    
+                    // Update best order if the grade is better
+                    if (grade > bestGrade) {
+                        bestGrade = grade;
+                        bestOrder = updatedOrder;
+                        failingnum = failingnum2;
+                    }
+                    if (failingnum === 0) {
+                        return [bestOrder, 0];
+                    }
+                }
             }
-      
-            bestCombo = bfs(
-                currentOrder.slice(0),
-                currentIndex + 1,
-                bestCombo,
-                depth + 1,
-                visited // Pass visited set to the recursive call
-            );
-      
-            // Undo the swap
-            [currentOrder[currentIndex], currentOrder[i]] = [
-              currentOrder[i],
-              currentOrder[currentIndex],
-            ];
-            
-          }
         }
-        return bestCombo;
-      }
+    
+        return [bestOrder, failingnum];
+    }
       
   
     // Initialize variables
-    let bestAvgGrade = -Infinity;
-    let bestFailingCount = Infinity;
     let bestCombo = Array.from({ length: iCoords.length }, (_, index) => index + 1);
-    console.log("Initial array:", generateOrderArray(iCoords, bestCombo));
+    let [grades] = grade_svg(iCoords, tCoords, passing);
+    let failing = grades.filter(grade => grade < passing).length;
+    console.log("Initial failing:", failing);
   
     // Perform BFS
-    bestCombo = bfs(bestCombo.slice(), 0, bestCombo, 0, new Set());
+    [bestCombo, failing] = bfs(bestCombo.slice(), 0, new Set());
+    if (failing === -1) {
+        console.log("No better stroke order found within the maximum depth")
+    }
     console.log("Best combo:", bestCombo);
     console.log("Updated array:", generateOrderArray(iCoords, bestCombo));
   
-    return [[], [], []]; // Placeholder return, you need to implement this part
+    return grade_svg(generateOrderArray(iCoords, bestCombo), tCoords, passing); 
   }
   
 
@@ -229,8 +218,7 @@ export default function grade(input: string, targetKanji: string) {
         } else if (iCoords.length < tCoords.length) {
             [grades, strokeInfo, feedback] = missingStrokes(iCoords, tCoords, passing);
         } else {
-            [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
-            //alternateStrokeOrder(iCoords, tCoords, passing);
+            [grades, strokeInfo, feedback] = alternateStrokeOrder(iCoords, tCoords, passing);
         }
         color_input(grades);
         strokeInfo.forEach(stroke => {
