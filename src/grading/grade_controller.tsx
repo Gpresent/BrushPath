@@ -180,7 +180,7 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
             gradeColors.push(grades[j]);
             j++;
         } else {
-            gradeColors.push(0);
+            gradeColors.push(-1);
             kanji_grade.overallFeedback += "\tStroke " + i + " is extra.\n";
             kanji_grade.overallGrade -= (100 - passing * 100)
         }
@@ -246,7 +246,6 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
 }
 
 export default function grade(input: string, targetKanji: string): Promise<KanjiGrade> {
-    console.log("GRADING");
     kanji_grade = {
         overallGrade: 100,
         overallFeedback: "",
@@ -259,6 +258,7 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
         fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
             .then(response => response.json())
             .then(data => {
+                console.log("GRADING")
                 var targetInfo = data as unknown as interp_data;
                 const tCoords = targetInfo.coords;
                 const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
@@ -273,7 +273,7 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
                     kanji_grade.overallFeedback += aspectString;
                     order_feedback(strokeOrder);
                 }
-                const avgGrade = grades.reduce((a, b) => a + b, 0) / grades.length;
+                const avgGrade = grades.filter((val) => val >= 0).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= 0).length;
 
                 kanji_grade.overallGrade *= avgGrade;
                 kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
@@ -283,16 +283,6 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
 
 
                 color_input(grades);
-                strokeInfo.forEach(stroke => {
-                    console.log(stroke)
-                });
-                feedback.forEach(string => {
-                    console.log(string);
-                });
-                console.log("Overall grade: " + kanji_grade.overallGrade);
-                if (kanji_grade.overallFeedback === "") {
-                    console.log("Great job!");
-                } else console.log(kanji_grade.overallFeedback)
                 
                 
                 resolve (kanji_grade);

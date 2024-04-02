@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ClearIcon from '@mui/icons-material/Clear';
+import HelpIcon from '@mui/icons-material/Help';
 import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
@@ -60,9 +61,24 @@ interface DrawProps {
   character?: Character;
   allowDisplay: boolean;
 }
+// Define types for coordinates
+interface Point {
+  x: number;
+  y: number;
+}
+
+// Function to calculate the coordinates relative to the canvas
+function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index: number): Point {
+  const location = path.getPointAtLength(path.getTotalLength() / 2);
+  const offsetX = (canvasRect.left + window.scrollX);
+  const offsetY = (canvasRect.top + window.scrollY);
+  return { x: offsetX, y: offsetY };
+}
 
 const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
+  const canvasElement = document.getElementById("react-sketch-canvas");
+  const canvasRect = canvasElement ? canvasElement.getBoundingClientRect() : null;
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
@@ -185,7 +201,6 @@ const Draw: React.FC<DrawProps> = (props) => {
             canvas.current.exportSvg().then((data: any) => {
               grade(data, kanji).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
-                console.log(grade); // Log the updated grade here
               }).catch((e: any) => {
                 console.log(e);
               });
@@ -199,12 +214,16 @@ const Draw: React.FC<DrawProps> = (props) => {
         <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
         <p>{kanji_grade.overallFeedback}</p>
         {kanji_grade.grades.map((grade, index) => {
-          return (
-            <div key={index}>
-              <h3>Stroke {index + 1}</h3>
-              <p>{kanji_grade.feedback[index]}</p>
-            </div>
-          );
+            if (grade >= 0.65 || grade === -1 || kanji_grade.feedback.length <= index) return null;
+            const path = canvasElement?.getElementsByTagName("path")[index];
+            if (!path) return null;
+
+            return (
+              <div key={index} className="stroke-info">
+                <h3>Stroke {index + 1}</h3>
+                <p>{kanji_grade.feedback[index]}</p>
+              </div>
+            );
         })}
         
       </div>
