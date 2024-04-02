@@ -5,6 +5,7 @@ import "../styles/settings.css";
 import { googleLogout } from "@react-oauth/google";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import UsernameModal from '../components/UsernameModal';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 
 const SettingsView: React.FC = () => {
@@ -12,6 +13,7 @@ const SettingsView: React.FC = () => {
     return JSON.parse(localStorage.getItem('darkMode') || 'false');
   });
   const [showUsernameModal, setShowUsernameModal] = useState(false);
+  const [showPrivacyPolicyModal, setShowPrivacyPolicyModal] = useState(false);
 
 
   useEffect(() => {
@@ -41,7 +43,7 @@ const SettingsView: React.FC = () => {
         console.log("Accessibility Arrow Clicked")
         break;
       case 'Privacy Policy':
-        console.log("Privacy Policy Arrow Clicked")
+        setShowPrivacyPolicyModal(true);
         break;
       case 'Terms of Service':
         console.log("Terms of Service Arrow Clicked")
@@ -51,6 +53,11 @@ const SettingsView: React.FC = () => {
         console.log("Nothing to see here people 0_0")
         break;
     }
+  };
+
+  const closePrivacyPolicyModal = () => {
+
+    setShowPrivacyPolicyModal(false);
   };
 
   const closeUsernameModal = () => {
@@ -72,10 +79,10 @@ const SettingsView: React.FC = () => {
             <span onClick={() => handleArrowClick('Username')}>Username</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Username')} />
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Profile Picture')}>Profile Picture</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Profile Picture')} />
-          </div>
+          </div> */}
         </div>
 
         <p className="title">Preferences</p>
@@ -88,10 +95,10 @@ const SettingsView: React.FC = () => {
               onClick={handleToggleDarkMode}
             ></div>
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Accessibility')}>Accessibility</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Accessibility')} />
-          </div>
+          </div> */}
         </div>
 
         <p className="title">About</p>
@@ -100,14 +107,14 @@ const SettingsView: React.FC = () => {
             <span onClick={() => handleArrowClick('Privacy Policy')}>Privacy Policy</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Privacy Policy')} />
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Terms of Service')}>Terms of Service</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Terms of Service')} />
-          </div>
-          <div className="settings-item">
+          </div> */}
+          {/* <div className="settings-item">
             <span>Contact Us</span>
             <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
-          </div>
+          </div> */}
 
         </div >
       </div >
@@ -126,6 +133,11 @@ const SettingsView: React.FC = () => {
         isOpen={showUsernameModal}
         onClose={closeUsernameModal}
         onSubmit={handleUsernameSubmit}
+      />
+
+      <PrivacyPolicyModal 
+        isOpen={showPrivacyPolicyModal}
+        onClose={closePrivacyPolicyModal}
       />
     </div >
   );
