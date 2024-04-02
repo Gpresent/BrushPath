@@ -196,6 +196,8 @@ const Draw: React.FC<DrawProps> = (props) => {
           Check
       </button>
       <div className="grade-info">
+        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
+        <p>{kanji_grade.overallFeedback}</p>
         {kanji_grade.grades.map((grade, index) => {
           return (
             <div key={index}>
@@ -204,8 +206,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             </div>
           );
         })}
-        <h3>Grade: {kanji_grade.overallGrade === -1 ? 0 : kanji_grade.overallGrade}</h3>
-        <p>{kanji_grade.overallFeedback}</p>
+        
       </div>
     </div>
   );

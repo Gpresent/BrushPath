@@ -24,12 +24,12 @@ function order_feedback(order: number[]) {
     if (order.toString() === default_order.toString()) {
         return;
     }
-    var feedback = "Feedback on stroke order:\n";
+    var feedback = "Stroke order:\n";
     for (let i = 0; i < order.length; i++) {
         if (order[i] !== i + 1) {
             if (order[order[i] - 1] === i + 1) {
                 if (order[i] < order[order[i] - 1]) {
-                    feedback += "\tStrokes " + order[i] + " and " + default_order[i] + " should be swapped.\n";
+                    feedback += "\tSwap strokes " + order[i] + " and " + default_order[i] + ".\n";
                     kanji_grade.overallGrade -= 2 * (100 - passing * 100);
                 }
             } else {
@@ -142,7 +142,7 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
     const comboNumbers = generateCombinations(array, tCoords.length);
 
     if (iCoords.length > Math.floor(tCoords.length * 1.25)) {
-        kanji_grade.overallFeedback += "You entered too many strokes for this character.\n";
+        kanji_grade.overallFeedback += "Too many strokes for this kanji.\n";
         color_input([]);
         return[[],[],[], "", 0];
     }
@@ -164,14 +164,14 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
                 break;
             }
             if (failing > tCoords.length * 0.75) {
-                kanji_grade.overallFeedback += "It looks like you drew the wrong character.\n";
+                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
                 return [[],[],[],"",0];
             }
         }
     }
 
     kanji_grade.overallFeedback += aspectString;
-    kanji_grade.overallFeedback += "Feedback on stroke number:\n";
+    kanji_grade.overallFeedback += "Stroke number:\n";
     const gradeColors = [];
     var j = 0;
 
@@ -181,7 +181,7 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
             j++;
         } else {
             gradeColors.push(0);
-            kanji_grade.overallFeedback += "\tStroke " + i + " was an extra stroke, it was removed for stroke grading.\n";
+            kanji_grade.overallFeedback += "\tStroke " + i + " is extra.\n";
             kanji_grade.overallGrade -= (100 - passing * 100)
         }
     }
@@ -197,7 +197,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     const comboNumbers = generateCombinations(array, iCoords.length);
 
     if (iCoords.length < Math.ceil(tCoords.length * 0.75)) {
-        kanji_grade.overallFeedback += "You entered too few strokes for this character.\n";
+        kanji_grade.overallFeedback += "Too few strokes for this kanji.\n";
         color_input([]);
         return [[],[],[], "",0];
     }
@@ -219,14 +219,14 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
                 break;
             }
             if (failing > iCoords.length * 0.75) {
-                kanji_grade.overallFeedback += "It looks like you drew the wrong character.\n";
+                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
                 return [[],[],[],"",0];
             }
         }
     }
 
     kanji_grade.overallFeedback += aspectString;
-    kanji_grade.overallFeedback += "Feedback on stroke number:\n";
+    kanji_grade.overallFeedback += "Stroke number:\n";
     const gradeColors = [];
     var j = 0;
 
@@ -235,7 +235,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
             gradeColors.push(grades[j]);
             j++;
         } else {
-            kanji_grade.overallFeedback += "\tStroke " + i + " from the model was missing, it was ignored for stroke grading.\n";
+            kanji_grade.overallFeedback += "\tStroke " + i + " is missing.\n";
             kanji_grade.overallGrade -= (100 - passing * 100)
 
         }
