@@ -13,6 +13,8 @@ import { Drawer } from '@mui/material';
 import DrawReview from '../pages/DrawReview';
 import { useState } from 'react';
 
+import { DarkModeProvider } from '../components/DarkModeContext';
+
 const decks_info: Deck[] = [
   {
     id: 0,
@@ -34,21 +36,23 @@ const ComponentRouter: React.FC = () => {
   const [showHeader, setShowHeader] = useState(true);
 
   return (
-    <BrowserRouter>
-      <Layout showHeader={showHeader}>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
-          <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
-          <Route path="/character" element={<SingleWordView />} />
-          <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
-          <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
-          <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
-          <Route path="/settings" element={<SettingsView />} />
-          <Route path="*" element={<ErrorComponent />}></Route>
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <DarkModeProvider>
+      <BrowserRouter>
+        <Layout showHeader={showHeader}>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
+            <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
+            <Route path="/character" element={<SingleWordView />} />
+            <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
+            <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
+            <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
+            <Route path="/settings" element={<SettingsView />} />
+            <Route path="*" element={<ErrorComponent />}></Route>
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </DarkModeProvider>
   );
 };
 
