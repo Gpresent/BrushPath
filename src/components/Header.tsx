@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/styles.css";
+import "../styles/index.css";
 
 import { BsPerson } from "react-icons/bs";
 import { Link } from "react-router-dom";

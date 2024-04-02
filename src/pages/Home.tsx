@@ -67,7 +67,6 @@ const charData = {
 const Home: React.FC = (props) => {
 
 
-
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
@@ -78,7 +77,6 @@ const Home: React.FC = (props) => {
 
   useEffect(() => {
     if (!userData) {
-
       getUserData();
 
 
@@ -98,7 +96,6 @@ const Home: React.FC = (props) => {
     const fetchDecks = async () => {
       if (userData) {
         return await getDecksFromRefs(userData.decks);
-
       }
     }
 
@@ -137,7 +134,7 @@ const Home: React.FC = (props) => {
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
-    </div>
+    </div >
   );
 };
 

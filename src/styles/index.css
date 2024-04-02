@@ -13,11 +13,19 @@ body {
   justify-content: 'space-between';
   align-content: center;
   align-items: 'center';
+  /*background-color: white;*/
+  /*color:#333;*/
 }
 
 p {
   margin: 0;
+  color: #333;
 }
+
+.title {
+  color: #333;
+}
+
 
 h2 {
   margin: 0;
@@ -40,8 +48,8 @@ button {
   border-radius: 10px;
   height: fit-content;
   background-color: white;
-  border: 1px solid  rgba(77, 77, 77, 1);
-  color: black;
+  border: 1px solid #333;
+  color: #333;
   font-size: 18px;
   font-family: 'DM Sans', sans-serif, -apple-system;
   font-weight: 500;
@@ -49,6 +57,14 @@ button {
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
+}
+
+.right-arrow {
+  color: #333;
+}
+
+.right-arrow-modal {
+  color: #333;
 }
 
 code {
@@ -59,4 +75,213 @@ code {
 :any-link {
   text-decoration: none;
   color: unset;
+}
+
+/*Header*/
+
+.header {
+  font-family: DM Sans, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+}
+
+.header-wrapper {
+  z-index: 10;
+  /*background-color: white;*/
+  position: fixed;
+  top: 0;
+  width: 100%;
+  /*border-bottom: 1.9px solid #333;*/
+  /* border-bottom: 1.9px solid #d1d3d6; */
+}
+
+/*Footer*/
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* width: 100%; */
+  /* height: 56.03px; */
+  margin-top: 10px;
+  margin-bottom: 15px;
+  margin-right: 20px;
+  margin-left: 20px;
+  /* box-sizing: border-box; */
+  color: #333;
+}
+
+.footer-wrapper {
+  border-top: 1.9px solid #333;
+  background-color: white;
+  z-index: 10;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* padding: 10px; */
+}
+
+/*Deck*/
+
+.deck-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/*Dictionary View*/
+
+.word-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 52px;
+  padding: 13px 10px 15px;
+  border-top-width: 1px;
+  border-color: #333;
+  border-top-style: solid;
+  box-sizing: border-box;
+  /* margin-top: 10px; */
+}
+
+.character {
+  color: #333;
+  font-size: 32px;
+  line-height: 69%;
+  font-family: DM Sans, sans-serif;
+  font-weight: 500;
+}
+
+.my-words {
+  /* position: absolute;
+  top: 163px;
+  left: 67px; */
+  color: #333;
+  font-size: 24px;
+  line-height: 69%;
+  font-family: DM Sans, sans-serif;
+  font-weight: 500;
+}
+
+.meaning {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #333;
+  font-size: 20px;
+  line-height: 110%;
+  font-family: DM Sans, sans-serif;
+  font-weight: 400;
+  text-align: right;
+  overflow: hidden;
+  height: 100%;
+}
+
+.search-bar {
+  width: 100%;
+  padding-left: 10px;
+  height: 36px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: white;
+  color: #333;
+}
+
+/* Dark Mode Toggle */
+.toggle-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  background-color: 333;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.toggle-button.active {
+  background-color: #333;
+}
+
+/* Modal */
+.username-modal-content {
+  background-color: #fefefe;
+  margin: 25% auto;
+  padding: 20px;
+  max-width: 50%;
+  width: 300px;
+  border-radius: 10px;
+}
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #333;
+  color: #E0E0E0;
+}
+
+body.dark-mode .title,
+body.dark-mode .character,
+body.dark-mode .my-words,
+body.dark-mode .meaning,
+body.dark-mode .right-arrow,
+body.dark-mode .right-arrow-modal,
+body.dark-mode .footer,
+body.dark-mode .footer-wrapper,
+body.dark-mode .header,
+body.dark-mode .header-wrapper,
+body.dark-mode p,
+body.dark-mode h2,
+body.dark-mode li,
+body.dark-mode code,
+body.dark-mode .deck-card,
+body.dark-mode .word-card,
+body.dark-mode .deckTitle {
+  color: #E0E0E0;
+  border-color: #7C7C7C;
+}
+
+body.dark-mode input,
+body.dark-mode .search-bar,
+body.dark-mode button {
+  background-color: #333;
+  color: #E0E0E0;
+  border-color: #7C7C7C;
+}
+
+body.dark-mode .header,
+body.dark-mode .header-wrapper,
+body.dark-mode .footer-wrapper,
+body.dark-mode .modal-content {
+  background-color: #333;
+  border-color: #7C7C7C;
+}
+
+body.dark-mode .toggle-button {
+  border-color: #7C7C7C;
+  background-color: white;
+}
+
+body.dark-mode .toggle-button.active {
+  background-color: #333;
+}
+
+body.dark-mode .username-modal-content {
+  background-color: #333;
+}
+
+body.dark-mode .pp-modal-content {
+  background-color: #333; 
 }

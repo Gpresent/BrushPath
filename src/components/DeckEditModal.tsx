@@ -66,7 +66,7 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
 
   useEffect(() => {
     setSelectedKanji(createInitialSelectedKanji(charRefs))
-  },[])
+  }, [])
 
   const toggleKanjiSelection = (kanji: Character) => {
     const isAlreadySelected = selectedKanji.some(
@@ -83,7 +83,7 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
 
   const handleSubmit = () => {
     //TODO Change desc.
-    updateUserDeck(deckId,selectedKanji,"",deckName,"")
+    updateUserDeck(deckId, selectedKanji, "", deckName, "")
     setSelectedKanji([]);
     onClose();
   };
@@ -114,7 +114,7 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
                 )}
                 onChange={() => toggleKanjiSelection(kanji)}
               />
-              {kanji?.unicode} - {} - {kanji?.one_word_meaning}
+              {kanji?.unicode} - { } - {kanji?.one_word_meaning}
             </li>
           ))}
         </ul>

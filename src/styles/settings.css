@@ -1,7 +1,100 @@
 .settings-page{
-    height: 80vh;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
     justify-content: center;
     align-items: center;
 }
+.settings-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 20px;
+}
+.title {
+    font-size: 35px;
+    line-height: 69%;
+    font-family: DM Sans, sans-serif;
+    font-weight: 500;
+}
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+    padding: 10px 15px; 
+}
 
+.right-arrow {
+    cursor: pointer;
+}
+
+/* .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    border: 2px solid #333;
+} */
+
+/* .modal-title {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+} */
+
+/* .modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+} */
+
+.pp-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 10px;
+    max-height: 80vh; 
+    overflow-y: auto;
+}
+
+.input-label {
+    font-size: 15px;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left; 
+}
+
+.input-icon-container {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+}
+
+.input-icon-container input {
+    width: calc(100% - 24px);
+    box-sizing: border-box; 
+}
+
+
+.right-arrow-modal {
+    cursor: pointer;
+    /*height: 24px;*/
+    width: 24px;
+    margin-left: 10px;
+}
