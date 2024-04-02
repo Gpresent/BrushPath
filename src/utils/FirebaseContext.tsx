@@ -5,11 +5,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Us
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-import { Timestamp, doc, runTransaction } from 'firebase/firestore';
+import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
+import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCaching';
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User }>({ user: null });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCachingResult | null }>({ user: null, userData: null, getUserData: () => { }, characterCache: null });
 
 export const useAuth = () => {
   return useContext(AuthContext)
@@ -22,10 +23,54 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const value = {
+  const [userData, setUserData] = useState<any>(null);
 
-    user: user
-  }
+
+  //Sam code
+  // const getUserData = async () => {
+  //   if(user === null || user.email === null) {
+  //     return;
+  //   }
+  //   try {
+  //     const userRef = await doc(db, "User", user.email);
+  //     await runTransaction(db, async (transaction) => {
+
+  //       const userDoc = await transaction.get(userRef);
+  //       if (!userDoc.exists()) {
+  //         throw "Document doesn't exists!";
+  //       }
+  //       setUserData(userDoc.data()); 
+  //       console.log(userDoc.data());          
+  //     });
+
+  //     console.log("Transaction successfully committed!");
+
+
+  //   } catch (e) {
+  //     console.log("Transaction failed: ", e);
+  //   }
+  // }
+  const getUserData = async () => {
+    if (user === null || user.email === null) return;
+    const userRef = doc(db, "User", user.email);
+    try {
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        setUserData({ email: user.email, ...userDoc.data() });
+        console.log("Data fetched successfully", userDoc.data());
+        if (userDoc.metadata.fromCache) {
+          console.log("You are currently offline. The data might be outdated.");
+        }
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+
+    }
+  };
+
+
 
   const updateUserDatabase = async (user: any) => {
     try {
@@ -34,7 +79,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const userDoc = await transaction.get(userRef);
         if (userDoc.exists()) {
-          throw "Document exists!";
+          getUserData();
+          return;
         }
 
 
@@ -43,10 +89,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           student: false,
           teacher: false,
           last_login_time: Timestamp.now(),
-          decks: [],
+          decks: [doc(db, "Deck/JLPT_1"), doc(db, "Deck/JLPT_2"), doc(db, "Deck/JLPT_3"), doc(db, "Deck/JLPT_4"), doc(db, "Deck/JLPT_5")],
           name: user.displayName,
           total_use_time: 0,
+          last_deck_studied: doc(db, "Deck/JLPT_1")
         });
+        getUserData();
 
         //Add character_progress collection?
       });
@@ -55,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("Transaction failed: ", e);
     }
   }
+  const characterCache = useIndexedDBCaching();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
@@ -65,6 +114,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(firebaseUser);
       if (firebaseUser != null) {
         updateUserDatabase(firebaseUser);
+        characterCache.checkCache();
       }
       setLoading(false);
     });
@@ -72,8 +122,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return unsubscribe;
   }, []);
 
+
+
+  const value = {
+    userData: userData,
+    getUserData: getUserData,
+    user: user,
+    characterCache: characterCache,
+  }
+
   return (<AuthContext.Provider value={value}>
     {loading ? <Loading /> : user ? children : <Login />}
   </AuthContext.Provider>)
 }
-

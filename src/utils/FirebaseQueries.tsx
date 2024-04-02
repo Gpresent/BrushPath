@@ -16,6 +16,7 @@ import {
   limit,
   getDocs,
 } from "firebase/firestore";
+import { getAuth, updateProfile } from "firebase/auth";
 
 import { db } from "./Firebase";
 import {
@@ -274,4 +275,29 @@ export const updateUserRecentDeck = async (userID: string, deckID: string) => {
     throw error;
   }
 
+};
+
+
+//User name update
+export const updateUserName = async (newName: string) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      await updateProfile(user, {
+        displayName: newName,
+      });
+      //console.log("User display name updated successfully.");
+
+      await user.reload();
+      //console.log("User profile reloaded successfully.");
+      return true;
+    } catch (error) {
+      console.error("Error updating user display name:", error);
+      return false;
+    }
+  } else {
+    return false;
+  }
 };
