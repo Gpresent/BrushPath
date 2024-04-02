@@ -171,8 +171,8 @@ body {
 }
 
 .deck-list-container {
-    max-height: 72vh;
-    overflow-y: scroll;
+    /* max-height: 72vh;
+    overflow-y: scroll; */
 }
 
 .deck-landing {
@@ -449,6 +449,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
+}
+
+.deck-header-wrapper{
+    padding-top: 10px;
+    padding-bottom: 20px;
+    position: sticky;
+    top: 54px;
+    background-color: white;
 }
 
 .deck-title {
