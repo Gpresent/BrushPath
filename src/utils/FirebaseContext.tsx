@@ -7,6 +7,7 @@ import Login from '../pages/Login';
 import Loading from '../components/Loading';
 import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
 import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCaching';
+import { useMutex } from 'react-context-mutex';
 
 
 //Initialize Context
@@ -29,31 +30,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<any>(null);
 
-
-  //Sam code
-  // const getUserData = async () => {
-  //   if(user === null || user.email === null) {
-  //     return;
-  //   }
-  //   try {
-  //     const userRef = await doc(db, "User", user.email);
-  //     await runTransaction(db, async (transaction) => {
-
-  //       const userDoc = await transaction.get(userRef);
-  //       if (!userDoc.exists()) {
-  //         throw "Document doesn't exists!";
-  //       }
-  //       setUserData(userDoc.data()); 
-  //       console.log(userDoc.data());          
-  //     });
-
-  //     console.log("Transaction successfully committed!");
-
-
-  //   } catch (e) {
-  //     console.log("Transaction failed: ", e);
-  //   }
-  // }
   const getUserData = async () => {
     if (user === null || user.email === null) return;
     const userRef = doc(db, "User", user.email);
@@ -108,8 +84,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
   const characterCache = useIndexedDBCaching();
+  const MutexRunner = useMutex();
+  const mutex = new MutexRunner('caching');
+
+  const handleCacheAsync = async () => { mutex.lock();
+    characterCache.startCache();
+    mutex.unlock(); }
 
   useEffect(() => {
+    // characterCache.startCache();
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
       // console.log("auth state changed")
       // console.log(firebaseUser);
@@ -118,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(firebaseUser);
       if (firebaseUser != null) {
         updateUserDatabase(firebaseUser);
-        characterCache.checkCache();
+        handleCacheAsync();
       }
       setLoading(false);
     });

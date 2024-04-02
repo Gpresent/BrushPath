@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { openDB, DBSchema, IDBPDatabase } from "idb";
-import { collection, getDocs, QuerySnapshot, DocumentData } from "firebase/firestore";
-import { db as firestoreDB } from "./Firebase";
+import { collection, getDocs, QuerySnapshot, DocumentData, getCountFromServer, query, orderBy, startAfter, limit, getDocsFromServer, DocumentReference, getDoc, doc } from "firebase/firestore";
+import { db, db as firestoreDB } from "./Firebase";
 import MiniSearch from 'minisearch';
 
 
@@ -10,7 +10,8 @@ export type IndexedDBCachingResult = {
   data: DocumentData[] | null;
   loading: boolean;
   search: MiniSearch<any>
-  checkCache: () => {}
+  startCache: () => {},
+
 
 }
 
@@ -27,21 +28,46 @@ const OBJECT_STORE_NAME = 'Character';
 const useIndexedDBCaching = () => {
   const [data, setData] = useState<DocumentData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [numChars, setNumChars] = useState<number>(-1);
+  const batch = 50;
+
   const [search, setSearch] = useState<MiniSearch<any>>(new MiniSearch({
     fields: ["on", "unicode_str", "one_word_meaning", "compounds", "literal", "meanings", "parts", "nanori", "kun"], // fields to index for full-text search
     storeFields: ["id", "_id", "on", "stroke_count", "unicode_str", "one_word_meaning", "compounds", "jlpt", "freq", "codepoints", "totalLengths", "grade", "literal", "readings", "meanings", "parts", "nanori", "meanings_str", "kun", "coords", "radicals"] // fields to return with search results
   }));
 
-  const fetchData = async () => {
+
+
+  const fetchData = async (skipRef:string, take:number = batch) => {
     try {
+      
       console.log("Fetching Data")
+      
 
 
       // Fetch data from Firebase
-      const snapshot = await getDocs(collection(firestoreDB, "Character"));;
-      // console.log("Snapshot got")
-      // console.log(snapshot);
+      // const snapshot = await getDocs(collection(firestoreDB, "Character"));
+      let paginatedQuery;
+      //Beginning case, unicode_str = ""
+      if(skipRef === "") {
+        paginatedQuery = query(collection(firestoreDB, "Character"),
+        orderBy("unicode_str"),
+        limit(take));
+      }
+      //Middle case, unicode_str = something
+      else {
+        console.log("startAfter: ",{unicode_str: skipRef});
+        const lastDocumentSnapshot = await getDoc(doc(collection(firestoreDB, "Character"), skipRef));
+        console.log(lastDocumentSnapshot)
+        paginatedQuery = query(collection(firestoreDB, "Character"),
+        orderBy("unicode_str"),
+        startAfter(lastDocumentSnapshot),
+        limit(take));
+      }
 
+      const snapshot = await getDocs(paginatedQuery);
+
+       
       // Extract data from the snapshot
       const newData = snapshot.docs.map((doc) => { return { _id: doc.id, ...doc.data() } });
 
@@ -63,9 +89,12 @@ const useIndexedDBCaching = () => {
       const tx = db.transaction(OBJECT_STORE_NAME, 'readwrite');
       const store = tx.objectStore(OBJECT_STORE_NAME);
       //   store.put({id:1, le: "Bruh"});
-      newData.forEach((item, index) => {
+      let cachedData: {id:number, _id:string}[] = [];
+      await newData.forEach((item, index) => {
         store.put({ id: index, ...item });
+        cachedData.push({ id: index, ...item });
       });
+      
       await tx.done;
       db.close();
 
@@ -73,10 +102,48 @@ const useIndexedDBCaching = () => {
 
       // Set the data state to the fetched data
       //   setData(newData);
+      console.log(newData)
+      const newSkipRef = newData.length ? newData[newData.length-1]._id:"poop"
+      console.log("Fetched (starting at ",newSkipRef, cachedData.length)
+
+      // setIndex(index+batch)
+      // setIndexID(newData.length ? newData[newData.length-1]._id:"")
+      return {skipRef: newSkipRef, cachedData: cachedData};
+
+
     } catch (error) {
       console.error("Error fetching data:", error);
+      return {skipRef: "poop", cachedData:[]}
     }
   };
+
+  const populateCache = async (startIndex:number) => {
+      let lastRef = "";
+      let prevCachedData:any[] = [];
+      for(let i = startIndex; i < 2136; i+= batch) {
+        console.log("i", i);
+        console.log("numChars", numChars)
+        console.log("Attempting to fetchData(lastRef,batch)", lastRef,batch)
+        let fetchResponse = await fetchData(lastRef,batch);
+        if(fetchResponse.cachedData) {
+          setData(data? [...fetchResponse.cachedData, ...data]:  fetchResponse.cachedData);
+        } 
+        else {
+          break;
+        }
+        lastRef = fetchResponse.skipRef
+        prevCachedData.concat(fetchResponse.cachedData);
+
+        //Index Search
+        let indexedSearch = search;
+        indexedSearch.removeAll();
+        console.log(prevCachedData)
+        indexedSearch.addAll(prevCachedData);
+
+        setSearch(indexedSearch);
+
+      }
+  }
 
   // Check if data exists in IndexedDB
   const checkCache = async () => {
@@ -94,37 +161,78 @@ const useIndexedDBCaching = () => {
 
     const transaction = db.transaction(OBJECT_STORE_NAME, 'readonly');
     const objectStore = transaction.objectStore(OBJECT_STORE_NAME);
-    const cachedData = await objectStore.getAll();
-    // console.log("CachedData.length" + cachedData.length)
-    if (cachedData.length > 0) {
-      // If data exists in IndexedDB, set the data state to the cached data
-      setData(cachedData);
-
-      //Index Search
-      let indexedSearch = search;
-      indexedSearch.removeAll();
-      indexedSearch.addAll(cachedData);
-      setSearch(indexedSearch);
-
-
-    } else {
-      // If data doesn't exist in IndexedDB, fetch it
-      // console.log("No Documents")
-      await fetchData();
+    let cachedData = await objectStore.getAll();
+    console.log("Before fetch CachedData.length" + cachedData.length)
+    console.log(cachedData.length < 2136);
+    console.log(numChars);
+    if(cachedData.length < 2136) {
+      console.log("Populating Cache")
+      await populateCache(cachedData.length);
     }
 
+    //Redundant?
+    // cachedData = await objectStore.getAll();
+    console.log("After fetch...",search.toJSON())
+
+    // If data exists in IndexedDB, set the data state to the cached data
+    // setData(cachedData);
+
+    //Index Search
+    // let indexedSearch = search;
+    // indexedSearch.removeAll();
+    // indexedSearch.addAll(cachedData);
+    // setSearch(indexedSearch);
+
     db.close();
-    setLoading(false);
+    // setLoading(false);
   };
 
-  useEffect(() => {
+  
+
+  const startCache = async () => {
+    
+    //Get size
+    if(numChars == -1) {
+      const coll = collection(db, "Character");
+      const snapshot = getCountFromServer(coll).then((snapshot)=> {
+        setNumChars(snapshot.data().count);
+        console.log("Document count",snapshot.data().count);
+        checkCache();
+      });
+      
+    }
+    else {
+      // Call the function to check cache
+      checkCache();
+    }
     
 
-    // Call the function to check cache
-    checkCache();
-  }, []);
+    
+    
+  };
+  useEffect(() => {
+    // startCache();
+      
+      
+      
+    }, []);
 
-  return { data, loading, search, checkCache };
+    // useEffect(() => {
+    //   if(index < 500 && index > 0) {
+    //     console.log("Fetching... Index = ",index)
+    //     checkCache()
+    //   }
+    //   else {
+    //     console.log("Not Fetching... Index = ",index)
+    //   }
+        
+        
+        
+    //   }, [index]);
+
+  
+
+  return { data, loading, search,startCache };
 };
 
 export default useIndexedDBCaching;
