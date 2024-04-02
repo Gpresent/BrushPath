@@ -48,9 +48,11 @@ export const interpretImage = async (imageDataUrl: string) => {
     //console.log(predictionData);
 
     // Assuming generatePredictions is implemented elsewhere
-    const result = processPredictions(predictionData); // Uncomment this to use the prediction data
-    console.log(result);
+    const result = processPredictions(predictionData);
+    //console.log(result);
 
     tensor.dispose();
     prediction.dispose();
+
+    return result;
 };

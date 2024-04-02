@@ -1,6 +1,6 @@
 import { kanjiLabels } from './labels'; // Ensure this has at least as many elements as your predictions array
 
-interface PredictionResult {
+export interface PredictionResult {
     label: string;
     probability: number;
 }
@@ -20,3 +20,4 @@ export const processPredictions = (predictions: Float32Array | Int32Array | Uint
     // Return the top K results
     return sortedResults.slice(0, topK);
 };
+export default PredictionResult;
