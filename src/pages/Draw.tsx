@@ -11,6 +11,8 @@ import '../styles/styles.css'
 import Character from "../types/Character";
 import KanjiGrade from "../types/KanjiGrade";
 
+const passing = 0.65;
+
 const styles = {
   canvas: {
     position: "relative" as "relative",
@@ -213,7 +215,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
             setReadOnly(true);
             canvas.current.exportSvg().then((data: any) => {
-              grade(data, kanji).then((grade: KanjiGrade) => {
+              grade(data, kanji, passing).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
               }).catch((e: any) => {
                 console.log(e);
@@ -228,7 +230,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
         <p>{kanji_grade.overallFeedback}</p>
         {kanji_grade.grades.map((grade, index) => {
-            if (grade >= 0.65 || grade === -1 || kanji_grade.feedback.length <= index) return null;
+            if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
             const path = canvasElement?.getElementsByTagName("path")[index];
             if (!path) return null;
 
