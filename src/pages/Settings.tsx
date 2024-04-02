@@ -5,6 +5,7 @@ import "../styles/settings.css";
 import { googleLogout } from "@react-oauth/google";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import UsernameModal from '../components/UsernameModal';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 
 const SettingsView: React.FC = () => {
@@ -12,6 +13,7 @@ const SettingsView: React.FC = () => {
     return JSON.parse(localStorage.getItem('darkMode') || 'false');
   });
   const [showUsernameModal, setShowUsernameModal] = useState(false);
+  const [showPrivacyPolicyModal, setShowPrivacyPolicyModal] = useState(false);
 
 
   useEffect(() => {
@@ -41,7 +43,7 @@ const SettingsView: React.FC = () => {
         console.log("Accessibility Arrow Clicked")
         break;
       case 'Privacy Policy':
-        console.log("Privacy Policy Arrow Clicked")
+        setShowPrivacyPolicyModal(true);
         break;
       case 'Terms of Service':
         console.log("Terms of Service Arrow Clicked")
@@ -51,6 +53,11 @@ const SettingsView: React.FC = () => {
         console.log("Nothing to see here people 0_0")
         break;
     }
+  };
+
+  const closePrivacyPolicyModal = () => {
+
+    setShowPrivacyPolicyModal(false);
   };
 
   const closeUsernameModal = () => {
@@ -126,6 +133,11 @@ const SettingsView: React.FC = () => {
         isOpen={showUsernameModal}
         onClose={closeUsernameModal}
         onSubmit={handleUsernameSubmit}
+      />
+
+      <PrivacyPolicyModal 
+        isOpen={showPrivacyPolicyModal}
+        onClose={closePrivacyPolicyModal}
       />
     </div >
   );
