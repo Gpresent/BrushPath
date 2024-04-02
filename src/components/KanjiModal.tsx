@@ -1,11 +1,15 @@
 import React, { useMemo, useState } from "react";
 import "../styles/styles.css";
+<<<<<<< HEAD
 import Character from "../types/Character";
 import { IndexedDBCachingResult } from "../utils/useIndexedDBCaching";
 import characterParser from "../utils/characterParser";
 import { DocumentData } from "firebase/firestore";
 import { addUserDeck } from "../utils/FirebaseQueries";
 import { User } from "firebase/auth";
+=======
+import "../styles/index.css";
+>>>>>>> 59531998 (modals and canvas stroke color changes with mode)
 
 interface Kanji {
     id: number;
@@ -85,7 +89,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, cha
         <div className="modal-content">
           <span className="close" onClick={handleClose}>&times;</span>
           <div className="deck-title-input">
-            <label htmlFor="deckTitle">Enter Deck Name:</label>
+            <label className="deckTitle" htmlFor="deckTitle">Enter Deck Name:</label>
             <input
               type="text"
               id="deckTitle"

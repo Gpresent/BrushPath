@@ -100,7 +100,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         svgText = svg.outerHTML;
 
         setSvgHtml({ __html: svgText });
-      } catch (e) {}
+      } catch (e) { }
     };
     // const unicode = kanji?.codePointAt(0)?.toString(16).padStart(5, '0') || '';
     const unicode = props.character?.unicode_str
@@ -167,13 +167,14 @@ const Draw: React.FC<DrawProps> = (props) => {
         onClick={() => {
           setReadOnly(true);
           canvas.current.exportSvg().then((data: any) => {
-          grade(data, kanji);
-        }).catch((e: any) => {
-          console.log(e);
-        })}}
-        >
-          Check
-        </button>
+            grade(data, kanji);
+          }).catch((e: any) => {
+            console.log(e);
+          })
+        }}
+      >
+        Check
+      </button>
     </div>
   );
 };

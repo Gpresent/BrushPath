@@ -212,6 +212,15 @@ code {
   background-color: #333;
 }
 
+/* Modal */
+.username-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  width: 25%;
+  border-radius: 10px;
+}
+
 
 
 /* Dark Mode Styles */
@@ -235,7 +244,8 @@ body.dark-mode h2,
 body.dark-mode li,
 body.dark-mode code,
 body.dark-mode .deck-card,
-body.dark-mode .word-card {
+body.dark-mode .word-card,
+body.dark-mode .deckTitle {
   color: #E0E0E0; 
   border-color: #7C7C7C;
 }
@@ -250,7 +260,9 @@ body.dark-mode button {
 
 body.dark-mode .header,
 body.dark-mode .header-wrapper,
-body.dark-mode .footer-wrapper {
+body.dark-mode .footer-wrapper, 
+body.dark-mode .modal-content
+{
   background-color: #333;
   border-color: #7C7C7C; 
 }
@@ -262,4 +274,9 @@ body.dark-mode .toggle-button {
 body.dark-mode .toggle-button.active {
   background-color: #333; 
 }
+
+body.dark-mode .username-modal-content {
+  background-color: #333; 
+}
+
 
