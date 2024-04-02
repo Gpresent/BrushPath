@@ -270,6 +270,11 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
                     [grades, strokeInfo, feedback, aspectString, failing] = missingStrokes(iCoords, tCoords, passing);
                 } else {
                     [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
+                    if (failing > iCoords.length * 0.75) {
+                        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                        color_input([]);
+                        resolve(kanji_grade);
+                    }
                     kanji_grade.overallFeedback += aspectString;
                     order_feedback(strokeOrder);
                 }
