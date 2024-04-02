@@ -14,20 +14,6 @@ import KanjiGrade from "../types/KanjiGrade";
 const passing = 0.65;
 
 const styles = {
-  canvas: {
-    position: "relative" as "relative",
-    width: "100%",
-    aspectRatio: "1/1",
-    maxWidth: "500px",
-    display: "flex",
-    border: "1px solid rgba(0, 0, 0, 1)",
-    borderRadius: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 2,
-  },
   button: {
     borderWidth: "0px",
     padding: "0px",
@@ -164,7 +150,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      <div style={styles.canvas}>
+      <div  className="canvas">
         <ReactSketchCanvas
           ref={canvas}
           style={{

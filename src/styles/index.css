@@ -248,6 +248,9 @@ body.dark-mode li,
 body.dark-mode code,
 body.dark-mode .deck-card,
 body.dark-mode .word-card,
+body.dark-mode .cover-image,
+body.dark-mode .character-info,
+body.dark-mode .canvas,
 body.dark-mode .deckTitle {
   color: #E0E0E0;
   border-color: #7C7C7C;

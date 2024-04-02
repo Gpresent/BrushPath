@@ -15,7 +15,7 @@
     box-sizing: border-box;
     gap: 20px;
 }
-.title {
+.settings-title {
     font-size: 35px;
     line-height: 69%;
     font-family: DM Sans, sans-serif;
