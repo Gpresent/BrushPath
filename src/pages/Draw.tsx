@@ -8,6 +8,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
+import KanjiGrade from "../types/KanjiGrade";
 
 const styles = {
   canvas: {
@@ -68,6 +69,13 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
   const [allowDisplaySVG, setAllowDisplaySVG] = React.useState<boolean>(props.allowDisplay);
+  const [kanji_grade, setKanjiGrade] = React.useState<KanjiGrade>({
+    overallGrade: -1,
+    overallFeedback: "",
+    grades: [],
+    feedback: [],
+    strokeInfo: [],
+  });
 
   useLayoutEffect(() => {
     if (props.character) {
@@ -146,6 +154,13 @@ const Draw: React.FC<DrawProps> = (props) => {
           onClick={() => {
             canvas.current.clearCanvas();
             setReadOnly(false);
+            setKanjiGrade({
+              overallGrade: -1,
+              overallFeedback: "",
+              grades: [],
+              feedback: [],
+              strokeInfo: [],
+            });
           }}
         >
           <ClearIcon></ClearIcon>
@@ -165,15 +180,33 @@ const Draw: React.FC<DrawProps> = (props) => {
       <button
         className="recolor-canvas"
         onClick={() => {
-          setReadOnly(true);
-          canvas.current.exportSvg().then((data: any) => {
-          grade(data, kanji);
-        }).catch((e: any) => {
-          console.log(e);
-        })}}
+          if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+            setReadOnly(true);
+            canvas.current.exportSvg().then((data: any) => {
+              grade(data, kanji).then((grade: KanjiGrade) => {
+                setKanjiGrade(grade);
+                console.log(grade); // Log the updated grade here
+              }).catch((e: any) => {
+                console.log(e);
+              });
+            });
+          }
+        }}
         >
           Check
-        </button>
+      </button>
+      <div className="grade-info">
+        {kanji_grade.grades.map((grade, index) => {
+          return (
+            <div key={index}>
+              <h3>Stroke {index + 1}</h3>
+              <p>{kanji_grade.feedback[index]}</p>
+            </div>
+          );
+        })}
+        <h3>Grade: {kanji_grade.overallGrade === -1 ? 0 : kanji_grade.overallGrade}</h3>
+        <p>{kanji_grade.overallFeedback}</p>
+      </div>
     </div>
   );
 };

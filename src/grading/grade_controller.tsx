@@ -245,7 +245,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     return [gradeColors, strokeInfo, feedback, aspectString, failing]
 }
 
-export default function grade(input: string, targetKanji: string): KanjiGrade {
+export default function grade(input: string, targetKanji: string): Promise<KanjiGrade> {
     console.log("GRADING");
     kanji_grade = {
         overallGrade: 100,
@@ -255,45 +255,51 @@ export default function grade(input: string, targetKanji: string): KanjiGrade {
         strokeInfo: []
     }
 
-    fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json").then(response => response.json())
-    .then(data => {
-        var targetInfo = data as unknown as interp_data;
-        const tCoords = targetInfo.coords;
-        const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
-        if (!iCoords.length) return;
-        let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately
-        if (iCoords.length > tCoords.length) {
-            [grades, strokeInfo, feedback, aspectString, failing] = extraStrokes(iCoords, tCoords, passing);
-        } else if (iCoords.length < tCoords.length) {
-            [grades, strokeInfo, feedback, aspectString, failing] = missingStrokes(iCoords, tCoords, passing);
-        } else {
-            [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
-            kanji_grade.overallFeedback += aspectString;
-            order_feedback(strokeOrder);
-        }
-        const avgGrade = grades.reduce((a, b) => a + b, 0) / grades.length;
+    return new Promise((resolve, reject) => {
+        fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
+            .then(response => response.json())
+            .then(data => {
+                var targetInfo = data as unknown as interp_data;
+                const tCoords = targetInfo.coords;
+                const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
+                if (!iCoords.length) return;
+                let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately
+                if (iCoords.length > tCoords.length) {
+                    [grades, strokeInfo, feedback, aspectString, failing] = extraStrokes(iCoords, tCoords, passing);
+                } else if (iCoords.length < tCoords.length) {
+                    [grades, strokeInfo, feedback, aspectString, failing] = missingStrokes(iCoords, tCoords, passing);
+                } else {
+                    [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
+                    kanji_grade.overallFeedback += aspectString;
+                    order_feedback(strokeOrder);
+                }
+                const avgGrade = grades.reduce((a, b) => a + b, 0) / grades.length;
 
-        kanji_grade.overallGrade *= avgGrade;
-        kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
-        kanji_grade.grades = grades;
-        kanji_grade.feedback = feedback;
-        kanji_grade.strokeInfo = strokeInfo;
+                kanji_grade.overallGrade *= avgGrade;
+                kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
+                kanji_grade.grades = grades;
+                kanji_grade.feedback = feedback;
+                kanji_grade.strokeInfo = strokeInfo;
 
 
-        color_input(grades);
-        strokeInfo.forEach(stroke => {
-            console.log(stroke)
-        });
-        feedback.forEach(string => {
-            console.log(string);
-        });
-        console.log("Overall grade: " + kanji_grade.overallGrade);
-        if (kanji_grade.overallFeedback === "") {
-            console.log("Great job!");
-        } else console.log(kanji_grade.overallFeedback)
-        
-        
-        return kanji_grade;
+                color_input(grades);
+                strokeInfo.forEach(stroke => {
+                    console.log(stroke)
+                });
+                feedback.forEach(string => {
+                    console.log(string);
+                });
+                console.log("Overall grade: " + kanji_grade.overallGrade);
+                if (kanji_grade.overallFeedback === "") {
+                    console.log("Great job!");
+                } else console.log(kanji_grade.overallFeedback)
+                
+                
+                resolve (kanji_grade);
+            })
+            .catch(error => {
+                console.error("Error grading:", error);
+                return kanji_grade;
+            });
     });
-    return kanji_grade;
 }
