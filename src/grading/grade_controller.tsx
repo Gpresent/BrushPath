@@ -278,10 +278,14 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
                     kanji_grade.overallFeedback += aspectString;
                     order_feedback(strokeOrder);
                 }
-                const avgGrade = grades.filter((val) => val >= 0).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= 0).length;
+                const avgGrade = grades.filter((val) => val >= passing).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= passing).length;
+                if (kanji_grade.overallGrade > passing * 100 && failing !== 0) {
+                    kanji_grade.overallGrade -= failing * (100 - passing * 100);
+                }
 
                 kanji_grade.overallGrade *= avgGrade;
                 kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
+
                 kanji_grade.grades = grades;
                 kanji_grade.feedback = feedback;
                 kanji_grade.strokeInfo = strokeInfo;
