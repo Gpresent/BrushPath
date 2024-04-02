@@ -79,10 +79,10 @@ const SettingsView: React.FC = () => {
             <span onClick={() => handleArrowClick('Username')}>Username</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Username')} />
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Profile Picture')}>Profile Picture</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Profile Picture')} />
-          </div>
+          </div> */}
         </div>
 
         <p className="title">Preferences</p>
@@ -95,10 +95,10 @@ const SettingsView: React.FC = () => {
               onClick={handleToggleDarkMode}
             ></div>
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Accessibility')}>Accessibility</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Accessibility')} />
-          </div>
+          </div> */}
         </div>
 
         <p className="title">About</p>
@@ -107,14 +107,14 @@ const SettingsView: React.FC = () => {
             <span onClick={() => handleArrowClick('Privacy Policy')}>Privacy Policy</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Privacy Policy')} />
           </div>
-          <div className="settings-item">
+          {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Terms of Service')}>Terms of Service</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Terms of Service')} />
-          </div>
-          <div className="settings-item">
+          </div> */}
+          {/* <div className="settings-item">
             <span>Contact Us</span>
             <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
-          </div>
+          </div> */}
 
         </div >
       </div >
