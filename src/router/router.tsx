@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DictionaryView from '../pages/Dictionary';
 import Home from '../pages/Home';
 import Draw from '../pages/Draw';
@@ -32,7 +32,7 @@ const decks_info: Deck[] = [
 ]
 const ComponentRouter: React.FC = () => {
   const [showHeader, setShowHeader] = useState(true);
-  
+
   return (
     <BrowserRouter>
       <Layout showHeader={showHeader}>
@@ -41,9 +41,9 @@ const ComponentRouter: React.FC = () => {
           <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
           <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
           <Route path="/character" element={<SingleWordView />} />
-          <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader}/>}  />
+          <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
           <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
-          <Route path="/deck/:id" element={<SingleDeckView title="Deck"  />} />
+          <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
           <Route path="/settings" element={<SettingsView />} />
           <Route path="*" element={<ErrorComponent />}></Route>
         </Routes>

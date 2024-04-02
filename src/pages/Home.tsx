@@ -96,7 +96,6 @@ const Home: React.FC = (props) => {
     const fetchDecks = async () => {
       if (userData) {
         return await getDecksFromRefs(userData.decks);
-
       }
     }
 

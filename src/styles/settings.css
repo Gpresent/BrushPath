@@ -1,10 +1,11 @@
-.settings-page{
+.settings-page {
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
+
 .settings-block {
     position: relative;
     display: flex;
@@ -15,23 +16,26 @@
     box-sizing: border-box;
     gap: 20px;
 }
+
 .title {
     font-size: 35px;
     line-height: 69%;
     font-family: DM Sans, sans-serif;
     font-weight: 500;
 }
+
 .settings-list {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
 .settings-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; 
-    padding: 10px 15px; 
+    width: 100%;
+    padding: 10px 15px;
 }
 
 .right-arrow {
@@ -67,7 +71,7 @@
     font-size: 15px;
     margin-bottom: 5px;
     width: 100%;
-    text-align: left; 
+    text-align: left;
 }
 
 .input-icon-container {
@@ -89,4 +93,3 @@
     width: 24px;
     margin-left: 10px;
 }
-

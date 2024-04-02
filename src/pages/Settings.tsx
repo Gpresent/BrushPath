@@ -23,7 +23,7 @@ const SettingsView: React.FC = () => {
 
     localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
   }, [isDarkMode]);
-  
+
   const handleToggleDarkMode = () => {
     setIsDarkMode(!isDarkMode); // This should toggle the isDarkMode state
   };
@@ -109,8 +109,8 @@ const SettingsView: React.FC = () => {
             <ArrowForwardIcon className="right-arrow"></ArrowForwardIcon>
           </div>
 
-        </div>
-      </div>
+        </div >
+      </div >
 
       <button
         className="logout-button"
@@ -127,7 +127,7 @@ const SettingsView: React.FC = () => {
         onClose={closeUsernameModal}
         onSubmit={handleUsernameSubmit}
       />
-    </div>
+    </div >
   );
 };
 

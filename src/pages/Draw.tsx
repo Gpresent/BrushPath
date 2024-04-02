@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -109,6 +109,19 @@ const Draw: React.FC<DrawProps> = (props) => {
     loadSvg(unicode);
   }, [kanji]);
 
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setStrokeColor(document.body.classList.contains('dark-mode') ? 'rgba(224, 224, 224, .75)' : 'rgba(40, 40, 41, .75)');
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div style={styles.container}>
       {askInput && (
@@ -134,7 +147,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             pointerEvents: readOnly ? "none" : "auto",
           }}
           strokeWidth={7}
-          strokeColor="rgba(40, 40, 41, .75)"
+          strokeColor={strokeColor}
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && (
