@@ -14,6 +14,7 @@ import DrawReview from '../pages/DrawReview';
 import { useState } from 'react';
 
 import { DarkModeProvider } from '../components/DarkModeContext';
+import Review from '../review_mode/review';
 
 const decks_info: Deck[] = [
   {
@@ -48,6 +49,7 @@ const ComponentRouter: React.FC = () => {
             <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
             <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
             <Route path="/settings" element={<SettingsView />} />
+            <Route path="/review" element={<Review />} />
             <Route path="*" element={<ErrorComponent />}></Route>
           </Routes>
         </Layout>
