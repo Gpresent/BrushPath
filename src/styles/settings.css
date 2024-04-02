@@ -1,11 +1,10 @@
-.settings-page {
+.settings-page{
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
-
 .settings-block {
     position: relative;
     display: flex;
@@ -16,26 +15,23 @@
     box-sizing: border-box;
     gap: 20px;
 }
-
 .title {
     font-size: 35px;
     line-height: 69%;
     font-family: DM Sans, sans-serif;
     font-weight: 500;
 }
-
 .settings-list {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-
 .settings-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    padding: 10px 15px;
+    width: 100%; 
+    padding: 10px 15px; 
 }
 
 .right-arrow {
@@ -67,29 +63,38 @@
     align-items: flex-start; 
 } */
 
+.pp-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 10px;
+    max-height: 80vh; 
+    overflow-y: auto;
+}
+
 .input-label {
     font-size: 15px;
     margin-bottom: 5px;
     width: 100%;
-    text-align: left;
+    text-align: left; 
 }
 
 .input-icon-container {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 100%; 
 }
 
-/* .modal-content input {
-    padding: 8px;
-    border: 1px solid #333;
-    border-radius: 10px;
-    flex-grow: 1;
-} */
+.input-icon-container input {
+    width: calc(100% - 24px);
+    box-sizing: border-box; 
+}
+
 
 .right-arrow-modal {
     cursor: pointer;
-    height: 24px;
+    /*height: 24px;*/
     width: 24px;
     margin-left: 10px;
 }
