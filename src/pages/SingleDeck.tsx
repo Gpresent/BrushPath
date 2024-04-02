@@ -31,7 +31,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
 
-  const { characterCache} = useContext(AuthContext);
+  const { characterCache } = useContext(AuthContext);
 
   const fetchChars = useCallback(async () => {
     let curCharacters = characters;
@@ -107,9 +107,9 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
             <DeckEditModal
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
-              characterCache = {characterCache}
+              characterCache={characterCache}
               deckName={title}
-              charRefs= {deck.data.characters}
+              charRefs={deck.data.characters}
               deckId={deck.data._id}
             />
           )}

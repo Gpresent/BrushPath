@@ -135,4 +135,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     {loading ? <Loading /> : user ? children : <Login />}
   </AuthContext.Provider>)
 }
-
