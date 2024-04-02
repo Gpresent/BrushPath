@@ -5,9 +5,13 @@ import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ClearIcon from '@mui/icons-material/Clear';
+import HelpIcon from '@mui/icons-material/Help';
 import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
+import KanjiGrade from "../types/KanjiGrade";
+
+const passing = 0.65;
 
 const styles = {
   canvas: {
@@ -59,15 +63,37 @@ interface DrawProps {
   character?: Character;
   allowDisplay: boolean;
 }
+// Define types for coordinates
+interface Point {
+  x: number;
+  y: number;
+}
+
+// Function to calculate the coordinates relative to the canvas
+function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index: number): Point {
+  const location = path.getPointAtLength(path.getTotalLength() / 2);
+  const offsetX = (canvasRect.left + window.scrollX);
+  const offsetY = (canvasRect.top + window.scrollY);
+  return { x: offsetX, y: offsetY };
+}
 
 const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
+  const canvasElement = document.getElementById("react-sketch-canvas");
+  const canvasRect = canvasElement ? canvasElement.getBoundingClientRect() : null;
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
   const [allowDisplaySVG, setAllowDisplaySVG] = React.useState<boolean>(props.allowDisplay);
+  const [kanji_grade, setKanjiGrade] = React.useState<KanjiGrade>({
+    overallGrade: -1,
+    overallFeedback: "",
+    grades: [],
+    feedback: [],
+    strokeInfo: [],
+  });
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
   useLayoutEffect(() => {
@@ -160,6 +186,13 @@ const Draw: React.FC<DrawProps> = (props) => {
           onClick={() => {
             canvas.current.clearCanvas();
             setReadOnly(false);
+            setKanjiGrade({
+              overallGrade: -1,
+              overallFeedback: "",
+              grades: [],
+              feedback: [],
+              strokeInfo: [],
+            });
           }}
         >
           <ClearIcon></ClearIcon>
@@ -179,16 +212,37 @@ const Draw: React.FC<DrawProps> = (props) => {
       <button
         className="recolor-canvas"
         onClick={() => {
-          setReadOnly(true);
-          canvas.current.exportSvg().then((data: any) => {
-            grade(data, kanji);
-          }).catch((e: any) => {
-            console.log(e);
-          })
+          if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+            setReadOnly(true);
+            canvas.current.exportSvg().then((data: any) => {
+              grade(data, kanji, passing).then((grade: KanjiGrade) => {
+                setKanjiGrade(grade);
+              }).catch((e: any) => {
+                console.log(e);
+              });
+            });
+          }
         }}
-      >
-        Check
+        >
+          Check
       </button>
+      <div className="grade-info">
+        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
+        <p>{kanji_grade.overallFeedback}</p>
+        {kanji_grade.grades.map((grade, index) => {
+            if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
+            const path = canvasElement?.getElementsByTagName("path")[index];
+            if (!path) return null;
+
+            return (
+              <div key={index} className="stroke-info">
+                <h3>Stroke {index + 1}</h3>
+                <p>{kanji_grade.feedback[index]}</p>
+              </div>
+            );
+        })}
+        
+      </div>
     </div>
   );
 };
