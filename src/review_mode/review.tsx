@@ -3,7 +3,7 @@ import {ReviewItem, SpacedRepetitionSystem} from "./features/spacedrep";
 import { useState } from 'react';
 import DrawRLink from './features/drawrmlink';
 import Character from '../types/Character';
-import WordList from '../components/WordList';
+import PlayList from './components/rv_word_list';
 const jlptN5Kanji: any = [
     { id: 1, unicode: "一", hiragana: "いち", one_word_meaning: "one" },
     { id: 2, unicode: "二", hiragana: "に", one_word_meaning: "two" },
@@ -41,7 +41,7 @@ const Review: React.FC = () => {
     // const [showHeader, setShowHeader] = useState(true);
     return (
         <>
-            <WordList words={words}/>
+            <PlayList words={words}/>
         </>
         
     );
