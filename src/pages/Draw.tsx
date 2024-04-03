@@ -10,6 +10,9 @@ import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
 import KanjiGrade from "../types/KanjiGrade";
+import { interpretImage } from "../recogition/interpretImage";
+import type PredictionResult from "../recogition/predictionDisplay";
+
 
 const passing = 0.65;
 
@@ -80,6 +83,8 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
   useLayoutEffect(() => {
@@ -150,7 +155,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      <div  className="canvas">
+      <div className="canvas">
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -203,33 +208,73 @@ const Draw: React.FC<DrawProps> = (props) => {
             canvas.current.exportSvg().then((data: any) => {
               grade(data, kanji, passing).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
+
+                if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                  //console.log(grade)
+                  canvas.current.exportImage('jpeg').then((data: any) => {
+                    interpretImage(data).then(result => {
+
+                      setPrediction(result);
+
+
+
+                      if (grade.overallFeedback === "") {
+                        setKanjiGrade(prevState => ({
+                          ...prevState,
+                          overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
+                        }));
+                      }
+                      else {
+                        setKanjiGrade(prevState => ({
+                          ...prevState,
+                          overallFeedback: grade.overallFeedback + "However it does possibly resemble the kanji " + result?.[0]?.label ?? "No feedback available"
+
+                        }));
+                      }
+
+
+                    }).catch(error => {
+                      console.error('Error interpreting image:', error);
+                    });
+                  }).catch((e: any) => {
+                    console.error(e);
+                  });
+                }
               }).catch((e: any) => {
                 console.log(e);
               });
+
+
+
+
+
             });
+
+
           }
         }}
-        >
-          Check
+      >
+        Check
       </button>
       <div className="grade-info">
         <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
         <p>{kanji_grade.overallFeedback}</p>
         {kanji_grade.grades.map((grade, index) => {
-            if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
-            const path = canvasElement?.getElementsByTagName("path")[index];
-            if (!path) return null;
+          if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
+          const path = canvasElement?.getElementsByTagName("path")[index];
+          if (!path) return null;
 
-            return (
-              <div key={index} className="stroke-info">
-                <h3>Stroke {index + 1}</h3>
-                <p>{kanji_grade.feedback[index]}</p>
-              </div>
-            );
+          return (
+            <div key={index} className="stroke-info">
+              <h3>Stroke {index + 1}</h3>
+              <p>{kanji_grade.feedback[index]}</p>
+            </div>
+          );
         })}
-        
+
       </div>
     </div>
+
   );
 };
 
