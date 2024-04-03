@@ -85,6 +85,7 @@ const Home: React.FC = (props) => {
   useEffect(() => {
     const fetchDecks = async () => {
       if (userData) {
+        const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { setRecentDeck(result); });
         return await getDecksFromRefs(userData.decks);
       }
     };
@@ -100,22 +101,25 @@ const Home: React.FC = (props) => {
 
   return (
     <div className="home-page">
-      <h2 className="home-greeting">Hello, {user?.displayName}</h2>
+      <h2 className="home-greeting">
+        Hello, {user?.displayName}
+      </h2>
       {/* <HomeStats /> */}
-      <HomeStudyPrompt
-        newUser={false}
-        suggestedDeck={{
-          id: 0,
-          image: "../sample_deck.png",
-          name: recentDeck?.name || "",
-        }}
-      />
-      <h2>Recent Decks</h2>
-      {loading || decks === null || decks === undefined || userData === null ? (
+      {loading || userData === null ? (
         <LoadingSpinner />
       ) : (
-        <DeckList user={userData} decks={decks}></DeckList>
+        <HomeStudyPrompt
+          newUser={userData}
+          suggestedDeck={{
+            _id: recentDeck?._id || "",
+            id: recentDeck?.id || 0,
+            image: recentDeck?.image || "../sample_deck.png",
+            name: recentDeck?.name || ""
+          }}
+        />
       )}
+      <h2>Recent Decks</h2>
+      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div>

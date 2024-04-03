@@ -17,9 +17,10 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   const { getUserData } = useContext(AuthContext);
 
   const handleDeckClick = (deckId: any) => {
-    console.log('Deck clicked:', deckId);
+    //console.log('Deck clicked:', deckId);
+    // console.log(deck)
     if (deck._id) {
-      console.log(user)
+      // console.log(user)
       updateUserRecentDeck(user.email, deck._id);
       getUserData();
     }
