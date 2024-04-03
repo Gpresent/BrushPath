@@ -63,7 +63,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Add debounce delay in milliseconds
-  const debounceDelay = 500;
+  const debounceDelay = 300;
 
   // Debounced search term
   const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
@@ -87,35 +87,6 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
     setLoading(false);
   }, [debouncedSearchTerm]);
   
-
-  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const query = event.target.value;
-  //   setLoading(true);
-  //   // console.log(characterCache?.search?.documentCount);
-  //   // console.log("Data length",characterCache?.data?.length);
-  //   if (query) {
-  //     const results = characterCache?.search?.search(query, {
-        
-  //         boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
-  //         fuzzy: 2,
-  //         prefix:true
-        
-  //     });
-  //     // console.log(results);
-
-
-  //     const cleanResults = results?.filter(result => result !== undefined && result !== null)
-  //       .map((result: any) => characterParser(result)); //Could be faster?
-
-
-  //     setFilteredKanjiList(cleanResults ? cleanResults : []);
-  //     console.log(filteredKanjiList);
-  //     // console.log(filteredKanjiList);
-  //   } else {
-  //     setFilteredKanjiList(kanjiList);
-  //   }
-  //   setLoading(false);
-  // };
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -125,7 +96,9 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   return (
     <div className="dictionary-view">
       <p className="my-words">My Words</p>
+      {characterCache.search?.documentCount === 2136 &&
       <LoadingBar progress={characterCache.search?.documentCount || 0} duration={2136} message={"Indexing search..."} />
+}
       <input className="search-bar" onChange={handleSearch}
         placeholder="Search kanji..." />
       {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
