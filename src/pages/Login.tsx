@@ -130,7 +130,7 @@ const Login: React.FC = () => {
             <input type="password" name="password" />
           </div>
           <div className="submit-row">
-            <button type="submit">{isRegister ? "Register" : "Login"}</button>
+            <button type="submit" style={{marginRight:"10px"}}>{isRegister ? "Register" : "Login"}</button>
             <div className="check-group">
               <label htmlFor="register">New User?</label>
               <input

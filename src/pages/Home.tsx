@@ -130,6 +130,8 @@ const Home: React.FC = (props) => {
           name: recentDeck?.name || ""
         }}
       />
+      <h2>Review Mode</h2>
+      <button >Study words so far</button>
       <h2>Recent Decks</h2>
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
