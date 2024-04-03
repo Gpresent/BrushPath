@@ -73,12 +73,10 @@ const Home: React.FC = (props) => {
   useEffect(() => {
     if (!userData) {
       getUserData();
-    } else {
-      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then(
-        (result) => {
-          setRecentDeck(result);
-        }
-      );
+    }
+    else {
+      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { console.log(result); setRecentDeck(result); });
+
     }
   }, []);
 
