@@ -44,10 +44,16 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    console.log(characterCache?.data?.length);
+    console.log(characterCache?.search?.documentCount);
+  },[characterCache?.search])
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setLoading(true);
-
+    console.log(characterCache?.search?.documentCount);
+    console.log("Data length",characterCache?.data?.length);
 
     if (query) {
       const results = characterCache?.search.search(query, {

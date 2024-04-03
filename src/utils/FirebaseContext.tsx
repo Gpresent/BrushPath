@@ -87,9 +87,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const MutexRunner = useMutex();
   const mutex = new MutexRunner('caching');
 
-  const handleCacheAsync = async () => { mutex.lock();
+  const handleCacheAsync = async () => {
+     mutex.lock();
     characterCache.startCache();
-    mutex.unlock(); }
+    mutex.unlock(); 
+  }
 
   useEffect(() => {
     // characterCache.startCache();
