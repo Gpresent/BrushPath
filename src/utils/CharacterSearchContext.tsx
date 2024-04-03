@@ -1,16 +1,19 @@
-import { useState, useEffect } from "react";
+
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+
 import { openDB, DBSchema, IDBPDatabase } from "idb";
-import { collection, getDocs, QuerySnapshot, DocumentData, getCountFromServer, query, orderBy, startAfter, limit, getDocsFromServer, DocumentReference, getDoc, doc, getDocsFromCache } from "firebase/firestore";
-import { db, db as firestoreDB } from "./Firebase";
+import { useMutex } from 'react-context-mutex';
+import { collection, doc, getDocs, getDoc, runTransaction, orderBy, startAfter, limit, query, DocumentData, DocumentReference, getDocsFromCache, getCountFromServer } from 'firebase/firestore';
 import MiniSearch from 'minisearch';
+
+import { auth, db,db as firestoreDB } from './Firebase'; // Assuming './Firebase' contains the Firebase initialization
 
 
 export type IndexedDBCachingResult = {
 
   data: DocumentData[] | null;
   loading: boolean;
-  search: MiniSearch<any>
-  startCache: () => {},
+  search: MiniSearch<any>|null,
 
 
 }
@@ -21,14 +24,23 @@ interface MyDBSchema extends DBSchema {
     value: DocumentData;
   };
 }
-
 const DATABASE_NAME = 'zenji-cache';
 const OBJECT_STORE_NAME = 'Character';
 
-const useIndexedDBCaching = () => {
+//Initialize Context
+export const CharacterSearchContext = createContext<IndexedDBCachingResult>({data:null,loading:true,search:null});
+
+export const useAuth = () => {
+  return useContext(CharacterSearchContext)
+};
+
+
+
+export const CharacterSearchProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<DocumentData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [numChars, setNumChars] = useState<number>(-1);
+  const [counter, setCounter] = useState<number>(1);
   const batch = 100;
 
   const [search, setSearch] = useState<MiniSearch<any>>(new MiniSearch({
@@ -38,7 +50,7 @@ const useIndexedDBCaching = () => {
 
 
 
-  const fetchData = async (skipRef:string, i: number,take:number = batch) => {
+  const fetchData = async (skipRef:string,take:number = batch) => {
     try {
       if(skipRef === "poop") {
         throw "Query finished";
@@ -72,7 +84,8 @@ const useIndexedDBCaching = () => {
       }
 
       //TODO Try to get from cache
-      const snapshot = await getDocsFromCache(paginatedQuery);
+      const snapshot = await getDocs(paginatedQuery);
+      // debugger;
 
        
       // Extract data from the snapshot
@@ -138,41 +151,54 @@ const useIndexedDBCaching = () => {
     }
   };
 
-  const populateCache = async (startIndex:number) => {
+  const populateCache = async (initialData:DocumentData[],startIndex:number,numChars: number) => {
       let lastRef = "";
-      let prevCachedData:any[] = [];
+      let prevCachedData:DocumentData[] = initialData;
 
-      for(let i = startIndex; i < 2136; i+= batch) {
+      for(let i = startIndex; i < numChars; i+= batch) {
         console.log("i", i);
         console.log("numChars", numChars)
         console.log("Attempting to fetchData(lastRef,batch)", lastRef,batch)
-
-        let fetchResponse = await fetchData(lastRef,i,batch);
+        if(prevCachedData.length) {
+          lastRef = prevCachedData[prevCachedData.length-1]._id;
+        }
+        else if(data?.length) {
+          lastRef = data[data.length-1]._id;
+        }
+        else {
+          lastRef ="";
+        }
+        // debugger;
+        let fetchResponse = await fetchData(lastRef,batch);
         if(fetchResponse.cachedData) {
-          setData(data? [...fetchResponse.cachedData, ...data]:  fetchResponse.cachedData);
+          setData(prevData => { 
+            return prevData? [...fetchResponse.cachedData, ...prevData]:  fetchResponse.cachedData;
+          } )
         } 
         else {
           break;
         }
-        lastRef = fetchResponse.skipRef
-        // prevCachedData = [,...fetchResponse.cachedData];
+        // lastRef = fetchResponse.skipRef
+        prevCachedData = [...prevCachedData,...fetchResponse.cachedData];
 
         //Index Search
-        let indexedSearch = search;
         // indexedSearch.removeAll();
-        console.log(prevCachedData)
 
         //As its pulling, this should update the search
-        indexedSearch.addAll(prevCachedData);
-        console.log(data);
-        setSearch(indexedSearch);
+        
+        setSearch(indexedSearch => {
+          // debugger;
+          indexedSearch.removeAll();
+          indexedSearch.addAll(prevCachedData);
+          return indexedSearch;
+        });
         // debugger;
 
       }
   }
 
   // Check if data exists in IndexedDB
-  const checkCache = async () => {
+  const checkCache = async (numChars:number) => {
     const db = await openDB(DATABASE_NAME, 1, {
       upgrade(db) {
         // Check if the object store already exists
@@ -197,20 +223,24 @@ const useIndexedDBCaching = () => {
     setData(cachedData);
     let indexedSearch = search;
     //TODO look into this
-      indexedSearch.removeAll();
-
-      console.log(cachedData)
-      indexedSearch.addAll(cachedData);
-      console.log(data);
+      
 
       //Should update search
-      setSearch(indexedSearch);
-    if(cachedData.length < 2136) {
+      setSearch(indexedSearch => {
+
+        indexedSearch.removeAll();
+
+        console.log(cachedData)
+        indexedSearch.addAll(cachedData);
+        console.log(data);
+        return indexedSearch;
+      });
+    if(cachedData.length < numChars) {
       //set data initally if some has been loaded previously
       
 
       console.log("Populating Cache")
-      await populateCache(cachedData.length);
+      await populateCache(cachedData,cachedData.length,numChars);
     }
 
     //Redundant?
@@ -240,26 +270,49 @@ const useIndexedDBCaching = () => {
       const snapshot = getCountFromServer(coll).then((snapshot)=> {
         setNumChars(snapshot.data().count);
         console.log("Document count",snapshot.data().count);
-        checkCache();
+        checkCache(snapshot.data().count);
       });
       
     }
     else {
       // Call the function to check cache
-      checkCache();
+      checkCache(numChars);
     }
     
 
     
     
   };
+    const MutexRunner = useMutex();
+    const mutex = new MutexRunner('caching');
   
-
-    
-
+    const handleCacheAsync = async () => {
+       mutex.lock();
+      startCache();
+      mutex.unlock(); 
+    }
   
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+        if (firebaseUser != null) {
+          
+          handleCacheAsync();
+        }
 
-  return { data, loading, search,startCache };
-};
-
-export default useIndexedDBCaching;
+      });
+  
+      return unsubscribe;
+    }, []);
+  
+  
+  
+    const value = {
+      data, loading, search
+    }
+  
+    return (<CharacterSearchContext.Provider value={value}>
+      {children}
+    </CharacterSearchContext.Provider>)
+  }
+  
+  

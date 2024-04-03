@@ -12,6 +12,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { AuthContext } from "../utils/FirebaseContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { CharacterSearchContext } from "../utils/CharacterSearchContext";
 
 interface DeckProp {
   title: string;
@@ -33,7 +34,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
 
-  const { characterCache } = useContext(AuthContext);
+  const characterCache = useContext(CharacterSearchContext);
 
   const fetchChars = useCallback(async () => {
     let curCharacters = characters;

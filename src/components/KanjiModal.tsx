@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import "../styles/styles.css";
 
 import Character from "../types/Character";
-import { IndexedDBCachingResult } from "../utils/useIndexedDBCaching";
+import { IndexedDBCachingResult } from "../utils/CharacterSearchContext";
 import characterParser from "../utils/characterParser";
 import { DocumentData } from "firebase/firestore";
 import { addUserDeck } from "../utils/FirebaseQueries";
