@@ -84,13 +84,15 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
         <div> {deck.error}</div>
       ) : (
         <>
+        <div className="deck-header-wrapper">
           <div className="deck-header">
             <p className="my-words">{deck.data?.name}</p>
             <AddIcon className="addButton" onClick={handleEditDeck} />
           </div>
           <input className="search-bar" />
+          </div>
           <div
-            style={{ maxHeight: "70vh", overflow: "auto" }}
+            // style={{ maxHeight: "70vh", overflow: "auto" }}
           >
             <InfiniteScroll
               pageStart={0}

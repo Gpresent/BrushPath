@@ -181,7 +181,7 @@ body {
     /* height: 100vh; */
     justify-content: center;
     align-content: center;
-    gap: 20px;
+    /* gap: 20px; */
     position: relative;
 }
 
@@ -504,7 +504,7 @@ body {
     position: absolute;
     width: 34px;
     height: 34px;
-    border: 6px solid #1d0e0b;
+    border: 3px solid #1d0e0b;
     border-top-color: transparent;
     border-radius: 50%;
 }
