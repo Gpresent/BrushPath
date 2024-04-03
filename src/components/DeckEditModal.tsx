@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../styles/styles.css";
-import IndexedDBCaching, {
+import  {
   IndexedDBCachingResult,
-} from "../utils/useIndexedDBCaching";
+} from "../utils/CharacterSearchContext";
 import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import { DocumentData, DocumentReference } from "firebase/firestore";

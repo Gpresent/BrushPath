@@ -19,6 +19,7 @@ import {
   where,
 } from "firebase/firestore";
 import Loading from "../components/Loading";
+import { CharacterSearchContext } from "../utils/CharacterSearchContext";
 
 interface DictionaryProps {
   title: string;
@@ -39,7 +40,7 @@ interface KanjiCharacter {
 const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const contextValue = db;
 
-  const { characterCache } = useContext(AuthContext);
+  const characterCache = useContext(CharacterSearchContext);
   const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>([]);
   const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -52,11 +53,10 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setLoading(true);
-    console.log(characterCache?.search?.documentCount);
-    console.log("Data length",characterCache?.data?.length);
-
+    // console.log(characterCache?.search?.documentCount);
+    // console.log("Data length",characterCache?.data?.length);
     if (query) {
-      const results = characterCache?.search.search(query, {
+      const results = characterCache?.search?.search(query, {
         
           boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
           fuzzy: 2,
@@ -86,7 +86,8 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
       <p className="my-words">My Words</p>
       <input className="search-bar" onChange={handleSearch}
         placeholder="Search kanji..." />
-
+      <p>documents loaded{characterCache.data?.length}</p>
+      <p>documents indexed{characterCache.search?.documentCount}</p>
       {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
     </div>
   );

@@ -8,6 +8,7 @@ import Character from "../types/Character";
 import { AuthContext } from "../utils/FirebaseContext";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { CharacterSearchContext } from "../utils/CharacterSearchContext";
 
 interface DeckProps {
   //message: string;
@@ -49,7 +50,8 @@ interface DeckProps {
 
 const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { userData, getUserData, characterCache, user } = useContext(AuthContext);
+  const { userData, getUserData, user } = useContext(AuthContext);
+  const characterCache = useContext(CharacterSearchContext);
   const [decks, setDecks] = useState<any>([]);
 
   useEffect(() => {
