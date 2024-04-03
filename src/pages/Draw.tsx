@@ -227,7 +227,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                       else {
                         setKanjiGrade(prevState => ({
                           ...prevState,
-                          overallFeedback: grade.overallFeedback + "However it does possibly resemble the kanji " + result?.[0]?.label ?? "No feedback available"
+                          overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
 
                         }));
                       }
@@ -257,7 +257,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         Check
       </button>
       <div className="grade-info">
-        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
+        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + (kanji_grade.overallGrade ? Math.round(kanji_grade.overallGrade) : 0)}</h3>
         <p>{kanji_grade.overallFeedback}</p>
         {kanji_grade.grades.map((grade, index) => {
           if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
