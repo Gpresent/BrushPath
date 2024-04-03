@@ -41,7 +41,7 @@ export const CharacterSearchProvider = ({ children }: { children: ReactNode }) =
   const [loading, setLoading] = useState<boolean>(true);
   const [numChars, setNumChars] = useState<number>(-1);
   const [counter, setCounter] = useState<number>(1);
-  const batch = 100;
+  const batch = 250;
 
   const [search, setSearch] = useState<MiniSearch<any>>(new MiniSearch({
     fields: ["on", "unicode_str", "one_word_meaning", "compounds", "literal", "meanings", "parts", "nanori", "kun"], // fields to index for full-text search
