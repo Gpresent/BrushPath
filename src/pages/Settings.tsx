@@ -1,34 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { auth } from '../utils/Firebase';
 import { signOut } from 'firebase/auth';
 import "../styles/settings.css";
 import { googleLogout } from "@react-oauth/google";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import UsernameModal from '../components/UsernameModal';
+import { useDarkMode } from '../components/DarkModeContext';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
-
 const SettingsView: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return JSON.parse(localStorage.getItem('darkMode') || 'false');
-  });
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const [showPrivacyPolicyModal, setShowPrivacyPolicyModal] = useState(false);
-
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
-
-  const handleToggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode); // This should toggle the isDarkMode state
-  };
 
   const handleArrowClick = (spanName: string) => {
     // Perform different actions based on spanName
@@ -72,8 +55,7 @@ const SettingsView: React.FC = () => {
   return (
     <div className="settings-page">
       <div className="settings-block">
-
-        <p className="title">Settings</p>
+        <p className="settings-title">Settings</p>
         <div className="settings-list">
           <div className="settings-item">
             <span onClick={() => handleArrowClick('Username')}>Username</span>
@@ -92,7 +74,7 @@ const SettingsView: React.FC = () => {
             <div
               id="toggleButton"
               className={`toggle-button ${isDarkMode ? 'active' : ''}`} //if true/false, shorthand goes crazy
-              onClick={handleToggleDarkMode}
+              onClick={toggleDarkMode}
             ></div>
           </div>
           {/* <div className="settings-item">

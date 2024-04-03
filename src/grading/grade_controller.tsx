@@ -9,7 +9,7 @@ class interp_data {
     totalLengths!: number;
 }
 
-const passing = 0.65;
+var passing = 0.65;
 
 var kanji_grade: KanjiGrade = {
     overallGrade: 0,
@@ -72,7 +72,7 @@ function generateOrderArray<T>(array: T[][], order: number[]): T[][] {
 function alternateStrokeOrder(
     iCoords: number[][][],
     tCoords: number[][][],
-    passing: number = 0.6,
+    passing: number = 0.65,
     maxIters: number = 40
   ): [number[], string[], string[], string, number, number[]] {
     function calculateAverageGrade(order: number[]): [number, number] {
@@ -245,7 +245,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     return [gradeColors, strokeInfo, feedback, aspectString, failing]
 }
 
-export default function grade(input: string, targetKanji: string): Promise<KanjiGrade> {
+export default function grade(input: string, targetKanji: string, passing: number): Promise<KanjiGrade> {
     kanji_grade = {
         overallGrade: 100,
         overallFeedback: "",
@@ -253,6 +253,7 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
         feedback: [],
         strokeInfo: []
     }
+    passing = passing;
 
     return new Promise((resolve, reject) => {
         fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
@@ -270,13 +271,22 @@ export default function grade(input: string, targetKanji: string): Promise<Kanji
                     [grades, strokeInfo, feedback, aspectString, failing] = missingStrokes(iCoords, tCoords, passing);
                 } else {
                     [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
+                    if (failing > iCoords.length * 0.75) {
+                        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                        color_input([]);
+                        resolve(kanji_grade);
+                    }
                     kanji_grade.overallFeedback += aspectString;
                     order_feedback(strokeOrder);
                 }
-                const avgGrade = grades.filter((val) => val >= 0).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= 0).length;
+                const avgGrade = grades.filter((val) => val >= passing).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= passing).length;
+                if (kanji_grade.overallGrade > passing * 100 && failing !== 0) {
+                    kanji_grade.overallGrade -= failing * (100 - passing * 100);
+                }
 
                 kanji_grade.overallGrade *= avgGrade;
                 kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
+
                 kanji_grade.grades = grades;
                 kanji_grade.feedback = feedback;
                 kanji_grade.strokeInfo = strokeInfo;

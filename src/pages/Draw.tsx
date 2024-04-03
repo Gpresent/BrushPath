@@ -14,21 +14,9 @@ import { interpretImage } from "../recogition/interpretImage";
 import type PredictionResult from "../recogition/predictionDisplay";
 
 
+const passing = 0.65;
+
 const styles = {
-  canvas: {
-    position: "relative" as "relative",
-    width: "100%",
-    aspectRatio: "1/1",
-    maxWidth: "500px",
-    display: "flex",
-    border: "1px solid rgba(0, 0, 0, 1)",
-    borderRadius: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 2,
-  },
   button: {
     borderWidth: "0px",
     padding: "0px",
@@ -167,7 +155,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      <div style={styles.canvas}>
+      <div className="canvas">
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -218,7 +206,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
             setReadOnly(true);
             canvas.current.exportSvg().then((data: any) => {
-              grade(data, kanji).then((grade: KanjiGrade) => {
+              grade(data, kanji, passing).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
 
                 if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
@@ -262,26 +250,7 @@ const Draw: React.FC<DrawProps> = (props) => {
 
             });
 
-            // canvas.current.exportImage('jpeg').then((data: any) => {
-            //   const result = interpretImage(data).then(result => {
-            //     setPrediction(result)
-            //     console.log(result);
 
-            //     if (kanji_grade.overallGrade < 65 || kanji_grade.overallGrade === -1) {
-
-            //       setKanjiGrade(prevState => ({
-            //         ...prevState,
-            //         overallFeedback: result?.[0]?.label ?? "No feedback available"
-            //       }));
-            //     }
-
-            //   }).catch(error => {
-            //     console.error('Error interpreting image:', error);
-            //   });;
-
-            // }).catch((e: any) => {
-            //   console.error(e);
-            // });
           }
         }}
       >
@@ -290,9 +259,8 @@ const Draw: React.FC<DrawProps> = (props) => {
       <div className="grade-info">
         <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + Math.round(kanji_grade.overallGrade)}</h3>
         <p>{kanji_grade.overallFeedback}</p>
-
         {kanji_grade.grades.map((grade, index) => {
-          if (grade >= 0.65 || grade === -1 || kanji_grade.feedback.length <= index) return null;
+          if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
           const path = canvasElement?.getElementsByTagName("path")[index];
           if (!path) return null;
 
@@ -302,11 +270,11 @@ const Draw: React.FC<DrawProps> = (props) => {
               <p>{kanji_grade.feedback[index]}</p>
             </div>
           );
-
         })}
 
       </div>
     </div>
+
   );
 };
 
