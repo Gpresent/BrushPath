@@ -9,6 +9,7 @@
 .login-prompt{
     width: 250px;
     text-align: center;
+    padding-bottom: 1rem;
 }
 
 label {
