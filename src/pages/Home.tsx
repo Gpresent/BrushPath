@@ -12,31 +12,33 @@ const Home: React.FC = () => {
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
-  const [recentDeck, setRecentDeck] = useState<any>();
+
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!userData) {
       getUserData();
-    } else {
-      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then(
-        (result) => {
-          setRecentDeck(result);
-        }
-      );
+
+    }
+    else {
+      getUserData();
+
+
     }
   }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
       if (userData) {
+
+
         return await getDecksFromRefs(userData.decks);
       }
     };
 
     fetchDecks().then((decksResult) => {
-      // console.log(decksResult);
+
       setDecks(decksResult);
       setLoading(false);
     });
@@ -46,22 +48,25 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-page">
-      <h2 className="home-greeting">Hello, {user?.displayName}</h2>
+      <h2 className="home-greeting">
+        Hello, {user?.displayName}
+      </h2>
       {/* <HomeStats /> */}
-      <HomeStudyPrompt
-        newUser={false}
-        suggestedDeck={{
-          id: 0,
-          image: "../sample_deck.png",
-          name: recentDeck?.name || "",
-        }}
-      />
-      <h2>Recent Decks</h2>
-      {loading || decks === null || decks === undefined || userData === null ? (
+      {(loading || userData === null || decks === undefined || decks === null) ? (
         <LoadingSpinner />
       ) : (
-        <DeckList user={userData} decks={decks}></DeckList>
+        <HomeStudyPrompt
+          newUser={userData}
+          suggestedDeck={{
+            _id: decks[0]?._id || "",
+            id: decks[0]?.id || 0,
+            image: decks[0]?.image || "../sample_deck.png",
+            name: decks[0]?.name || ""
+          }}
+        />
       )}
+      <h2>Recent Decks</h2>
+      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div>

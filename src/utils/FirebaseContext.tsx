@@ -10,7 +10,8 @@ import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCachi
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCachingResult | null }>({ user: null, userData: null, getUserData: () => { }, characterCache: null });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, characterCache: IndexedDBCachingResult | null }>
+  ({ user: null, userData: null, getUserData: () => { }, characterCache: null });
 
 export const useAuth = () => {
   return useContext(AuthContext)
