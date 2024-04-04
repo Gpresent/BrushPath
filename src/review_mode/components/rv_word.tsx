@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/styles.css'
+import '../../styles/styles.css'
 import Character from "../../types/Character";
 import { Link } from "react-router-dom";
 
@@ -15,6 +15,7 @@ const ReviewWordCard: React.FC<WordCardProps> = ({ character }) => {
         <p className="character">{character.unicode}</p>
         <p className="hiragana">{ }</p>
         <p className="meaning">{character.one_word_meaning}</p>
+        {/* add some type of attempted_review var in here */}
       </Link>
     </>
   );

@@ -13,8 +13,8 @@ import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { userInfo } from "os";
 import { getDecksFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 // interface HomeProps {
 //   message: string;
 //   user: string;
@@ -66,7 +66,7 @@ const charData = {
 
 const Home: React.FC = (props) => {
 
-
+  const navigate = useNavigate();
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
@@ -131,7 +131,12 @@ const Home: React.FC = (props) => {
         }}
       />
       <h2>Review Mode</h2>
-      <button >Study words so far</button>
+      <button onClick={()=> {navigate("/review")}}>
+        {/* <Link to={{pathname:"/review"}}> */}
+          Study words so far
+        {/*</Link> */}
+      </button>
+      
       <h2>Recent Decks</h2>
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
