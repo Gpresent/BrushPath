@@ -14,8 +14,7 @@ export default function color_input(grades: number[], passing: number = 0.6) {
           const yellow = grades[i] - passing;
           color = "rgba(" + Math.floor(255 * (1 - yellow / (1 - passing))) + ", 255, 0, 0.8)";
         } else {
-          var yellow = grades[i];
-          if (yellow < 0) yellow = 0;
+          const yellow = grades[i];
           color = "rgba(255, " + Math.floor(255 * (yellow / passing)) + ", 0, 0.8)";
         }
         // console.log("Stroke ", i + 1, " color:", color);

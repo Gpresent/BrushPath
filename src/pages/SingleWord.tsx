@@ -4,14 +4,10 @@ import "../styles/dict.css";
 import Draw from "./Draw";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import React from "react";
 
 const SingleWordView: React.FC = () => {
   let { state } = useLocation();
   let character: Character = state.character;
-  const [characterinfo, setCharacterInfo] = React.useState(false);
 
   let meaning_len = 0;
 
@@ -41,7 +37,7 @@ const SingleWordView: React.FC = () => {
                   style={{ display: "flex", alignItems: "center" }}
                   onClick={() => navigate(-1)}
                 >
-                  <ArrowBackIosNewIcon/>
+                  <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
                 </div>
                 {character.unicode}
               </div>
@@ -56,59 +52,44 @@ const SingleWordView: React.FC = () => {
                 </div>
               )}
             </div>
-            
-            <div className="character-info-button" style={{width: "100%", display: "flex", justifyContent: "center"}}>
-              <button
-                onClick={() => {
-                  console.log("clicked");
-                  setCharacterInfo(!characterinfo);
-                  document.getElementsByClassName("info")[0]?.classList.toggle("info-hidden");
-                }}
-                style={{border: "none", backgroundColor: "transparent", color: "black"}}
-              >
-                {characterinfo ? <ExpandLess/> : <ExpandMore/>}
-              </button>
+            <div className="character-info">
+              <div className="info-line">stroke: {character.stroke_count} </div>
+              {character.kun.length > 0 && (
+                <div className="info-line">
+                  kun:{" "}
+                  {character.kun.map((kun, index) => {
+                    return (index ? ", " : "") + kun;
+                  })}
+                </div>
+              )}
+              {character.on.length > 0 && (
+                <div className="info-line">
+                  on:{" "}
+                  {character.on.map((on, index) => {
+                    return (index ? ", " : "") + on;
+                  })}
+                </div>
+              )}
+              {character.radicals.length > 0 && (
+                <div className="info-line">
+                  radicals:{" "}
+                  {character.radicals.map((radical, index) => {
+                    return (index ? ", " : "") + radical;
+                  })}
+                </div>
+              )}
+              {character.jlpt && (
+                <div className="info-line">JLPT: {character.jlpt} </div>
+              )}
+              {character.freq && (
+                <div className="info-line">frequency: {character.freq} </div>
+              )}
+              {character.grade && (
+                <div className="info-line">grade: {character.grade} </div>
+              )}
             </div>
-            <div className="info info-hidden">
-              <div className="character-info">
-                <div className="info-line">strokes: {character.stroke_count} </div>
-                {character.kun.length > 0 && (
-                  <div className="info-line">
-                    kun:{" "}
-                    {character.kun.map((kun, index) => {
-                      return (index ? ", " : "") + kun;
-                    })}
-                  </div>
-                )}
-                {character.on.length > 0 && (
-                  <div className="info-line">
-                    on:{" "}
-                    {character.on.map((on, index) => {
-                      return (index ? ", " : "") + on;
-                    })}
-                  </div>
-                )}
-                {character.radicals.length > 0 && (
-                  <div className="info-line">
-                    radicals:{" "}
-                    {character.radicals.map((radical, index) => {
-                      return (index ? ", " : "") + radical;
-                    })}
-                  </div>
-                )}
-                {character.jlpt && (
-                  <div className="info-line">JLPT: {character.jlpt} </div>
-                )}
-                {character.freq && (
-                  <div className="info-line">frequency: {character.freq} </div>
-                )}
-                {character.grade && (
-                  <div className="info-line">grade: {character.grade} </div>
-                )}
-              </div>
-              <div className="mastery-desc">
-                You are <b>unfamiliar</b> with this character.
-              </div>
+            <div className="mastery-desc">
+              You are <b>unfamiliar</b> with this character.
             </div>
             <Draw character={character} allowDisplay={true} />
           </>

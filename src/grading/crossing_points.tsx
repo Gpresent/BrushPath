@@ -44,8 +44,8 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
         for (let j = 0; j < inputCoords.length; j++) {
             inputCrosses[i][j] = 0;
             if (i === j) continue;
-            for (let k = endpoints; k < inputCoords[i].length - endpoints; k++) {
-                for (let l = endpoints; l < inputCoords[j].length - endpoints; l++) {
+            for (let k = endpoints; k < inputCoords[i].length - 1 - endpoints; k++) {
+                for (let l = endpoints; l < inputCoords[j].length - 1 - endpoints; l++) {
                     const ix1 = inputCoords[i][k][0];
                     const iy1 = inputCoords[i][k][1];
                     const ix2 = inputCoords[i][k + 1][0];
