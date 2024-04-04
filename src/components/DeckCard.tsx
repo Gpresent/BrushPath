@@ -37,7 +37,7 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   };
 
   const startPressTimer = () => {
-    pressTimer = setTimeout(() => setShowDeleteIcon(true), 1000); // Adjust time as needed
+    pressTimer = setTimeout(() => setShowDeleteIcon(true), 1000); // adjust time as needed
   };
 
   const clearTimer = () => {
