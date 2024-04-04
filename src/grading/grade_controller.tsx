@@ -149,6 +149,10 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
     const lengthdiff = iCoords.length - tCoords.length;
     var iCoordsCorrected = iCoords.slice(0, iCoords.length - lengthdiff);
     var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(JSON.parse(JSON.stringify(iCoordsCorrected)), tCoords, passing);
+    if (failing > iCoords.length * 0.75) {
+        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        return [[],[],[],"",0];
+    }
     var avgGrade = 0
     var bestCombo = 0;
     const combos = generateCombinations(iCoords, tCoords.length);
@@ -204,6 +208,10 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     const lengthdiff = tCoords.length - iCoords.length;
     var tCoordsCorrected = tCoords.slice(0, tCoords.length - lengthdiff);
     var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(iCoords, JSON.parse(JSON.stringify(tCoordsCorrected)), passing);
+    if (failing > iCoords.length * 0.75) {
+        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        return [[],[],[],"",0];
+    }
     var avgGrade = 0;
     var bestCombo = 0;
     const combos = generateCombinations(tCoords, iCoords.length);
@@ -218,6 +226,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
             if (failing === 0) {
                 break;
             }
+            console.log(failing, tCoords.length * 0.75)
             if (failing > iCoords.length * 0.75) {
                 kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
                 return [[],[],[],"",0];
@@ -272,9 +281,16 @@ export default function grade(input: string, targetKanji: string, passing: numbe
                 } else {
                     [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
                     if (failing > iCoords.length * 0.75) {
-                        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
                         color_input([]);
+                        kanji_grade = {
+                            overallGrade: 0,
+                            overallFeedback: "It looks like you drew the wrong kanji.\n",
+                            grades: [],
+                            feedback: [],
+                            strokeInfo: []
+                        }
                         resolve(kanji_grade);
+                        return;
                     }
                     kanji_grade.overallFeedback += aspectString;
                     order_feedback(strokeOrder);
