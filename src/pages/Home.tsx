@@ -78,7 +78,7 @@ const Home: React.FC = (props) => {
     else {
       getUserData();
 
-      console.log(userData.decks[0].id)
+
     }
   }, []);
 

@@ -22,15 +22,14 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
 
 
   const handleDeckClick = (deckId: any) => {
-    //console.log('Deck clicked:', deckId);
-    // console.log(deck)
+
     if (deck._id) {
-      console.log(user.decks[0].id)
-      console.log("deck being swapped", deck)
+
+      //console.log("Deck is being moved to front:", deck)
 
 
       updateUserRecentDeck(user.email, deck._id, userData?.decks);
-      // getUserData();
+
 
     }
     navigate(`/deck/${deck._id}`);

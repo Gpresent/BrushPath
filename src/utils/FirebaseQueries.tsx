@@ -265,27 +265,31 @@ export const updateUserRecentDeck = async (userID: string, deckID: string, decks
     const deckRef = doc(db, "Deck", deckID);
     const userRef = doc(db, "User", userID);
 
-
-    await updateDoc(userRef, {
-      last_deck_studied: deckRef
-    });
-
-
-
     const existingIndex = decks.findIndex((ref) => ref.id === deckID);
+
+    if (existingIndex === 0) {
+      //console.log("already recent")
+      return;
+    }
+
+    //update recent 
+    // await updateDoc(userRef, {
+    //   last_deck_studied: deckRef
+    // });
+
+
     if (existingIndex > -1) {
       decks.splice(existingIndex, 1);
     }
 
 
     decks.unshift(deckRef);
-    console.log(decks)
-    console.log(decks[0].id)
+
     await updateDoc(userRef, {
       last_deck_studied: deckRef,
       decks: decks
     });
-    console.log("Post updated Recent Deck and shifted to front: ", deckRef.id);
+    // console.log("Post: Successfully updated Recent Deck and shifted to front: ", deckRef.id);
   } catch (error) {
     console.error("Error creating deck:", error);
     throw error;
@@ -293,23 +297,7 @@ export const updateUserRecentDeck = async (userID: string, deckID: string, decks
 
 };
 
-const updateRecentDeck = (recentDeckRef: any) => {
 
-
-  // const deckIndex = userData?.decks.findIndex((deckRef: DocumentReference) => deckRef.id === recentDeckRef._id);
-
-  // let updatedDecks = [...userData?.decks];
-  // if (deckIndex >= 0) {
-  //   updatedDecks.splice(deckIndex, 1); // Remove the deck from the array
-  //   updatedDecks.unshift(userData?.decks[deckIndex]); // Add the deck to the front of the array
-  // }
-  // // console.log(updatedDecks)
-  // // console.log(updatedDecks[0].id)
-
-  // userData?.decks
-  // return { decks: updatedDecks };
-
-};
 
 
 //User name update
