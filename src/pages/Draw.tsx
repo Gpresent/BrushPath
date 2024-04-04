@@ -1,29 +1,22 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ClearIcon from '@mui/icons-material/Clear';
+import HelpIcon from '@mui/icons-material/Help';
 import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
+import KanjiGrade from "../types/KanjiGrade";
+import { interpretImage } from "../recogition/interpretImage";
+import type PredictionResult from "../recogition/predictionDisplay";
+
+
+const passing = 0.65;
 
 const styles = {
-  canvas: {
-    position: "relative" as "relative",
-    width: "100%",
-    aspectRatio: "1/1",
-    maxWidth: "500px",
-    display: "flex",
-    border: "1px solid rgba(0, 0, 0, 1)",
-    borderRadius: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 2,
-  },
   button: {
     borderWidth: "0px",
     padding: "0px",
@@ -59,15 +52,40 @@ interface DrawProps {
   character?: Character;
   allowDisplay: boolean;
 }
+// Define types for coordinates
+interface Point {
+  x: number;
+  y: number;
+}
+
+// Function to calculate the coordinates relative to the canvas
+function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index: number): Point {
+  const location = path.getPointAtLength(path.getTotalLength() / 2);
+  const offsetX = (canvasRect.left + window.scrollX);
+  const offsetY = (canvasRect.top + window.scrollY);
+  return { x: offsetX, y: offsetY };
+}
 
 const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
+  const canvasElement = document.getElementById("react-sketch-canvas");
+  const canvasRect = canvasElement ? canvasElement.getBoundingClientRect() : null;
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
   const [allowDisplaySVG, setAllowDisplaySVG] = React.useState<boolean>(props.allowDisplay);
+  const [kanji_grade, setKanjiGrade] = React.useState<KanjiGrade>({
+    overallGrade: -1,
+    overallFeedback: "",
+    grades: [],
+    feedback: [],
+    strokeInfo: [],
+  });
+
+  const [prediction, setPrediction] = React.useState<PredictionResult[]>()
+  const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
   useLayoutEffect(() => {
     if (props.character) {
@@ -109,6 +127,19 @@ const Draw: React.FC<DrawProps> = (props) => {
     loadSvg(unicode);
   }, [kanji]);
 
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setStrokeColor(document.body.classList.contains('dark-mode') ? 'rgba(224, 224, 224, .75)' : 'rgba(40, 40, 41, .75)');
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div style={styles.container}>
       {askInput && (
@@ -124,7 +155,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      <div style={styles.canvas}>
+      <div className="canvas">
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -134,7 +165,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             pointerEvents: readOnly ? "none" : "auto",
           }}
           strokeWidth={7}
-          strokeColor="rgba(40, 40, 41, .75)"
+          strokeColor={strokeColor}
           canvasColor="rgba(214, 90, 181, 0.01)"
         />
         {displaySVG && (
@@ -146,6 +177,13 @@ const Draw: React.FC<DrawProps> = (props) => {
           onClick={() => {
             canvas.current.clearCanvas();
             setReadOnly(false);
+            setKanjiGrade({
+              overallGrade: -1,
+              overallFeedback: "",
+              grades: [],
+              feedback: [],
+              strokeInfo: [],
+            });
           }}
         >
           <ClearIcon></ClearIcon>
@@ -165,17 +203,78 @@ const Draw: React.FC<DrawProps> = (props) => {
       <button
         className="recolor-canvas"
         onClick={() => {
-          setReadOnly(true);
-          canvas.current.exportSvg().then((data: any) => {
-            grade(data, kanji);
-          }).catch((e: any) => {
-            console.log(e);
-          })
+          if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+            setReadOnly(true);
+            canvas.current.exportSvg().then((data: any) => {
+              grade(data, kanji, passing).then((grade: KanjiGrade) => {
+                setKanjiGrade(grade);
+
+                if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                  //console.log(grade)
+                  canvas.current.exportImage('jpeg').then((data: any) => {
+                    interpretImage(data).then(result => {
+
+                      setPrediction(result);
+
+
+
+                      if (grade.overallFeedback === "") {
+                        setKanjiGrade(prevState => ({
+                          ...prevState,
+                          overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
+                        }));
+                      }
+                      else {
+                        setKanjiGrade(prevState => ({
+                          ...prevState,
+                          overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
+
+                        }));
+                      }
+
+
+                    }).catch(error => {
+                      console.error('Error interpreting image:', error);
+                    });
+                  }).catch((e: any) => {
+                    console.error(e);
+                  });
+                }
+              }).catch((e: any) => {
+                console.log(e);
+              });
+
+
+
+
+
+            });
+
+
+          }
         }}
       >
         Check
       </button>
+      <div className="grade-info">
+        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + (kanji_grade.overallGrade ? Math.round(kanji_grade.overallGrade) : 0)}</h3>
+        <p>{kanji_grade.overallFeedback}</p>
+        {kanji_grade.grades.map((grade, index) => {
+          if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
+          const path = canvasElement?.getElementsByTagName("path")[index];
+          if (!path) return null;
+
+          return (
+            <div key={index} className="stroke-info">
+              <h3>Stroke {index + 1}</h3>
+              <p>{kanji_grade.feedback[index]}</p>
+            </div>
+          );
+        })}
+
+      </div>
     </div>
+
   );
 };
 
