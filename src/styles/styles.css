@@ -487,6 +487,12 @@ body {
 
 /* Loading page */
 
+.loading{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .loading-page {
     display: flex;
     flex-direction: column;
