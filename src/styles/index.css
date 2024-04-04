@@ -127,7 +127,20 @@ code {
 
 /*Deck*/
 
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
 .deck-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -136,6 +149,18 @@ code {
   border: 1px solid #333;
   border-radius: 10px;
   box-sizing: border-box;
+}
+
+.deck-card.shaking {
+  animation: shake 0.5s ease-in-out;
+}
+
+.delete-icon {
+  z-index: 10;
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* color:#333; */
 }
 
 /*Dictionary View*/
