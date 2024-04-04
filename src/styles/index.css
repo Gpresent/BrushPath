@@ -217,15 +217,7 @@ code {
   background-color: #333;
 }
 
-/* Modal */
-.username-modal-content {
-  background-color: #fefefe;
-  margin: 25% auto;
-  padding: 20px;
-  max-width: 50%;
-  width: 300px;
-  border-radius: 10px;
-}
+
 
 
 
@@ -290,8 +282,14 @@ body.dark-mode .toggle-button.active {
 
 body.dark-mode .username-modal-content {
   background-color: #333;
+  border-color: #7C7C7C;
 }
 
 body.dark-mode .pp-modal-content {
   background-color: #333; 
+  border-color: #7C7C7C;
+}
+
+body.dark-mode label{
+  color: #b6b6b6;
 }
