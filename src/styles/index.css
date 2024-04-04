@@ -7,7 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: 'DM Sans', sans-serif, -apple-system;
   margin-bottom: 90px;
-  margin-top: 56px;
+  /* margin-top: 56px; */
   display: 'flex';
   flex-direction: 'column';
   justify-content: 'space-between';
@@ -84,14 +84,17 @@ code {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
   background-color: white;
 }
 
 .header-wrapper {
   z-index: 10;
   /*background-color: white;*/
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   /*border-bottom: 1.9px solid #333;*/
@@ -108,7 +111,6 @@ code {
   /* width: 100%; */
   /* height: 56.03px; */
   margin-top: 10px;
-  margin-bottom: 15px;
   margin-right: 20px;
   margin-left: 20px;
   /* box-sizing: border-box; */
@@ -116,9 +118,10 @@ code {
 }
 
 .footer-wrapper {
-  border-top: 1.9px solid #333;
+  border-top: 1.9px solid #3a3a3a6c;
   background-color: white;
   z-index: 10;
+  padding-bottom: 15px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -251,6 +254,9 @@ body.dark-mode .word-card,
 body.dark-mode .cover-image,
 body.dark-mode .character-info,
 body.dark-mode .canvas,
+body.dark-mode .ldio-wxuczbvq7eh div,
+body.dark-mode .image-wrapper,
+body.dark-mode .icon-styling,
 body.dark-mode .deckTitle {
   color: #E0E0E0;
   border-color: #7C7C7C;
@@ -258,6 +264,7 @@ body.dark-mode .deckTitle {
 
 body.dark-mode input,
 body.dark-mode .search-bar,
+body.dark-mode .deck-header-wrapper,
 body.dark-mode button {
   background-color: #333;
   color: #E0E0E0;

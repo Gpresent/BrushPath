@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 //   user: string;
 // }
 
-
 // also will be pulled from api
 // const decks = [
 //      {
@@ -40,56 +39,47 @@ import { useNavigate } from "react-router-dom";
 //       }
 // ]
 
-
 const charData = {
   readings: [
-    { type: 'ja_on', value: 'ボク' },
-    { type: 'ja_kun', value: 'ほう' },
-    { type: 'ja_kun', value: 'ほお' },
-    { type: 'ja_kun', value: 'えのき' }
+    { type: "ja_on", value: "ボク" },
+    { type: "ja_kun", value: "ほう" },
+    { type: "ja_kun", value: "ほお" },
+    { type: "ja_kun", value: "えのき" },
   ],
   nanori: [],
-  radicals: [{ rad_type: 'classical', value: '75' }],
-  grade: '8',
-  jlpt: '1',
-  freq: '1626',
+  radicals: [{ rad_type: "classical", value: "75" }],
+  grade: "8",
+  jlpt: "1",
+  freq: "1626",
   codepoints: [
-    { cp_type: 'ucs', value: '6734' },
-    { cp_type: 'jis208', value: '1-43-49' }
+    { cp_type: "ucs", value: "6734" },
+    { cp_type: "jis208", value: "1-43-49" },
   ],
-  compounds: { '素朴': ['simple', 'artless', 'naive', 'unsophisticated'] },
-  meanings: ['crude', 'simple', 'plain', 'docile'],
-  stroke_count: '6',
-  literal: '朴'
-}
-
+  compounds: { 素朴: ["simple", "artless", "naive", "unsophisticated"] },
+  meanings: ["crude", "simple", "plain", "docile"],
+  stroke_count: "6",
+  literal: "朴",
+};
 
 const Home: React.FC = (props) => {
-
-
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
-  const [recentDeck, setRecentDeck] = useState<any>()
+  const [recentDeck, setRecentDeck] = useState<any>();
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!userData) {
       getUserData();
-
-
-
+    } else {
+      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then(
+        (result) => {
+          setRecentDeck(result);
+        }
+      );
     }
-    else {
-
-      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { setRecentDeck(result); });
-
-
-    }
-
-
   }, []);
 
   useEffect(() => {
@@ -97,44 +87,38 @@ const Home: React.FC = (props) => {
       if (userData) {
         return await getDecksFromRefs(userData.decks);
       }
-    }
+    };
 
     fetchDecks().then((decksResult) => {
       // console.log(decksResult);
       setDecks(decksResult);
       setLoading(false);
-    })
-
-
-
-
-
-
+    });
   }, [userData]);
-
-
 
   // const character: Character = characterParser(charData);
 
   return (
     <div className="home-page">
-      <h2 className="home-greeting">
-        Hello, {user?.displayName}
-      </h2>
+      <h2 className="home-greeting">Hello, {user?.displayName}</h2>
       {/* <HomeStats /> */}
       <HomeStudyPrompt
         newUser={false}
         suggestedDeck={{
           id: 0,
           image: "../sample_deck.png",
-          name: recentDeck?.name || ""
+          name: recentDeck?.name || "",
         }}
       />
       <h2>Recent Decks</h2>
-      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
+      {loading || decks === null || decks === undefined || userData === null ? (
+        <LoadingSpinner />
+      ) : (
+        <DeckList user={userData} decks={decks}></DeckList>
+      )}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
-    </div >
+    </div>
   );
 };
 
