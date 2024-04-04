@@ -434,6 +434,7 @@ body {
 }
 
 .modal-content {
+    position: relative;
     border: 1px solid rgba(0, 0, 0, 1);
     box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 20%);
     background-color: #fefefe;
@@ -454,6 +455,12 @@ body {
     font-weight: 500;
     margin-bottom: 20px;
     text-align: center;
+}
+
+.modal-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 
 .add-word-list {
