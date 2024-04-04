@@ -1,6 +1,7 @@
 import React from 'react';
 import "../styles/settings.css";
 import "../styles/index.css";
+import Modal from './Modal';
 
 interface PrivacyPolicyModalProps {
   isOpen: boolean;
@@ -173,12 +174,10 @@ const PrivacyPolicyModal: React.FC<PrivacyPolicyModalProps> = ({ isOpen, onClose
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <div className="pp-modal-content">
+    <Modal title={"Privacy Policy"} isOpen={isOpen} onClose={onClose} >
         <div dangerouslySetInnerHTML={{ __html: privacyPolicyHTML }} />
         <button onClick={onClose}>Acknowledge</button>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
