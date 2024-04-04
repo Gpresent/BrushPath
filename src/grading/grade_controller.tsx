@@ -1,10 +1,44 @@
 import grade_svg from './grade_svg';
 import interpolate from './interpolate';
 import color_input from './color_input';
+import { Heap } from 'heap-js';
+import KanjiGrade from '../types/KanjiGrade';
 
 class interp_data {
     coords! : [];
     totalLengths!: number;
+}
+
+var passing = 0.65;
+
+var kanji_grade: KanjiGrade = {
+    overallGrade: 0,
+    overallFeedback: "",
+    grades: [],
+    feedback: [],
+    strokeInfo: []
+}
+
+function order_feedback(order: number[]) {
+    const default_order = Array.from({ length: order.length }, (_, index) => index + 1);
+    if (order.toString() === default_order.toString()) {
+        return;
+    }
+    var feedback = "Stroke order:\n";
+    for (let i = 0; i < order.length; i++) {
+        if (order[i] !== i + 1) {
+            if (order[order[i] - 1] === i + 1) {
+                if (order[i] < order[order[i] - 1]) {
+                    feedback += "\tSwap strokes " + order[i] + " and " + default_order[i] + ".\n";
+                    kanji_grade.overallGrade -= 2 * (100 - passing * 100);
+                }
+            } else {
+                feedback += "\tStroke " + order[i] + " should be stroke " + default_order[i] + ".\n";
+                kanji_grade.overallGrade -= (100 - passing * 100);
+            }
+        }
+    }
+    kanji_grade.overallFeedback += feedback;
 }
 
 function generateCombinations<T>(arr: T[], size: number): T[][] {
@@ -38,206 +72,250 @@ function generateOrderArray<T>(array: T[][], order: number[]): T[][] {
 function alternateStrokeOrder(
     iCoords: number[][][],
     tCoords: number[][][],
-    passing: number = 0.6,
-    maxDepth: number = 10 // Adjust the maximum depth as needed
-  ): [number[], string[], string[]] {
-    function bfs(
-        currentOrder: number[],
-        currentIndex: number,
-        bestCombo: number[],
-        depth: number,
-        visited: Set<string> // Keep track of visited combinations
-      ): number[] {
-        // Base case: If we've reached the end of the array or maximum depth
-        if (currentIndex === currentOrder.length || depth === maxDepth) {
-          return bestCombo;
-        }
-      
-        // Recursive case: Explore all possible swaps for the current index
-        for (let i: number = currentIndex; i < currentOrder.length; i++) {
-            
-          // Swap elements
-          [currentOrder[currentIndex], currentOrder[i]] = [
-            currentOrder[i],
-            currentOrder[currentIndex],
-          ];
-          console.log("depth:", depth);
-          console.log("currentIndex:", currentIndex);
-          console.log("i:", i);
-          const currentComboString = currentOrder.toString(); // Convert array to string for tracking
-          if (!visited.has(currentComboString)) {
-            visited.add(currentComboString); // Mark combination as visited
-            console.log("Current combo:", currentComboString);
-      
-            // Grade the current order
-            const [grades, strokeInfo, feedback] = grade_svg(
-              generateOrderArray(JSON.parse(JSON.stringify(iCoords)), currentOrder),
-              tCoords,
-              passing
-            );
-            const avgGrade =
-              grades.reduce((a, b) => a + b, 0) / grades.length;
-            const failingCount = grades.filter((grade) => grade < passing).length;
-      
-            // If the current order is better, update the bestCombo
-            if (
-              avgGrade > bestAvgGrade ||
-              (avgGrade === bestAvgGrade && failingCount < bestFailingCount)
-            ) {
-              bestAvgGrade = avgGrade;
-              bestFailingCount = failingCount;
-              bestCombo = JSON.parse(JSON.stringify(currentOrder));
+    passing: number = 0.65,
+    maxIters: number = 40
+  ): [number[], string[], string[], string, number, number[]] {
+    function calculateAverageGrade(order: number[]): [number, number] {
+        const [grades] = grade_svg(generateOrderArray(JSON.parse(JSON.stringify(iCoords)), order), tCoords, passing);
+        return [grades.reduce((a, b) => a + b, 0) / grades.length, grades.filter(grade => grade < passing).length];
+    }
+
+    // BFS function to find the best stroke order
+    function bfs(order: number[]): [number[], number] {
+        const visited = new Set<string>();
+        const queue = new Heap<[number[], number]>((a, b) => a[1] - b[1]);
+        queue.push([order, calculateAverageGrade(order)[1]]);
+        let failingnum = calculateAverageGrade(order)[1];
+        let bestOrder = order.slice();
+        let iters = 0;
+        while (queue.size() > 0) {
+            if (iters > maxIters) {
+                return [bestOrder, failingnum];
             }
-      
-            bestCombo = bfs(
-                currentOrder.slice(0),
-                currentIndex + 1,
-                bestCombo,
-                depth + 1,
-                visited // Pass visited set to the recursive call
-            );
-      
-            // Undo the swap
-            [currentOrder[currentIndex], currentOrder[i]] = [
-              currentOrder[i],
-              currentOrder[currentIndex],
-            ];
-            
-          }
+            const [currentOrder, currentFailing] = queue.pop() as [number[], number];
+            iters++;
+            if (currentFailing === 0) {
+                return [currentOrder, 0];
+            }
+            if (currentFailing < failingnum) {
+                failingnum = currentFailing;
+                bestOrder = currentOrder.slice();
+            } else if (currentFailing > failingnum) {
+                continue;
+            }
+            for (let i = 0; i < currentOrder.length; i++) {
+                for (let j = i + 1; j < currentOrder.length; j++) {
+                    const newOrder = currentOrder.slice();
+                    [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+                    const key = newOrder.toString();
+                    if (!visited.has(key)) {
+                        visited.add(key);
+                        queue.push([newOrder, calculateAverageGrade(newOrder)[1]]);
+                    }
+                }
+            }
         }
-        return bestCombo;
-      }
+        
+        return [bestOrder, failingnum];
+    }
       
   
     // Initialize variables
-    let bestAvgGrade = -Infinity;
-    let bestFailingCount = Infinity;
     let bestCombo = Array.from({ length: iCoords.length }, (_, index) => index + 1);
-    console.log("Initial array:", generateOrderArray(iCoords, bestCombo));
+    let [grades] = grade_svg(iCoords, tCoords, passing);
+    let failing = grades.filter(grade => grade < passing).length;
   
     // Perform BFS
-    bestCombo = bfs(bestCombo.slice(), 0, bestCombo, 0, new Set());
-    console.log("Best combo:", bestCombo);
-    console.log("Updated array:", generateOrderArray(iCoords, bestCombo));
-  
-    return [[], [], []]; // Placeholder return, you need to implement this part
-  }
+    [bestCombo, failing] = bfs(bestCombo.slice());
+
+
+    let res = grade_svg(generateOrderArray(iCoords, bestCombo), tCoords, passing);
+    let retVal = [res[0], res[1], res[2], res[3], failing, bestCombo] as [number[], string[], string[], string, number, number[]];
+
+    return retVal;
+}
   
 
-function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[]] {
+function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[], string, number] {
     const n = iCoords.length;
     const array = Array.from({ length: n }, (_, index) => index + 1);
     const comboNumbers = generateCombinations(array, tCoords.length);
 
-    console.log("Too many strokes!");
     if (iCoords.length > Math.floor(tCoords.length * 1.25)) {
-        console.log("Too many extra strokes, review model");
+        kanji_grade.overallFeedback += "Too many strokes for this kanji.\n";
         color_input([]);
-        return[[],[],[]];
+        return[[],[],[], "", 0];
     }
     const lengthdiff = iCoords.length - tCoords.length;
     var iCoordsCorrected = iCoords.slice(0, iCoords.length - lengthdiff);
-    var [grades, strokeInfo, feedback] = grade_svg(JSON.parse(JSON.stringify(iCoordsCorrected)), tCoords, passing);
+    var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(JSON.parse(JSON.stringify(iCoordsCorrected)), tCoords, passing);
+    if (failing > iCoords.length * 0.75) {
+        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        return [[],[],[],"",0];
+    }
     var avgGrade = 0
     var bestCombo = 0;
     const combos = generateCombinations(iCoords, tCoords.length);
-    console.log("generated", combos.length, "combinations")
     for (let i = 0; i < combos.length; i++) {
-        const [newGrades, newStrokeInfo, newFeedback] = grade_svg(JSON.parse(JSON.stringify(combos[i])), tCoords, passing);
+        const [newGrades, newStrokeInfo, newFeedback, newAspectString, newFailing, newSOrder] = alternateStrokeOrder(JSON.parse(JSON.stringify(combos[i])), tCoords, passing);
         const newAvgGrade = newGrades.reduce((a, b) => a + b, 0) / newGrades.length;
-        console.log("combo", i, ": average grade:", newAvgGrade)
         if (newAvgGrade > avgGrade) {
+            [grades, strokeInfo, feedback, aspectString, failing, sOrder] = [newGrades, newStrokeInfo, newFeedback, newAspectString, newFailing, newSOrder]
             iCoordsCorrected = combos[i];
             avgGrade = newAvgGrade;
-            grades = newGrades;
-            strokeInfo = newStrokeInfo;
-            feedback = newFeedback;
             bestCombo = i;
+            if (failing === 0) {
+                break;
+            }
+            if (failing > tCoords.length * 0.75) {
+                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                return [[],[],[],"",0];
+            }
         }
     }
+
+    kanji_grade.overallFeedback += aspectString;
+    kanji_grade.overallFeedback += "Stroke number:\n";
     const gradeColors = [];
     var j = 0;
+
     for (var i = 1; i < iCoords.length + 1; i++) {
         if (comboNumbers[bestCombo].includes(i)) {
             gradeColors.push(grades[j]);
             j++;
         } else {
-            gradeColors.push(0);
+            gradeColors.push(-1);
+            kanji_grade.overallFeedback += "\tStroke " + i + " is extra.\n";
+            kanji_grade.overallGrade -= (100 - passing * 100)
         }
     }
-    console.log("Best combo:", bestCombo);
-    console.log("Strokes in combo:", comboNumbers[bestCombo].toString());
-    return [gradeColors, strokeInfo, feedback]
+
+    order_feedback(sOrder);
+
+    return [gradeColors, strokeInfo, feedback, aspectString, failing]
 }
 
-function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[]] {
+function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: number = 0.6): [number[], string[], string[], string, number] {
     const n = tCoords.length;
     const array = Array.from({ length: n }, (_, index) => index + 1);
     const comboNumbers = generateCombinations(array, iCoords.length);
 
-    console.log("Too few strokes!");
     if (iCoords.length < Math.ceil(tCoords.length * 0.75)) {
-        console.log("Too many extra strokes, review model");
+        kanji_grade.overallFeedback += "Too few strokes for this kanji.\n";
         color_input([]);
-        return [[], [], []];
+        return [[],[],[], "",0];
     }
     const lengthdiff = tCoords.length - iCoords.length;
     var tCoordsCorrected = tCoords.slice(0, tCoords.length - lengthdiff);
-    var [grades, strokeInfo, feedback] = grade_svg(iCoords, JSON.parse(JSON.stringify(tCoordsCorrected)), passing);
+    var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(iCoords, JSON.parse(JSON.stringify(tCoordsCorrected)), passing);
+    if (failing > iCoords.length * 0.75) {
+        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        return [[],[],[],"",0];
+    }
     var avgGrade = 0;
     var bestCombo = 0;
     const combos = generateCombinations(tCoords, iCoords.length);
-    console.log("generated", combos.length, "combinations");
     for (let i = 0; i < combos.length; i++) {
-        const [newGrades, newStrokeInfo, newFeedback] = grade_svg(iCoords, JSON.parse(JSON.stringify(combos[i])), passing);
+        const [newGrades, newStrokeInfo, newFeedback, newAspectString, newFailing, newSOrder] = alternateStrokeOrder(iCoords, JSON.parse(JSON.stringify(combos[i])), passing);
         const newAvgGrade = newGrades.reduce((a, b) => a + b, 0) / newGrades.length;
-        console.log("combo", i, ": average grade:", newAvgGrade)
         if (newAvgGrade > avgGrade) {
+            [grades, strokeInfo, feedback, aspectString, failing, sOrder] = [newGrades, newStrokeInfo, newFeedback, newAspectString, newFailing, newSOrder];
             tCoordsCorrected = combos[i];
             avgGrade = newAvgGrade;
-            grades = newGrades;
-            strokeInfo = newStrokeInfo;
-            feedback = newFeedback;
             bestCombo = i;
+            if (failing === 0) {
+                break;
+            }
+            console.log(failing, tCoords.length * 0.75)
+            if (failing > iCoords.length * 0.75) {
+                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                return [[],[],[],"",0];
+            }
         }
     }
+
+    kanji_grade.overallFeedback += aspectString;
+    kanji_grade.overallFeedback += "Stroke number:\n";
     const gradeColors = [];
     var j = 0;
+
     for (var i = 1; i < tCoords.length + 1; i++) {
         if (comboNumbers[bestCombo].includes(i)) {
             gradeColors.push(grades[j]);
             j++;
-        } 
+        } else {
+            kanji_grade.overallFeedback += "\tStroke " + i + " is missing.\n";
+            kanji_grade.overallGrade -= (100 - passing * 100)
+
+        }
     }
-    console.log("Best combo:", bestCombo);
-    console.log("Strokes in combo:", comboNumbers[bestCombo].toString());
-    return [gradeColors, strokeInfo, feedback]
+
+    order_feedback(sOrder);
+    return [gradeColors, strokeInfo, feedback, aspectString, failing]
 }
 
-export default function grade(input: string, targetKanji: string) {
-    const passing = 0.65;
-    console.log("GRADING");
-    fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json").then(response => response.json())
-    .then(data => {
-        var targetInfo = data as unknown as interp_data;
-        const tCoords = targetInfo.coords;
-        const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
-        if (!iCoords.length) return;
-        let grades: number[], strokeInfo: string[], feedback: string[]; // Declare the types of the variables separately
-        if (iCoords.length > tCoords.length) {
-            [grades, strokeInfo, feedback] = extraStrokes(iCoords, tCoords, passing);
-        } else if (iCoords.length < tCoords.length) {
-            [grades, strokeInfo, feedback] = missingStrokes(iCoords, tCoords, passing);
-        } else {
-            [grades, strokeInfo, feedback] = grade_svg(iCoords, tCoords, passing);
-            //alternateStrokeOrder(iCoords, tCoords, passing);
-        }
-        color_input(grades);
-        strokeInfo.forEach(stroke => {
-            console.log(stroke)
-        });
-        feedback.forEach(string => {
-            console.log(string);
-        });
+export default function grade(input: string, targetKanji: string, passing: number): Promise<KanjiGrade> {
+    kanji_grade = {
+        overallGrade: 100,
+        overallFeedback: "",
+        grades: [],
+        feedback: [],
+        strokeInfo: []
+    }
+    passing = passing;
+
+    return new Promise((resolve, reject) => {
+        fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
+            .then(response => response.json())
+            .then(data => {
+                console.log("GRADING")
+                var targetInfo = data as unknown as interp_data;
+                const tCoords = targetInfo.coords;
+                const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
+                if (!iCoords.length) return;
+                let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately
+                if (iCoords.length > tCoords.length) {
+                    [grades, strokeInfo, feedback, aspectString, failing] = extraStrokes(iCoords, tCoords, passing);
+                } else if (iCoords.length < tCoords.length) {
+                    [grades, strokeInfo, feedback, aspectString, failing] = missingStrokes(iCoords, tCoords, passing);
+                } else {
+                    [grades, strokeInfo, feedback, aspectString, failing, strokeOrder] = alternateStrokeOrder(iCoords, tCoords, passing);
+                    if (failing > iCoords.length * 0.75) {
+                        color_input([]);
+                        kanji_grade = {
+                            overallGrade: 0,
+                            overallFeedback: "It looks like you drew the wrong kanji.\n",
+                            grades: [],
+                            feedback: [],
+                            strokeInfo: []
+                        }
+                        resolve(kanji_grade);
+                        return;
+                    }
+                    kanji_grade.overallFeedback += aspectString;
+                    order_feedback(strokeOrder);
+                }
+                const avgGrade = grades.filter((val) => val >= passing).reduce((a, b) => a + b, 0) / grades.filter((val) => val >= passing).length;
+                if (kanji_grade.overallGrade > passing * 100 && failing !== 0) {
+                    kanji_grade.overallGrade -= failing * (100 - passing * 100);
+                }
+
+                kanji_grade.overallGrade *= avgGrade;
+                kanji_grade.overallGrade = Math.max(kanji_grade.overallGrade, 0);
+
+                kanji_grade.grades = grades;
+                kanji_grade.feedback = feedback;
+                kanji_grade.strokeInfo = strokeInfo;
+
+
+                color_input(grades);
+                
+                
+                resolve (kanji_grade);
+            })
+            .catch(error => {
+                console.error("Error grading:", error);
+                return kanji_grade;
+            });
     });
 }
