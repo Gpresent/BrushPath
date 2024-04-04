@@ -66,30 +66,33 @@ const Home: React.FC = (props) => {
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
-  const [recentDeck, setRecentDeck] = useState<any>();
+
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!userData) {
       getUserData();
+
     }
     else {
-      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { console.log(result); setRecentDeck(result); });
+      getUserData();
 
+      console.log(userData.decks[0].id)
     }
   }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
       if (userData) {
-        const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { setRecentDeck(result); });
+
+
         return await getDecksFromRefs(userData.decks);
       }
     };
 
     fetchDecks().then((decksResult) => {
-      // console.log(decksResult);
+
       setDecks(decksResult);
       setLoading(false);
     });
@@ -103,16 +106,16 @@ const Home: React.FC = (props) => {
         Hello, {user?.displayName}
       </h2>
       {/* <HomeStats /> */}
-      {loading || userData === null ? (
+      {(loading || userData === null || decks === undefined || decks === null) ? (
         <LoadingSpinner />
       ) : (
         <HomeStudyPrompt
           newUser={userData}
           suggestedDeck={{
-            _id: recentDeck?._id || "",
-            id: recentDeck?.id || 0,
-            image: recentDeck?.image || "../sample_deck.png",
-            name: recentDeck?.name || ""
+            _id: decks[0]?._id || "",
+            id: decks[0]?.id || 0,
+            image: decks[0]?.image || "../sample_deck.png",
+            name: decks[0]?.name || ""
           }}
         />
       )}

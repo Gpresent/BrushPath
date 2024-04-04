@@ -13,15 +13,14 @@ interface HomeStudyPromptProps {
 
 const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({ newUser, suggestedDeck }) => {
   const navigate = useNavigate();
-  const { getUserData } = useContext(AuthContext);
+  const { userData, getUserData } = useContext(AuthContext);
 
-  console.log(suggestedDeck);
+
   const handleDeckClick = (deckId: any) => {
-    console.log('Deck clicked:', suggestedDeck);
+
     if (suggestedDeck._id) {
-      //console.log(suggestedDeck._id)
-      updateUserRecentDeck(newUser.email, suggestedDeck._id);
-      getUserData();
+      updateUserRecentDeck(newUser.email, suggestedDeck._id, userData?.decks);
+      //getUserData();
     }
     navigate(`/deck/${suggestedDeck._id}`);
 
