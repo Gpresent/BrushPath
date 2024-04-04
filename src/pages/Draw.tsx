@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useContext, useLayoutEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -12,6 +12,8 @@ import Character from "../types/Character";
 import KanjiGrade from "../types/KanjiGrade";
 import { interpretImage } from "../recogition/interpretImage";
 import type PredictionResult from "../recogition/predictionDisplay";
+import { AuthContext } from "../utils/FirebaseContext";
+import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
 
 
 const passing = 0.65;
@@ -67,6 +69,7 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
+  const {userData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const canvasElement = document.getElementById("react-sketch-canvas");
   const canvasRect = canvasElement ? canvasElement.getBoundingClientRect() : null;
@@ -208,6 +211,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             canvas.current.exportSvg().then((data: any) => {
               grade(data, kanji, passing).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
+                upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)
 
                 if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                   //console.log(grade)

@@ -7,6 +7,10 @@ import {
   addDoc,
   arrayUnion,
   updateDoc,
+  and,
+  where,
+  setDoc,
+  Timestamp,
 } from "firebase/firestore";
 import {
   collection,
@@ -301,3 +305,43 @@ export const updateUserName = async (newName: string) => {
     return false;
   }
 };
+
+export const upsertCharacterScoreData = async (userID: string, characterID: string, score:number) => {
+  try {
+    if(userID === "") {
+      throw "UserID is empty"
+    }
+    if(characterID === "") {
+      throw "characterID is empty"
+    }
+
+    console.log(userID)
+    console.log(characterID)
+    const characterRef = doc(db, "Character", characterID);
+    const userRef = doc(db, "User", userID);
+
+    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef), where("characterRef","==",characterRef));
+    const characterScoreResult = await getDocs(characterScoreQuery);
+
+    // If the document exists, update it; otherwise, create a new document
+    if (!characterScoreResult.empty) {
+      characterScoreResult.forEach(async (doc) => {
+        await setDoc(doc.ref, { score, last_time_practice: Timestamp.now(), nextReviewDate: Timestamp.now() }, { merge: true });
+        console.log("CharacterScore document updated:", doc.id);
+      });
+    } else {
+      await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, interval: 0, repetition: 0, last_time_practice: Timestamp.now(), nextReviewDate: Timestamp.now()});
+      console.log("New CharacterScore document created.");
+    }
+
+
+
+
+    
+
+  } catch (error) {
+    console.error("Error upserting CharacterScore:", error);
+    throw error;
+  }
+
+}
