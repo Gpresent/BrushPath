@@ -10,16 +10,16 @@ interface LoadingBarProps {
 
 const LoadingBar: React.FC<LoadingBarProps> = ({ progress, duration, message }) => {
     return (
-        <>
-        <p>{message}
+        <div className='loading-bar-container'>
+        <p className='loading-bar-text'>{message}
         </p>
-        <div className="loading-bar-container">
+        <div className="loading-bar-outer">
           <div
             className="loading-bar"
             style={{ width: `${(progress/duration)*100}%` }}
           ></div>
         </div>
-        </>
+        </div>
       );
 
 }
