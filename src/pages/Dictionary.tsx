@@ -92,11 +92,27 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   };
 
 
+  useEffect(() => {
+    setLoading(true);
+      const results = characterCache?.search?.search("a", {
+        boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
+        fuzzy: 2,
+        prefix:true
+      });
+
+      const cleanResults = results?.filter(result => result !== undefined && result !== null)
+        .map((result: any) => characterParser(result));
+
+      setFilteredKanjiList(cleanResults ? cleanResults : []);
+    
+    setLoading(false);
+  }, []);
+
 
   return (
     <div className="dictionary-view">
-      <p className="my-words">My Words</p>
-      {characterCache.search?.documentCount === 2136 &&
+      <p className="my-words">Dictionary</p>
+      {characterCache.search?.documentCount !== 2136 &&
       <LoadingBar progress={characterCache.search?.documentCount || 0} duration={2136} message={"Indexing search..."} />
 }
       <input className="search-bar" onChange={handleSearch}
