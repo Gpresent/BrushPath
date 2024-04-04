@@ -6,6 +6,7 @@ import { DocumentData } from "firebase/firestore";
 import { updateUserRecentDeck } from "../utils/FirebaseQueries";
 import { AuthContext } from "../utils/FirebaseContext";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 interface DeckCardProps {
   deck: Deck;
@@ -18,9 +19,10 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   const [showDeleteIcon, setShowDeleteIcon] = useState<boolean>(false);
   let pressTimer: ReturnType<typeof setTimeout> | null = null;
   const [isShaking, setIsShaking] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const handleDeckClick = (deckId: any) => {
-    if (!showDeleteIcon) {
+    if (!showDeleteIcon && !showConfirmationModal) {
       console.log('Deck clicked:', deckId);
       if (deck._id) {
         console.log(user);
@@ -31,10 +33,15 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
     }
   };
 
-  const handleTrashClick = (deckId: any) => {
+  const handleTrashClick = () => {
     console.log("Trashcan Clicked: You're Trash!");
-    //trash can logic, hey sam :)
+    setShowConfirmationModal(true)
+    setShowDeleteIcon(false);
   };
+
+  const closeConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  }
 
   const startPressTimer = () => {
     pressTimer = setTimeout(() => setShowDeleteIcon(true), 1000); // adjust time as needed
@@ -66,11 +73,19 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
       onTouchMove={handleMouseLeaveOrTouchMove}
     >
       {showDeleteIcon && (
-        <DeleteForeverIcon className="delete-icon" onClick={() => handleTrashClick(deck._id)} />
+        <DeleteForeverIcon className="delete-icon" onClick={() => handleTrashClick()} />
       )}
       <div className="cover-image" style={{ backgroundImage: `url(${deck.image})` }}>
       </div>
       <p className="title">{deck.name}</p>
+
+    <ConfirmationModal
+      deck={deck}
+      user={user} 
+      isOpen={showConfirmationModal}
+      onClose={closeConfirmationModal}
+    />
+
     </div>
   );
 };
