@@ -6,7 +6,7 @@ import Draw from "../../pages/Draw";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import React from "react";
-
+// DO NOT  USE JUST TESTING STUFF
 interface DrawReviewProps {
   setShowHeader: any;
 }
