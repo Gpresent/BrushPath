@@ -39,7 +39,7 @@ const offline_db = initializeFirestore(app,
   {
     localCache:
       persistentLocalCache(/*settings*/{ tabManager: persistentMultipleTabManager() }),
-
+      experimentalForceLongPolling: true
 
   });
 

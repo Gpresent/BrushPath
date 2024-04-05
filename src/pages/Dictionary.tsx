@@ -19,6 +19,8 @@ import {
   where,
 } from "firebase/firestore";
 import Loading from "../components/Loading";
+import { CharacterSearchContext } from "../utils/CharacterSearchContext";
+import LoadingBar from "../components/LoadingBar";
 
 interface DictionaryProps {
   title: string;
@@ -33,54 +35,88 @@ interface KanjiCharacter {
 
 
 
+// Debounce hook
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 
 const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   const contextValue = db;
 
-  const { characterCache } = useContext(AuthContext);
+  const characterCache = useContext(CharacterSearchContext);
   const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>([]);
   const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
+  // Add debounce delay in milliseconds
+  const debounceDelay = 300;
+
+  // Debounced search term
+  const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
+
+  useEffect(() => {
     setLoading(true);
-
-
-    if (query) {
-      const results = characterCache?.search.search(query, {
-        
-          boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
-          fuzzy: 2,
-          prefix:true
-        
+    if (debouncedSearchTerm) {
+      const results = characterCache?.search?.search(debouncedSearchTerm, {
+        boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
+        fuzzy: 2,
+        prefix:true
       });
-      // console.log(results);
-
 
       const cleanResults = results?.filter(result => result !== undefined && result !== null)
-        .map((result: any) => characterParser(result)); //Could be faster?
-
+        .map((result: any) => characterParser(result));
 
       setFilteredKanjiList(cleanResults ? cleanResults : []);
-      console.log(filteredKanjiList);
-      // console.log(filteredKanjiList);
     } else {
       setFilteredKanjiList(kanjiList);
     }
     setLoading(false);
+  }, [debouncedSearchTerm]);
+  
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
+
+  useEffect(() => {
+    setLoading(true);
+      const results = characterCache?.search?.search("a", {
+        boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
+        fuzzy: 2,
+        prefix:true
+      });
+
+      const cleanResults = results?.filter(result => result !== undefined && result !== null)
+        .map((result: any) => characterParser(result));
+
+      setFilteredKanjiList(cleanResults ? cleanResults : []);
+    
+    setLoading(false);
+  }, []);
 
 
   return (
     <div className="dictionary-view">
-      <p className="my-words">My Words</p>
+      <p className="my-words">Dictionary</p>
+      {characterCache.search?.documentCount !== characterCache.numChars &&
+      <LoadingBar progress={characterCache.search?.documentCount || 0} duration={characterCache.numChars} message={"Indexing search..."} />
+}
       <input className="search-bar" onChange={handleSearch}
         placeholder="Search kanji..." />
-
       {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
     </div>
   );
