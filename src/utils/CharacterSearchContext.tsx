@@ -14,6 +14,8 @@ export type IndexedDBCachingResult = {
   data: DocumentData[] | null;
   loading: boolean;
   search: MiniSearch<any>|null,
+  numChars: number;
+
 
 
 }
@@ -28,7 +30,7 @@ const DATABASE_NAME = 'zenji-cache';
 const OBJECT_STORE_NAME = 'Character';
 
 //Initialize Context
-export const CharacterSearchContext = createContext<IndexedDBCachingResult>({data:null,loading:true,search:null});
+export const CharacterSearchContext = createContext<IndexedDBCachingResult>({data:null,loading:true,search:null, numChars:-1});
 
 export const useAuth = () => {
   return useContext(CharacterSearchContext)
@@ -307,7 +309,7 @@ export const CharacterSearchProvider = ({ children }: { children: ReactNode }) =
   
   
     const value = {
-      data, loading, search
+      data, loading, search, numChars
     }
   
     return (<CharacterSearchContext.Provider value={value}>
