@@ -268,7 +268,6 @@ export default function grade(input: string, targetKanji: string, passing: numbe
         fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
             .then(response => response.json())
             .then(data => {
-                console.log("GRADING")
                 var targetInfo = data as unknown as interp_data;
                 const tCoords = targetInfo.coords;
                 const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
