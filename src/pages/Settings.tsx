@@ -56,6 +56,8 @@ const SettingsView: React.FC = () => {
     <div className="settings-page">
       <div className="settings-block">
         <p className="settings-title">Settings</p>
+        <p className="title">Profile</p>
+
         <div className="settings-list">
           <div className="settings-item">
             <span onClick={() => handleArrowClick('Username')}>Username</span>
