@@ -1,0 +1,64 @@
+.grade-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow-x: scroll;
+
+}
+
+.feedback-container {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem; /* Add gap between feedback boxes */
+    overflow-x: scroll; /* Allow horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Enable mandatory snap points on the x-axis */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer/Edge */
+}
+
+.feedback-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+}
+
+.feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+    margin-left: 1rem;
+    overflow: wrap;
+}
+
+.feedback-box-strokes {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    padding-bottom: 1rem;
+    min-width: calc(99% - 2rem);
+    overflow: wrap;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.feedback-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+    overflow: wrap;
+}
+
+.feedback-box {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    min-width: calc(99% - 2rem);
+    overflow: wrap;
+    border: 1px solid black;
+    border-radius: 10px;
+}

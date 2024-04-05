@@ -113,13 +113,13 @@ function gen_feedback_intersections(extraIntersections: number[], missingInterse
         } else {
             feedback += "This stroke should not intersect with strokes " 
             if (extraIntersections.length === 2) {
-                feedback += extraIntersections[0] + 1 + " or " + extraIntersections[1] + 1;
+                feedback += extraIntersections[0] + 1 + " or " + (extraIntersections[1] + 1);
             }
             else {
                 for (let i = 0; i < extraIntersections.length - 1; i++) {
                     feedback += extraIntersections[i] + 1 + ", ";
                 }
-                feedback += "or " + extraIntersections[extraIntersections.length - 1] + 1;
+                feedback += "or " + (extraIntersections[extraIntersections.length - 1] + 1);
             }
         }
     } 
@@ -131,13 +131,13 @@ function gen_feedback_intersections(extraIntersections: number[], missingInterse
         } else {
             feedback += "strokes " 
             if (missingIntersections.length === 2) {
-                feedback += missingIntersections[0] + 1 + " and " + missingIntersections[1];
+                feedback += missingIntersections[0] + 1 + " and " + (missingIntersections[1] + 1);
             }
             else {
                 for (let i = 0; i < missingIntersections.length - 1; i++) {
                     feedback += missingIntersections[i] + 1 + ", ";
                 }
-                feedback += "and " + missingIntersections[missingIntersections.length - 1] + 1;
+                feedback += "and " + (missingIntersections[missingIntersections.length - 1] + 1);
             }
         }
     }
@@ -152,13 +152,13 @@ function gen_feedback_crosses(extraCrosses: number[], missingCrosses: number[]):
         } else {
             feedback += "This stroke should not cross strokes " 
             if (extraCrosses.length === 2) {
-                feedback += extraCrosses[0] + 1 + " or " + extraCrosses[1] + 1;
+                feedback += extraCrosses[0] + 1 + " or " + (extraCrosses[1] + 1);
             }
             else {
                 for (let i = 0; i < extraCrosses.length - 1; i++) {
                     feedback += extraCrosses[i] + 1 + ", ";
                 }
-                feedback += "or " + extraCrosses[extraCrosses.length - 1] + 1;
+                feedback += "or " + (extraCrosses[extraCrosses.length - 1] + 1);
             }
         }
     }
@@ -176,7 +176,7 @@ function gen_feedback_crosses(extraCrosses: number[], missingCrosses: number[]):
                 for (let i = 0; i < missingCrosses.length - 1; i++) {
                     feedback += missingCrosses[i] + 1 + ", ";
                 }
-                feedback += "and " + missingCrosses[missingCrosses.length - 1] + 1;
+                feedback += "and " + (missingCrosses[missingCrosses.length - 1] + 1);
             }
         }
     }

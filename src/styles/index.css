@@ -7,7 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: 'DM Sans', sans-serif, -apple-system;
   margin-bottom: 90px;
-  margin-top: 56px;
+  margin-top: 30px;
   display: 'flex';
   flex-direction: 'column';
   justify-content: 'space-between';
