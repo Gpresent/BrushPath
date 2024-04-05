@@ -12,9 +12,7 @@ const ReviewWordCard: React.FC<WordCardProps> = ({ character }) => {
   return (
     <>
       <Link to={{ pathname: '/review/character' }} state={{ character }} className="word-card">
-        <p className="character">{character.unicode}</p>
-        <p className="hiragana">{ }</p>
-        <p className="meaning">{character.one_word_meaning}</p>
+          <p className="character" >{character.unicode}</p>
         {/* add some type of attempted_review var in here */}
       </Link>
     </>

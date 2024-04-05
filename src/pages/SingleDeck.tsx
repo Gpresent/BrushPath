@@ -37,7 +37,6 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
     let curCharacters = characters;
 
     if (deck && deck.data && deck.data.characters) {
-
       await getCharsFromRefs(
         deck.data.characters,
         charIndex
