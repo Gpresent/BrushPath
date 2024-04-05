@@ -367,3 +367,17 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
   }
 
 }
+
+export const getCharacterScoreDataByUser = async (userId:string) => {
+  try {
+    const userRef = doc(db, "User", userId);
+    const charScoreQuery = query(collection(db, "CharacterScore"),where("userRef", "==", userRef));
+    const charScoreData = await getDocs(charScoreQuery);
+    let data:any[] = []
+    charScoreData.forEach((item)=>{data.push(item.data())})
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
