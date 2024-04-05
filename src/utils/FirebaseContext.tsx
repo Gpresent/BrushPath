@@ -6,7 +6,6 @@ import React, { ReactNode, createContext, useContext, useEffect, useMemo, useSta
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
 import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
-import useIndexedDBCaching, { IndexedDBCachingResult } from './useIndexedDBCaching';
 
 
 
@@ -116,7 +115,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     userData: userData,
     getUserData: getUserData,
     user: user,
-    // characterCache: characterCache,
   }
 
   return (<AuthContext.Provider value={value}>

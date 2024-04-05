@@ -112,8 +112,8 @@ const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
   return (
     <div className="dictionary-view">
       <p className="my-words">Dictionary</p>
-      {characterCache.search?.documentCount !== 2136 &&
-      <LoadingBar progress={characterCache.search?.documentCount || 0} duration={2136} message={"Indexing search..."} />
+      {characterCache.search?.documentCount !== characterCache.numChars &&
+      <LoadingBar progress={characterCache.search?.documentCount || 0} duration={characterCache.numChars} message={"Indexing search..."} />
 }
       <input className="search-bar" onChange={handleSearch}
         placeholder="Search kanji..." />
