@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import {ReviewItem, SpacedRepetitionSystem} from "./features/spacedrep";
 import { useState } from 'react';
 import DrawRLink from './features/drawrmlink';
 import Character from '../types/Character';
@@ -54,7 +53,7 @@ const Review: React.FC = () => {
         let char_refs: DocumentReference[] = [];
         // console.log("chars");
         // console.log(char_scores)
-        char_scores.forEach((item:any)=>{char_refs.push(item.characterRef)})
+        char_scores?.forEach((item:any)=>{char_refs.push(item.characterRef)})
         let chars = await getCharsFromRefs(char_refs, 0);
         console.log(chars)
     }

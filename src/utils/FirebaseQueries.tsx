@@ -11,6 +11,9 @@ import {
   where,
   setDoc,
   Timestamp,
+  Query,
+  getDocsFromCache,
+  getDocsFromServer,
 } from "firebase/firestore";
 import {
   collection,
@@ -170,6 +173,40 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
       }
     } catch (serverError) {
       console.error("Error fetching document from server:", serverError);
+      return null;
+    }
+  }
+};
+
+const fetchDocuments = async (collection: string, query:Query) => {
+
+  try {
+    const docsFromCacheResult = await getDocsFromCache(query);
+
+    // console.log("Retrieved document from cache");
+
+    return docsFromCacheResult.docs.map((doc) => {
+      return {
+        [`_${collection}_id`]: doc.id,
+        ...doc.data()
+      }
+    });
+  } catch (error) {
+    console.error("Documents not in cache or error fetching from cache:", error);
+
+    try {
+      const docsFromCacheResult = await getDocsFromServer(query);
+
+    // console.log("Retrieved document from cache");
+
+    return docsFromCacheResult.docs.map((doc) => {
+      return {
+        [`_${collection}_id`]: doc.id,
+        ...doc.data()
+      }
+    });
+    } catch (serverError) {
+      console.error("Error fetching documents from server:", serverError);
       return null;
     }
   }
@@ -378,6 +415,66 @@ export const getCharacterScoreDataByUser = async (userId:string) => {
     return data;
   } catch (error) {
     console.error(error);
+  }
+}
+
+export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
+  try {
+    
+    const userRef = doc(db,"User", userID)
+    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef));
+    const characterScoreResult = await getDocs( characterScoreQuery);
+    const characterScoreData = characterScoreResult.docs.map((score) => {
+      return {_score_id: score.id, ...score.data()}
+    })
+    return characterScoreData;
+   
+  } catch (error) {
+    console.error("Error getting character score data:", error);
+    throw error;
+  }
+}
+//TODO Implement
+export const getHydratedCharacterScoreData = async (userID:string) => {
+  
+  try {
+    const userRef = doc(db,"User", userID);
+    const characterScores = await getCharacterScoreData(userID);
+    if(!characterScores) {
+      throw "Error grabbing initial score docs";
+    }
+    const characterRefs = characterScores?.map((score:any) => score.characterRef);
+
+    //TODO Fix for paging...
+    const characterData = await getCharsFromRefs(characterRefs,0);
+
+    //Make hash maps based on unicode #
+    let characterMap: any = {}
+    console.log(characterData)
+    characterData.forEach((char) => {
+      if(char !== null && char !== undefined) {
+        characterMap[char._id] = {...char}
+      }
+      
+    });
+
+    console.log(characterScores)
+    characterScores.forEach((score: any) => {
+      if(score !== null && score !== undefined) {
+        if(characterMap[score?.characterRef?.id]) {
+        characterMap[score?.characterRef?.id] = { ...characterMap[score?.characterRef?.id], ...score}
+
+        }
+      }
+      
+    });
+
+
+    
+    return characterMap;
+   
+  } catch (error) {
+    console.error("Error getting character score data:", error);
     throw error;
   }
 }

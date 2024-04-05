@@ -7,7 +7,7 @@ import { DocumentData } from "firebase/firestore";
 import { updateUserRecentDeck } from "../utils/FirebaseQueries";
 
 interface HomeStudyPromptProps {
-  newUser: DocumentData;
+  newUser: DocumentData | null;
   suggestedDeck: Deck;
 }
 
@@ -19,7 +19,7 @@ const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({ newUser, suggestedDec
   const handleDeckClick = (deckId: any) => {
 
     if (suggestedDeck._id) {
-      updateUserRecentDeck(newUser.email, suggestedDeck._id, userData?.decks);
+      updateUserRecentDeck(newUser?.email, suggestedDeck._id, userData?.decks);
       //getUserData();
     }
     navigate(`/deck/${suggestedDeck._id}`);
