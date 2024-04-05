@@ -14,6 +14,7 @@ import KanjiGrade from "../types/KanjiGrade";
 import { interpretImage } from "../recogition/interpretImage";
 import type PredictionResult from "../recogition/predictionDisplay";
 import Feedback from "../grading/Feedback";
+import gradeToColor from "../utils/gradeToColor";
 
 
 const passing = 0.65;
@@ -88,6 +89,16 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
+  const [color, setColor] = React.useState("#FFFFFF");
+
+  useEffect(() => {
+      console.log("in useeffect")
+      // if(kanji_grade.overallGrade > -1){
+          setColor(gradeToColor(kanji_grade.overallGrade))
+          console.log("updated color")
+      // }
+  }, [kanji_grade])
+
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
@@ -160,7 +171,9 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
+      
       <div className="canvas">
+         <div className="canvas-color" style={{border: `7px solid ${color}`, opacity:'.5'}}></div>
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -212,6 +225,7 @@ const Draw: React.FC<DrawProps> = (props) => {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
+
                   setKanjiGrade(grade);
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
@@ -253,7 +267,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium"/>
         </button>
       </div>
-      <Feedback kanjiGrade={kanji_grade} passing={passing} />
+      <Feedback kanjiGrade={kanji_grade} passing={passing} color={color}/>
     </div>
 
   );

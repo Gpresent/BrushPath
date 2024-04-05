@@ -2,10 +2,12 @@ import React from 'react';
 import KanjiGrade from "../types/KanjiGrade";
 import "../styles/feedback.css";
 import { useEffect } from 'react';
+import gradeToColor from '../utils/gradeToColor';
 
 interface feedbackProps {
     kanjiGrade: KanjiGrade;
     passing: number;
+    color: string;
 }
 
 function pageCreator(feedback: string, index: number) {
@@ -31,10 +33,16 @@ function pageCreator(feedback: string, index: number) {
 
 const Feedback: React.FC<feedbackProps> = (props) => {
     const kanji_grade = props.kanjiGrade;
+    const color = props.color;
     const passing = props.passing;
     const canvasElement = document.getElementById("react-sketch-canvas");
 
+
+
+
     useEffect(() => {
+
+        console.log("color is: " + color)
         document.querySelectorAll('.feedback-container').forEach((container) => {
             let isScrolling: ReturnType<typeof setTimeout>;
         
@@ -64,10 +72,15 @@ const Feedback: React.FC<feedbackProps> = (props) => {
         <>
         <div className="feedback-container">
             <div className="feedback-header">
-                <div className="feedback-box">
-                    <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + (kanji_grade.overallGrade ? Math.round(kanji_grade.overallGrade) : 0)}</h3>
+            {(kanji_grade.overallGrade != -1)  && ( 
+                <div className="feedback-box" >
+
+                
+                    <div className="grade-circle" style={{backgroundColor:color}}> {Math.round(kanji_grade.overallGrade)} </div>
+               
                     {kanji_grade.overallFeedback !== "" && <p style={{ paddingBottom: "1rem" }}>{kanji_grade.overallFeedback}</p>}
                 </div>
+                 )}
             </div>
             {kanji_grade.grades.map((grade, index) => {
                 if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;

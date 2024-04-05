@@ -59,6 +59,19 @@
     padding: 0 1rem;
     min-width: calc(99% - 2rem);
     overflow: wrap;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
+}
+
+.grade-circle {
+    border-radius: 50%;
+    width: 70px;
+    border: 1px solid black;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 500;
+    margin: 10px;
 }

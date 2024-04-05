@@ -66,7 +66,6 @@
     font-weight: 300;
     justify-content: space-between;
     padding-bottom: 20px;
-    border-bottom: 1.5px solid rgba(0, 0, 0, 1);
     columns: 2;
     transition: all 0.3s ease;
 }
@@ -80,5 +79,17 @@
 
 .mastery-desc {
     font-size: 20px;
-    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1.5px solid rgba(0, 0, 0, 1);
+    width: 100%;
+}
+
+.character-info-button {
+    display: flex;
+    width: -webkit-fill-available;
+    border-radius: 10px;
+    justify-content: flex-end;
+    margin: 10px;
+    color: #3a3a3ad7;
+    gap: 5px;
 }
