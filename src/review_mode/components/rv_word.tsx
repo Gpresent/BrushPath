@@ -4,7 +4,8 @@ import Character from "../../types/Character";
 import { Link } from "react-router-dom";
 
 interface WordCardProps {
-  character: Character;
+  character: Character,
+  // last_attempted:string
 }
 
 const ReviewWordCard: React.FC<WordCardProps> = ({ character }) => {
@@ -13,6 +14,7 @@ const ReviewWordCard: React.FC<WordCardProps> = ({ character }) => {
     <>
       <Link to={{ pathname: '/review/character' }} state={{ character }} className="word-card">
           <p className="character" >{character.unicode}</p>
+          {/* <p className="meaning"></p>  will say if done or not based on last_attempted*/}
         {/* add some type of attempted_review var in here */}
       </Link>
     </>
