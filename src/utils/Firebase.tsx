@@ -35,14 +35,15 @@ const app = initializeApp(firebaseConfig);
 
 
 
-
-  export const offline_db = initializeFirestore(app,
-    {
-      localCache:
-        persistentLocalCache(/*settings*/{ tabManager: persistentMultipleTabManager() }),
-  
+const offline_db = initializeFirestore(app,
+  {
+    localCache:
+      persistentLocalCache(/*settings*/{ tabManager: persistentMultipleTabManager() }),
       experimentalForceLongPolling: true
-    });
+
+  });
+
+export const db = offline_db;
 
 export const auth = getAuth(app);
 
