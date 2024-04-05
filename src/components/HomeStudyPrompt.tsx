@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import '../styles/styles.css'
 import Deck from "../types/Deck";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../utils/FirebaseContext";
+import { DocumentData } from "firebase/firestore";
+import { updateUserRecentDeck } from "../utils/FirebaseQueries";
 
 interface HomeStudyPromptProps {
-  newUser: boolean;
+  newUser: DocumentData;
   suggestedDeck: Deck;
 }
 
-const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({
-  newUser,
-  suggestedDeck,
-}) => {
+const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({ newUser, suggestedDeck }) => {
+  const navigate = useNavigate();
+  const { userData, getUserData } = useContext(AuthContext);
+
+
+  const handleDeckClick = (deckId: any) => {
+
+    if (suggestedDeck._id) {
+      updateUserRecentDeck(newUser.email, suggestedDeck._id, userData?.decks);
+      //getUserData();
+    }
+    navigate(`/deck/${suggestedDeck._id}`);
+
+  };
+
   return (
     <div className="deck-prompt">
       <div className="word-group">
@@ -30,6 +45,7 @@ const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({
       <div
         className="image-wrapper"
         style={{ backgroundImage: `url(${suggestedDeck.image})` }}
+        onClick={handleDeckClick}
       >
         <div />
       </div>

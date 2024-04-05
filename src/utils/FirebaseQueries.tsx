@@ -261,25 +261,47 @@ export const updateUserDeck = async (deckId: string, characters: Character[], de
 };
 
 
-//update user recent used deck 
+//update user recent used deck  and move array inside table ?
 
-export const updateUserRecentDeck = async (userID: string, deckID: string) => {
+
+export const updateUserRecentDeck = async (userID: string, deckID: string, decks: DocumentReference[]) => {
   try {
     const deckRef = doc(db, "Deck", deckID);
     const userRef = doc(db, "User", userID);
 
+    const existingIndex = decks.findIndex((ref) => ref.id === deckID);
+
+    if (existingIndex === 0) {
+      //console.log("already recent")
+      return;
+    }
+
+    //update recent 
+    // await updateDoc(userRef, {
+    //   last_deck_studied: deckRef
+    // });
+
+
+    if (existingIndex > -1) {
+      decks.splice(existingIndex, 1);
+    }
+
+
+    decks.unshift(deckRef);
 
     await updateDoc(userRef, {
-      last_deck_studied: deckRef
+      last_deck_studied: deckRef,
+      decks: decks
     });
-    console.log("Post updated Recent Deck: ", deckRef.id);
-
+    // console.log("Post: Successfully updated Recent Deck and shifted to front: ", deckRef.id);
   } catch (error) {
     console.error("Error creating deck:", error);
     throw error;
   }
 
 };
+
+
 
 
 //User name update

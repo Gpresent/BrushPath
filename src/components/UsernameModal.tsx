@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import React, { useState, useContext, useRef } from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import "../styles/settings.css";
-import { updateUserName } from '../utils/FirebaseQueries';
+import { updateUserName } from "../utils/FirebaseQueries";
 import { AuthContext } from "../utils/FirebaseContext";
+import Modal from "./Modal";
 
 interface ModalProps {
   isOpen: boolean;
@@ -11,13 +12,12 @@ interface ModalProps {
 }
 
 const UsernameModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const { user } = useContext(AuthContext);
-
+  const modalRef = useRef(null);
 
   const handleSubmit = () => {
-
-    console.log(user)
+    console.log(user);
     updateUserName(username)
       .then((success) => {
         if (success) {
@@ -37,23 +37,25 @@ const UsernameModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-      <div className="modal">
-        <div className="username-modal-content">
-          <h2 className="modal-title">Edit Your Username</h2>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="username" className="input-label">Username</label>
-            <div className="input-icon-container">
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <ArrowForwardIcon className="right-arrow-modal" onClick={handleSubmit} />
-            </div>
-          </form>
+    <Modal title={"Edit Your Username"} onClose={onClose} onSubmit={onSubmit} isOpen={isOpen}>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <label htmlFor="username" className="input-label">
+          Username
+        </label>
+        <div className="input-icon-container">
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <ArrowForwardIcon
+            className="right-arrow-modal"
+            onClick={handleSubmit}
+          />
         </div>
-      </div>
+      </form>
+    </Modal>
   );
 };
 

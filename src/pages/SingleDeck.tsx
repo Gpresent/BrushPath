@@ -10,6 +10,8 @@ import { getCharsFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import Loading from "../components/Loading";
 import InfiniteScroll from "react-infinite-scroller";
 import { AuthContext } from "../utils/FirebaseContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 interface DeckProp {
   title: string;
@@ -37,17 +39,15 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
     let curCharacters = characters;
 
     if (deck && deck.data && deck.data.characters) {
-      await getCharsFromRefs(
-        deck.data.characters,
-        charIndex
-      ).then((fetchedChars) => {
-        curCharacters = curCharacters.concat(
-          fetchedChars
-            .map((character: any) => characterParser(character))
-            .filter((elem) => elem != null && !curCharacters.includes(elem))
-        );
-      });
-
+      await getCharsFromRefs(deck.data.characters, charIndex).then(
+        (fetchedChars) => {
+          curCharacters = curCharacters.concat(
+            fetchedChars
+              .map((character: any) => characterParser(character))
+              .filter((elem) => elem != null && !curCharacters.includes(elem))
+          );
+        }
+      );
     } else {
       // console.log("deck.data or something not found, not fetching");
     }
@@ -75,6 +75,8 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
     setIsEditModalOpen(!isEditModalOpen);
   };
 
+  let navigate = useNavigate();
+
   return (
     <div className="deck-landing">
       {deck.loading ? (
@@ -83,13 +85,23 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
         <div> {deck.error}</div>
       ) : (
         <>
-          <div className="deck-header">
-            <p className="my-words">{deck.data?.name}</p>
-            <AddIcon className="addButton" onClick={handleEditDeck} />
+          <div className="deck-header-wrapper">
+            <div className="deck-header">
+              <div className="deck-title-back">
+              <div
+                style={{ display: "flex", alignItems: "center" }}
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBackIosNewIcon style={{ fontSize: "18px"}}></ArrowBackIosNewIcon>
+              </div>
+              <p className="my-words">{deck.data?.name}</p>
+              </div>
+              <AddIcon className="addButton" onClick={handleEditDeck} />
+            </div>
+            <input className="search-bar" />
           </div>
-          <input className="search-bar" />
           <div
-            style={{ maxHeight: "70vh", overflow: "auto" }}
+          // style={{ maxHeight: "70vh", overflow: "auto" }}
           >
             <InfiniteScroll
               pageStart={0}

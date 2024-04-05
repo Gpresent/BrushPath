@@ -31,66 +31,6 @@ const Login: React.FC = () => {
 
   const googAuth = getAuth();
 
-  const displayError = (error: FirebaseAuthError) => {
-    switch (error.code) {
-      case "auth/invalid-credential":
-        setErrorMsg("Invalid Login");
-        break;
-      case "auth/too-many-requests":
-        setErrorMsg("Please wait before clicking again.");
-        break;
-      case "auth/weak-password":
-        setErrorMsg("Password must be 6 characters or longer.");
-        break;
-      case "auth/email-already-in-use":
-        setErrorMsg("Email already in use.");
-        break;
-      default:
-        setErrorMsg("An error occurred during authentication: " + error.code);
-    }
-  };
-
-  const isValidEmail = (email: string): boolean => {
-    // Simple email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    if (!isValidEmail(email)) {
-      setErrorMsg("Please enter a valid email address");
-      return;
-    }
-
-    if (isRegister) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((user) => {
-          if (user.user) {
-            updateProfile(user.user, {
-              displayName: user.user?.email?.split("@")[0],
-            });
-          }
-        })
-        .catch((error) => {
-          displayError(error as FirebaseAuthError);
-        });
-    } else {
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        displayError(error as FirebaseAuthError);
-      }
-    }
-  };
-
   getRedirectResult(googAuth)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access Google APIs.
@@ -118,7 +58,7 @@ const Login: React.FC = () => {
     <>
       <div className="login-page">
         <div className="login-prompt">
-          To access Zenji, please <b>log in</b> or <b>create an account</b>.
+          To access Zenji, please <b>sign in</b>.
         </div>
         <form onSubmit={handleSubmit} id="login-form" className="form-group">
           <div className="input-group">
