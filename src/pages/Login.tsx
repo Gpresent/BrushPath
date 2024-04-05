@@ -60,31 +60,6 @@ const Login: React.FC = () => {
         <div className="login-prompt">
           To access Zenji, please <b>sign in</b>.
         </div>
-        <form onSubmit={handleSubmit} id="login-form" className="form-group">
-          <div className="input-group">
-            <label htmlFor="email">email</label>
-            <input type="text" name="email" />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">password</label>
-            <input type="password" name="password" />
-          </div>
-          <div className="submit-row">
-            <button type="submit" style={{marginRight:"10px"}}>{isRegister ? "Register" : "Login"}</button>
-            <div className="check-group">
-              <label htmlFor="register">New User?</label>
-              <input
-                type="checkbox"
-                checked={isRegister}
-                onChange={() => {
-                  setIsRegister(!isRegister);
-                }}
-                name="register"
-              />
-            </div>
-          </div>
-        </form>
-
 
         <button onClick={() => { signInWithPopup(auth, GoogleProvider) }}>Sign in with Google</button>
         <div className="login-error">{errorMsg}</div>
