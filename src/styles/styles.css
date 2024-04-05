@@ -446,7 +446,7 @@ body {
     border-radius: 10px;
     z-index: 30;
     align-self: flex-start;
-    max-height: 60%;
+    max-height: 70%;
     overflow-y: scroll;
 }
 
@@ -465,7 +465,8 @@ body {
 
 .add-word-list {
     overflow: scroll;
-    max-height: 60vh;
+    max-height: 50vh;
+    padding: unset;
 }
 
 .close {
@@ -501,6 +502,7 @@ body {
     position: sticky;
     top: 54px;
     background-color: white;
+    z-index: 10;
 }
 
 .deck-title {

@@ -95,7 +95,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
 
         {
           !userData ? <LoadingSpinner /> : <DeckList decks={decks}
-            user={userData} />
+            user={userData} length={decks.length} />
         }
       </div >
       <KanjiModal
