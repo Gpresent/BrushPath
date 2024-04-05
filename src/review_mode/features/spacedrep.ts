@@ -1,3 +1,5 @@
+import { networkInterfaces } from "os";
+
 type ReviewItem = {
     id: string;
     repetition: number;
@@ -50,6 +52,27 @@ class SpacedRepetitionSystem {
     }
 }
 
+const reviewItem = (id:string, quality:number, repetition:number, interval:number, easeFactor:number = 1.25, nextReviewDate:Date = new Date()) => {
+
+        if (quality >= 3) {
+            if (repetition === 0) {
+                interval = 1;
+            } else if (repetition === 1) {
+                interval = 6;
+            } else {
+                interval = Math.ceil(interval * easeFactor);
+            }
+            repetition++;
+        } else {
+            repetition = 0;
+            interval = 1;
+        }
+
+        easeFactor = Math.max(1.3, easeFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        nextReviewDate = new Date(Date.now() + interval * 24 * 60 * 60 * 1000);
+        return {id, repetition, interval, easeFactor, nextReviewDate};
+}
+
 // // Usage example
 // const spaceSystem= new SpacedRepetitionSystem();
 // spaceSystem.addItem('1');
@@ -61,4 +84,4 @@ class SpacedRepetitionSystem {
 // spaceSystem.reviewItem('1', 5); // Lower quality response, but still remembered
 // spaceSystem.reviewItem('1', 5); // Lower quality response, but still remembered
 
-export {type ReviewItem, SpacedRepetitionSystem} ;
+export {reviewItem} ;
