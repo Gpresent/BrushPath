@@ -528,6 +528,15 @@ body {
 
 /* Loading page */
 
+.not-found {
+    /* width: 100%; */
+    display: flex;
+    justify-content: center;
+    color: #777;
+    align-self: center;
+    margin: 10px;
+}
+
 .loading{
     width: 100%;
     display: flex;
