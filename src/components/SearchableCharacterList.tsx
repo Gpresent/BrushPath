@@ -70,18 +70,21 @@ const SearchableCharacterList: React.FC<SearchableCharacterListProps> = ({select
           .map((result) => characterParser(result)).filter((result) => result !== null && result !== undefined);
   
         setFilteredKanjiList(cleanResults ? cleanResults as Character[] : [] as Character[]);
-      
+        console.log(cleanResults)
       
     } else {
       const cleanResults = characterCache?.data?.filter(result => result !== undefined && result !== null)
         .map((result: DocumentData) => characterParser(result)).filter((result) => result !== null && result !== undefined);
 
       setFilteredKanjiList(cleanResults ? cleanResults as Character[] : [] as Character[]);
+      console.log(cleanResults)
     }
+    
     setLoading(false);
   }, [debouncedSearchTerm]);
   
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     setSearchTerm(event.target.value);
   };
 

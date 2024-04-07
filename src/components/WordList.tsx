@@ -39,7 +39,7 @@ const WordList: React.FC<WordListProps> = ({ words, selectedWords, selectable, s
   return (
     <div className="word-list">
       
-        {modifiedWords.map((word) => (
+        {words.map((word) => (
           <WordCard key={word.unicode} character={word} selectable={selectable} handleClick={handleClick} />
 
         ))}
