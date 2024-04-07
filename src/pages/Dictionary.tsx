@@ -36,7 +36,7 @@ const DictionaryView: React.FC<DictionaryProps> = ({ kanjiList, setKanjiList, ti
 
   const fetchChars = useCallback(async () => {
 
-    console.log("lastRef changed")
+    // console.log("lastRef changed")
     let batch = 30;
 
     await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {

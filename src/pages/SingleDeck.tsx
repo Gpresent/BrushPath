@@ -38,7 +38,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [charIndex, setCharIndex] = useState<number>(0);
 
 
-  // const characterCache = useContext(CharacterSearchContext);
+  const characterCache = useContext(CharacterSearchContext);
 
   const fetchChars = useCallback(async () => {
     let curCharacters = characters;
@@ -122,7 +122,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
             </InfiniteScroll>
           </div>
 
-          {/* {isEditModalOpen && (
+          {isEditModalOpen && (
             <DeckEditModal
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
@@ -131,7 +131,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               charRefs={deck.data.characters}
               deckId={deck.data._id}
             />
-          )} */}
+          )}
         </>
       )}
     </div>
