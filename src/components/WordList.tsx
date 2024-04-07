@@ -131,6 +131,7 @@ const WordList: React.FC<WordListProps> = ({
         setNotFound(false);
       }
     } else {
+      setNotFound(false);
       setFilteredKanjiList([]);
     }
 
@@ -171,7 +172,7 @@ const WordList: React.FC<WordListProps> = ({
       }
     }
   };
-  
+
   return (
     <>
       <input
