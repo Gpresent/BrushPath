@@ -182,6 +182,9 @@ code {
   box-sizing: border-box;
   /* margin-top: 10px; */
 }
+.selected {
+  background-color: #E0E0E0
+}
 
 .character {
   color: #333;

@@ -302,6 +302,9 @@ body {
     text-align: center;
 }
 
+.selected {
+    color: red;
+}
 
 .icon-1 {
     display: flex;

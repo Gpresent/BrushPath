@@ -13,6 +13,7 @@ type Character = {
     jlpt: number | null;
     compounds: any;
     parts: string[];
+    selected?: boolean;
 
 };
 
