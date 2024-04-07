@@ -1,4 +1,5 @@
 type Character = {
+    id: string;
     unicode: string;
     unicode_str: string;
     on: string[];

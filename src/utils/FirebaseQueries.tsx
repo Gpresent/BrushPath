@@ -149,6 +149,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
 
   try {
     const docFromCache = await getDocFromCache(docRef);
+    
 
     // console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };

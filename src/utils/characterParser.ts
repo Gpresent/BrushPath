@@ -5,6 +5,7 @@ import Character from "../types/Character";
 function characterParser(data: any) {
 
     let character: Character = {
+        id: "ERR",
         unicode: "ERR",
         unicode_str: "ERR",
         on: ["ERR"],
@@ -30,13 +31,14 @@ function characterParser(data: any) {
     // }
 
     character = {
-        unicode: data.literal,
+        id: data.unicode_str,
+        unicode: data.literal || data.unicode,
         unicode_str: data.unicode_str,
         on: data.on,
         kun: data.kun,
         nanori: data.nanori,
         radicals: [],
-        english: data.meanings,
+        english: data.meanings || data.english,
         one_word_meaning: data.one_word_meaning,
         stroke_count: data.stroke_count,
         freq: data.freq,
