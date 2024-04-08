@@ -318,3 +318,31 @@ body.dark-mode .pp-modal-content {
 body.dark-mode label{
   color: #b6b6b6;
 }
+.loading-bar-container {
+  width: 99%;
+}
+.loading-bar-outer {
+  height: 5px;
+  background-color: white;
+  border-radius: 5px;
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  border-color:#333;
+}
+body.dark-mode .loading-bar-outer {
+  background-color: #333; 
+  border-color: #7C7C7C;
+}
+
+.loading-bar {
+  height: 100%;
+  background-color: #333; /* You can change the color as per your preference */
+  transition: width 0.3s ease;
+}
+body.dark-mode .loading-bar {
+  background-color: #E0E0E0; 
+}
+.loading-bar-text {
+  padding-bottom: .5rem;
+}

@@ -64,9 +64,9 @@ const SingleWordView: React.FC = () => {
                   setCharacterInfo(!characterinfo);
                   document.getElementsByClassName("info")[0]?.classList.toggle("info-hidden");
                 }}
-                style={{border: "none", backgroundColor: "transparent", color: "black"}}
+                style={{border: "none", backgroundColor: "transparent", color: "black", height: "40px"}}
               >
-                {characterinfo ? <ExpandLess/> : <ExpandMore/>}
+                {characterinfo ? <ExpandLess fontSize="large"/> : <ExpandMore fontSize="large"/>}
               </button>
             </div>
             <div className="info info-hidden">

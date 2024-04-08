@@ -13,21 +13,32 @@ body {
     position: absolute;
     right: 0;
     bottom: 0;
-    margin: 10px;
+    height: 50px;
+    width: 50px;
 }
 
 .clear-kanji {
     position: absolute;
     right: 0;
     top: 0;
-    margin: 10px;
+    height: 50px;
+    width: 50px;
 }
 
 .view-kanji {
     position: absolute;
     left: 0;
     bottom: 0;
-    margin: 10px;
+    height: 50px;
+    width: 50px;
+}
+
+.check-kanji {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    width: 50px;
 }
 
 .interpolate-kanji {

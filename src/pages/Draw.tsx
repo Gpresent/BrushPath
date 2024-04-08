@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ClearIcon from '@mui/icons-material/Clear';
-import HelpIcon from '@mui/icons-material/Help';
+import DoneIcon from '@mui/icons-material/Done';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import grade from "../grading/grade_controller";
 import '../styles/styles.css'
 import Character from "../types/Character";
@@ -14,6 +15,7 @@ import { interpretImage } from "../recogition/interpretImage";
 import type PredictionResult from "../recogition/predictionDisplay";
 import { AuthContext } from "../utils/FirebaseContext";
 import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
+import Feedback from "../grading/Feedback";
 
 
 const passing = 0.65;
@@ -21,8 +23,11 @@ const passing = 0.65;
 const styles = {
   button: {
     borderWidth: "0px",
-    padding: "0px",
+    padding: "10px",
     backgroundColor: "transparent",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     display: "flex",
@@ -72,7 +77,6 @@ const Draw: React.FC<DrawProps> = (props) => {
   const {userData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const canvasElement = document.getElementById("react-sketch-canvas");
-  const canvasRect = canvasElement ? canvasElement.getBoundingClientRect() : null;
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
@@ -110,6 +114,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         const paths = svg.getElementsByTagName("path");
         for (var i = 0; i < paths.length; i++) {
           paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
+          paths[i].setAttribute("stroke-width", "3");
         }
         const nums = svg.getElementsByTagName("text");
         for (var i = 0; i < nums.length; i++) {
@@ -189,7 +194,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             });
           }}
         >
-          <ClearIcon></ClearIcon>
+          <ClearIcon fontSize="medium"></ClearIcon>
         </button>
         {allowDisplaySVG && (
           <button
@@ -199,84 +204,59 @@ const Draw: React.FC<DrawProps> = (props) => {
               setDisplaySVG(!displaySVG);
             }}
           >
-            {displaySVG ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            {displaySVG ? <VisibilityOffIcon fontSize="medium"/> : <VisibilityIcon fontSize="medium"/>}
           </button>
         )}
-      </div>
-      <button
-        className="recolor-canvas"
-        onClick={() => {
-          if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
-            setReadOnly(true);
-            canvas.current.exportSvg().then((data: any) => {
-              grade(data, kanji, passing).then((grade: KanjiGrade) => {
-                setKanjiGrade(grade);
-                upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)
+          <button
+          className="check-kanji"
+          style={styles.button}
+          onClick={() => {
+            if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+              setReadOnly(true);
+              canvas.current.exportSvg().then((data: any) => {
+                grade(data, kanji, passing).then((grade: KanjiGrade) => {
+                  setKanjiGrade(grade);
 
-                if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                  //console.log(grade)
-                  canvas.current.exportImage('jpeg').then((data: any) => {
-                    interpretImage(data).then(result => {
+                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                    //console.log(grade)
+                    canvas.current.exportImage('jpeg').then((data: any) => {
+                      interpretImage(data).then(result => {
 
-                      setPrediction(result);
-
-
-
-                      if (grade.overallFeedback === "") {
-                        setKanjiGrade(prevState => ({
-                          ...prevState,
-                          overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
-                        }));
-                      }
-                      else {
-                        setKanjiGrade(prevState => ({
-                          ...prevState,
-                          overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
-
-                        }));
-                      }
+                        setPrediction(result);
+                        if (kanji === result?.[0]?.label) return;
 
 
-                    }).catch(error => {
-                      console.error('Error interpreting image:', error);
+                        if (grade.overallFeedback === "") {
+                          setKanjiGrade(prevState => ({
+                            ...prevState,
+                            overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
+                          }));
+                        }
+                        else {
+                          setKanjiGrade(prevState => ({
+                            ...prevState,
+                            overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
+
+                          }));
+                        }
+                      }).catch(error => {
+                        console.error('Error interpreting image:', error);
+                      });
+                    }).catch((e: any) => {
+                      console.error(e);
                     });
-                  }).catch((e: any) => {
-                    console.error(e);
-                  });
-                }
-              }).catch((e: any) => {
-                console.log(e);
+                  }
+                }).catch((e: any) => {
+                  console.log(e);
+                });
               });
-
-
-
-
-
-            });
-
-
-          }
-        }}
-      >
-        Check
-      </button>
-      <div className="grade-info">
-        <h3>{kanji_grade.overallGrade === -1 ? "Enter Kanji" : "Grade: " + (kanji_grade.overallGrade ? Math.round(kanji_grade.overallGrade) : 0)}</h3>
-        <p>{kanji_grade.overallFeedback}</p>
-        {kanji_grade.grades.map((grade, index) => {
-          if (grade >= passing || grade === -1 || kanji_grade.feedback.length <= index) return null;
-          const path = canvasElement?.getElementsByTagName("path")[index];
-          if (!path) return null;
-
-          return (
-            <div key={index} className="stroke-info">
-              <h3>Stroke {index + 1}</h3>
-              <p>{kanji_grade.feedback[index]}</p>
-            </div>
-          );
-        })}
-
+            }
+          }}
+        >
+          <DoneIcon fontSize="medium"/>
+        </button>
       </div>
+      <Feedback kanjiGrade={kanji_grade} passing={passing} />
     </div>
 
   );
