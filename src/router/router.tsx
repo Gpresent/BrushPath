@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { DarkModeProvider } from '../components/DarkModeContext';
 import Review from '../review_mode/review';
 import ReviewWordView from '../review_mode/components/rv_wordview';
+import Learn from '../pages/LearnDeck';
 
 const decks_info: Deck[] = [
   {
@@ -52,6 +53,7 @@ const ComponentRouter: React.FC = () => {
             <Route path="/settings" element={<SettingsView />} />
             <Route path="/review" element={<Review />} />
             <Route path="/review/character" element={<ReviewWordView />} />
+            <Route path="/deck/:id/learn" element={<Learn />} />
             <Route path="*" element={<ErrorComponent />}></Route>
           </Routes>
         </Layout>
