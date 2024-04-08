@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
+import {reviewItem} from "./features/spacedrep";
 import { useState } from 'react';
-import DrawRLink from './features/drawrmlink';
 import Character from '../types/Character';
 import PlayList from './components/rv_word_list';
 import { review_data } from './testdata';
