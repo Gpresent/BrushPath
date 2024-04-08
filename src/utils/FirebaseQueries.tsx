@@ -175,7 +175,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
 
 export const fetchAllCharacters = async (skipRef:string, take: number) => {
 
-  // console.log("skipRef is: " + skipRef)
+  console.log("skipRef is: " + skipRef)
 
   try {
     if(skipRef === "poop") {

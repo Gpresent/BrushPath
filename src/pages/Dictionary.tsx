@@ -30,14 +30,17 @@ interface DictionaryProps {
 }
 
 const DictionaryView: React.FC<DictionaryProps> = ({ kanjiList, setKanjiList, title, lastRef, setLastRef }) => {
+  // console.log("what the fuck")
 
   // const characterCache = useContext(CharacterSearchContext);
   const [loading, setLoading] = useState(false);
 
   const fetchChars = useCallback(async () => {
 
-    // console.log("lastRef changed")
     let batch = 30;
+
+    console.log(lastRef)
+    console.log(kanjiList.length)
 
     await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
       if (fetchResponse.cachedData) {
@@ -59,6 +62,8 @@ const DictionaryView: React.FC<DictionaryProps> = ({ kanjiList, setKanjiList, ti
       setLastRef(fetchResponse.skipRef);
     });
   }, [lastRef]);
+
+
 
   return (
     <div className="dictionary-view">
