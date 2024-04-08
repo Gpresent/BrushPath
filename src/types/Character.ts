@@ -15,7 +15,8 @@ type Character = {
     compounds: any;
     parts: string[];
     selected?: boolean;
-
+    coords: any;
+    totalLengths: number;
 };
 
 export default Character;

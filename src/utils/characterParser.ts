@@ -19,7 +19,9 @@ function characterParser(data: any) {
         grade: null,
         jlpt: null,
         compounds: undefined,
-        parts: []
+        parts: [],
+        coords: null,
+        totalLengths: 0,
     }
 
     if (data == null) {
@@ -45,7 +47,9 @@ function characterParser(data: any) {
         grade: data.grade,
         jlpt: data.jlpt,
         compounds: data.compounds,
-        parts: data.parts
+        parts: data.parts,
+        coords: [],
+        totalLengths: data.totalLengths
     }
 
     if (character.one_word_meaning == "") {
@@ -54,10 +58,22 @@ function characterParser(data: any) {
         }
     }
 
+    // console.log(data)
+
+    // console.log(data.radicals)
+
     data.radicals.forEach((element: any) => {
         character.radicals.push(element.value);
     });
 
+    // console.log() 
+    // console.log(data.coords)
+
+    // console.log([...(data.coords).values()])
+
+    // data.coords.forEach((element : any) => {
+    //     character.coords.push(element.value)
+    // })
 
     return character;
 }

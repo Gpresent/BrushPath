@@ -30,7 +30,7 @@ precacheAndRoute([{
 }, 
 {url : "/joyo_kanji/04f55.svg"}])
 
-// precacheAndRoute(kanjiList);
+precacheAndRoute(kanjiList);
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell

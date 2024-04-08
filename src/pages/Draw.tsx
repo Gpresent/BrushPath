@@ -49,7 +49,7 @@ const styles = {
 const parser = new DOMParser();
 
 interface DrawProps {
-  character?: Character;
+  character: Character;
   allowDisplay: boolean;
 }
 // Define types for coordinates
@@ -86,6 +86,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
+
+  let character = props.character
 
   useLayoutEffect(() => {
     if (props.character) {
@@ -206,7 +208,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
             setReadOnly(true);
             canvas.current.exportSvg().then((data: any) => {
-              grade(data, kanji, passing).then((grade: KanjiGrade) => {
+              grade(data, props.character, passing).then((grade: KanjiGrade) => {
                 setKanjiGrade(grade);
 
                 if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
