@@ -216,6 +216,7 @@ const Draw: React.FC<DrawProps> = (props) => {
               canvas.current.exportSvg().then((data: any) => {
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
                   setKanjiGrade(grade);
+                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     //console.log(grade)
