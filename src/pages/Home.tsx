@@ -5,6 +5,7 @@ import DeckList from "../components/DeckList";
 import { AuthContext } from "../utils/FirebaseContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { getDecksFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
+import Loading from "../components/Loading";
 
 
 const Home: React.FC = () => {

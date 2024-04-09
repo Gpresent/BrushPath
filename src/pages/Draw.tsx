@@ -89,7 +89,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
-  const [color, setColor] = React.useState("#FFFFFF");
+  const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
   useEffect(() => {
       console.log("in useeffect")

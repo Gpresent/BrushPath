@@ -1,3 +1,11 @@
+:root {
+  --background: white;
+  --border: black;
+  --text: black;
+  --deemphasized-1: #3a3a3ad7;
+  --deemphasized-2: #333;
+}
+
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,17 +21,21 @@ body {
   justify-content: 'space-between';
   align-content: center;
   align-items: 'center';
-  /*background-color: white;*/
-  /*color:#333;*/
+  background-color: var(--background);
+  color: var(--text);
+}
+
+input {
+  background-color: var(--background);
 }
 
 p {
   margin: 0;
-  color: #333;
+  color: var(--text);
 }
 
 .title {
-  color: #333;
+  color: var(--text);
 }
 
 
@@ -39,7 +51,7 @@ li {
 input {
   padding-left: 10px;
   height: 36px;
-  border: 1px solid rgba(77, 77, 77, 1);
+  border: 1px solid var(--deemphasized-1);
   border-radius: 10px;
   box-sizing: border-box;
 }
@@ -47,9 +59,9 @@ input {
 button {
   border-radius: 10px;
   height: fit-content;
-  background-color: white;
-  border: 1px solid #333;
-  color: #333;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  color: var(--deemphasized-2);
   font-size: 18px;
   font-family: 'DM Sans', sans-serif, -apple-system;
   font-weight: 500;
@@ -60,11 +72,11 @@ button {
 }
 
 .right-arrow {
-  color: #333;
+  color: var(--deemphasized-2);
 }
 
 .right-arrow-modal {
-  color: #333;
+  color: var(--deemphasized-2);
 }
 
 code {
@@ -88,7 +100,7 @@ code {
   padding-bottom: 10px;
   padding-left: 15px;
   padding-right: 15px;
-  background-color: white;
+  background-color: var(--background);
 }
 
 .header-wrapper {
@@ -114,12 +126,12 @@ code {
   margin-right: 20px;
   margin-left: 20px;
   /* box-sizing: border-box; */
-  color: #333;
+  color:var(--deemphasized-2);
 }
 
 .footer-wrapper {
-  border-top: 1.9px solid #3a3a3a6c;
-  background-color: white;
+  border-top: 1.9px solid var(--border);
+  background-color: var(--background);
   z-index: 10;
   padding-bottom: 15px;
   position: fixed;
@@ -136,7 +148,7 @@ code {
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  border: 1px solid #333;
+  border: 1px solid var(--deemphasized-2);
   border-radius: 10px;
   box-sizing: border-box;
   position: relative;
@@ -177,14 +189,15 @@ code {
   height: 52px;
   padding: 13px 10px 15px;
   border-top-width: 1px;
-  border-color: #333;
+  border-color: var(--deemphasized-2);
   border-top-style: solid;
   box-sizing: border-box;
+  color: var(--text);
   /* margin-top: 10px; */
 }
 
 .character {
-  color: #333;
+  color: var(--text);
   font-size: 32px;
   line-height: 69%;
   font-family: DM Sans, sans-serif;
@@ -195,7 +208,7 @@ code {
   /* position: absolute;
   top: 163px;
   left: 67px; */
-  color: #333;
+  color: var(--text);
   font-size: 24px;
   line-height: 69%;
   font-family: DM Sans, sans-serif;
@@ -206,7 +219,7 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  color: #333;
+  color: var(--text);
   font-size: 20px;
   line-height: 110%;
   font-family: DM Sans, sans-serif;
@@ -220,11 +233,11 @@ code {
   width: 100%;
   padding-left: 10px;
   height: 36px;
-  border: 1px solid #333;
+  border: 1px solid var(--border);
   border-radius: 10px;
   box-sizing: border-box;
-  background-color: white;
-  color: #333;
+  background-color: var(--background);
+  color: var(--deemphasized-2);
 }
 
 /* Dark Mode Toggle */
@@ -232,117 +245,37 @@ code {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid #333;
-  background-color: 333;
+  border: 2px solid var(--deemphasized-2);
+  background-color: var(--background);
   transition: background-color 0.3s;
   cursor: pointer;
 }
 
 .toggle-button.active {
-  background-color: #333;
+  background-color: var(--deemphasized-2);
 }
 
 
 
-
-
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #333;
-  color: #E0E0E0;
-}
-
-body.dark-mode .title,
-body.dark-mode .character,
-body.dark-mode .my-words,
-body.dark-mode .meaning,
-body.dark-mode .right-arrow,
-body.dark-mode .right-arrow-modal,
-body.dark-mode .footer,
-body.dark-mode .footer-wrapper,
-body.dark-mode .header,
-body.dark-mode .header-wrapper,
-body.dark-mode p,
-body.dark-mode h2,
-body.dark-mode li,
-body.dark-mode code,
-body.dark-mode .deck-card,
-body.dark-mode .word-card,
-body.dark-mode .cover-image,
-body.dark-mode .character-info,
-body.dark-mode .canvas,
-body.dark-mode .ldio-wxuczbvq7eh div,
-body.dark-mode .image-wrapper,
-body.dark-mode .icon-styling,
-body.dark-mode .deckTitle {
-  color: #E0E0E0;
-  border-color: #7C7C7C;
-}
-
-body.dark-mode input,
-body.dark-mode .search-bar,
-body.dark-mode .deck-header-wrapper,
-body.dark-mode button {
-  background-color: #333;
-  color: #E0E0E0;
-  border-color: #7C7C7C;
-}
-
-body.dark-mode .header,
-body.dark-mode .header-wrapper,
-body.dark-mode .footer-wrapper,
-body.dark-mode .modal-content {
-  background-color: #333;
-  border-color: #7C7C7C;
-}
-
-body.dark-mode .toggle-button {
-  border-color: #7C7C7C;
-  background-color: white;
-}
-
-body.dark-mode .toggle-button.active {
-  background-color: #333;
-}
-
-body.dark-mode .username-modal-content {
-  background-color: #333;
-  border-color: #7C7C7C;
-}
-
-body.dark-mode .pp-modal-content {
-  background-color: #333; 
-  border-color: #7C7C7C;
-}
-
-body.dark-mode label{
-  color: #b6b6b6;
-}
 .loading-bar-container {
   width: 99%;
 }
 .loading-bar-outer {
   height: 5px;
-  background-color: white;
+  background-color: var(--background);
   border-radius: 5px;
   overflow: hidden;
   border-width: 1px;
   border-style: solid;
-  border-color:#333;
-}
-body.dark-mode .loading-bar-outer {
-  background-color: #333; 
-  border-color: #7C7C7C;
+  border-color: var(--border);
 }
 
 .loading-bar {
   height: 100%;
-  background-color: #333; /* You can change the color as per your preference */
+  background-color: var(--deemphasized-2); /* You can change the color as per your preference */
   transition: width 0.3s ease;
 }
-body.dark-mode .loading-bar {
-  background-color: #E0E0E0; 
-}
+
 .loading-bar-text {
   padding-bottom: .5rem;
 }

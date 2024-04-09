@@ -13,7 +13,7 @@ export default function gradeToColor(score: number) {
     }else if(80 < score){
         return "#8EF076";
     }else{
-        return "#FFFFFF";
+        return "rgba(0,0,0,0)";
     }
 }
 

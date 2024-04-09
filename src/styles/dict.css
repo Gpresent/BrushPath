@@ -81,7 +81,7 @@
 .mastery-desc {
     font-size: 20px;
     padding-top: 10px;
-    border-top: 1.5px solid rgba(0, 0, 0, 1);
+    border-top: 1.5px solid var(--border);
     width: 100%;
     max-width: 500px;
 
@@ -96,6 +96,6 @@
     margin: 10px;
     margin-left: 0;
     margin-right: 0;
-    color: #3a3a3ad7;
+    color: var(--deemphasized-1);
     gap: 5px;
 }

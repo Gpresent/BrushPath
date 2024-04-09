@@ -14,7 +14,7 @@
 
 label {
     font-size: 16px;
-    color:  rgba(77, 77, 77, 1);
+    color: var(--deemphasized-1);
 }
 
 .form-group {
