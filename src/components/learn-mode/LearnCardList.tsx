@@ -5,7 +5,7 @@ import '../../styles/learn.css'
 import LearnCard from './LearnCard';
 import KanjiGrade from '../../types/KanjiGrade';
 import { grad } from '@tensorflow/tfjs';
-import { CharacterSearchProvider } from '../../utils/FirebaseCharacterSearchContext';
+// import { CharacterSearchProvider } from '../../utils/FirebaseCharacterSearchContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface LearnCardListProps {

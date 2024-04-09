@@ -83,8 +83,10 @@ const LearnDeck: React.FC<LearnProps> = ({  }) => {
                 setCharacters({ data: null, loading: false, error: "Error fetching character data" });
                 return;
             }
-            setCharacters({ data: fetchedChars
-                .map((character: any) => characterParser(character)).filter((character: Character | null): character is Character => character !== null).slice(0,2), loading: false, error: "" });
+            const filteredChars = fetchedChars
+            .map((character: any) => characterParser(character)).filter((character: Character | null): character is Character => character !== null).slice(0,numCharacters)
+            console.log(filteredChars);
+            setCharacters({ data: filteredChars, loading: false, error: "" });
             
         })
         
@@ -101,7 +103,8 @@ const LearnDeck: React.FC<LearnProps> = ({  }) => {
     return (<div>
         {characters.loading? <LoadingSpinner /> :
         characters.error || characters.data == null? <p>{characters.error}</p>:
-        <LearnCardList characters={characters.data} />
+        characters.data.length > 0? <LearnCardList characters={characters.data} />:
+        <p>LEarned them all</p>
         }
         
     </div>)
