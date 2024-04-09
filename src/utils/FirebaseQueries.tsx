@@ -190,7 +190,7 @@ export const fetchAllCharacters = async (skipRef:string, take: number) => {
     if(skipRef === "") {
       //TODO Order by created date
       paginatedQuery = query(collection(db, "Character"),
-      // orderBy("unicode_str"),
+      orderBy("unicode_str"),
       limit(take));
     }
     //Middle case, unicode_str = something
@@ -206,7 +206,7 @@ export const fetchAllCharacters = async (skipRef:string, take: number) => {
       // console.log(lastDocumentSnapshot)
 
       paginatedQuery = query(collection(db, "Character"),
-      // orderBy("unicode_str"),
+      orderBy("unicode_str"),
       startAfter(lastDocumentSnapshot),
       limit(take));
     }

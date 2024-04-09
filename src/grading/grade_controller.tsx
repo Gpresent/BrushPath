@@ -3,11 +3,10 @@ import interpolate from './interpolate';
 import color_input from './color_input';
 import { Heap } from 'heap-js';
 import KanjiGrade from '../types/KanjiGrade';
-import Character from '../types/Character';
 
 class interp_data {
     coords! : [];
-    length!: number;
+    totalLengths!: number;
 }
 
 var passing = 0.65;
@@ -255,7 +254,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     return [gradeColors, strokeInfo, feedback, aspectString, failing]
 }
 
-export default function grade(input: string, targetKanji: Character, passing: number): Promise<KanjiGrade> {
+export default function grade(input: string, targetKanji: string, passing: number): Promise<KanjiGrade> {
     kanji_grade = {
         overallGrade: 100,
         overallFeedback: "",
@@ -266,19 +265,12 @@ export default function grade(input: string, targetKanji: Character, passing: nu
     passing = passing;
 
     return new Promise((resolve, reject) => {
-        // targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
-            // .then(response => response.json())
-            // .then(data => {
-                console.log(targetKanji)
-                console.log("GRADING")
-                var targetInfo = targetKanji
-                // console.log(targetInfo)
-                const tCoords = targetKanji.coords;
+        fetch("/interpolation_data/" + targetKanji.codePointAt(0)?.toString(16).padStart(5, '0') + ".json")
+            .then(response => response.json())
+            .then(data => {
+                var targetInfo = data as unknown as interp_data;
+                const tCoords = targetInfo.coords;
                 const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
-
-                console.log(tCoords)
-                // console.log("icoords: " + iCoords)
-
                 if (!iCoords.length) return;
                 let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately
                 if (iCoords.length > tCoords.length) {
@@ -319,6 +311,10 @@ export default function grade(input: string, targetKanji: Character, passing: nu
                 
                 
                 resolve (kanji_grade);
-            
+            })
+            .catch(error => {
+                console.error("Error grading:", error);
+                return kanji_grade;
+            });
     });
 }
