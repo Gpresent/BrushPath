@@ -92,7 +92,7 @@ const Home: React.FC = () => {
 
 
   }, [userData]);
-
+  let navigate = useNavigate()
 
 
   // const character: Character = characterParser(charData);
