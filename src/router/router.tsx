@@ -14,6 +14,9 @@ import DrawReview from '../pages/DrawReview';
 import { useState } from 'react';
 
 import { DarkModeProvider } from '../components/DarkModeContext';
+import Review from '../review_mode/review';
+import ReviewWordView from '../review_mode/components/rv_wordview';
+import Learn from '../pages/LearnDeck';
 
 const decks_info: Deck[] = [
   {
@@ -32,8 +35,13 @@ const decks_info: Deck[] = [
     name: "another dope deck",
   }
 ]
+
 const ComponentRouter: React.FC = () => {
+
   const [showHeader, setShowHeader] = useState(true);
+  const [kanjiList, setKanjiList] = useState<any[]>( []);
+  const [lastRef, setLastRef] = useState("");
+
 
   return (
     <DarkModeProvider>
@@ -41,13 +49,16 @@ const ComponentRouter: React.FC = () => {
         <Layout showHeader={showHeader}>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
-            <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
+            {/* <Route path="/draw" element={<Draw allowDisplay={true} />}></Route> */}
+            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef}/>} />
             <Route path="/character" element={<SingleWordView />} />
             <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
             <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
             <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
             <Route path="/settings" element={<SettingsView />} />
+            <Route path="/review" element={<Review />} />
+            <Route path="/review/character" element={<ReviewWordView />} />
+            <Route path="/deck/:id/learn" element={<Learn />} />
             <Route path="*" element={<ErrorComponent />}></Route>
           </Routes>
         </Layout>

@@ -195,6 +195,9 @@ code {
   color: var(--text);
   /* margin-top: 10px; */
 }
+.selected {
+  background-color: #E0E0E0
+}
 
 .character {
   color: var(--text);
@@ -235,6 +238,7 @@ code {
   height: 36px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   background-color: var(--background);
   color: var(--deemphasized-2);

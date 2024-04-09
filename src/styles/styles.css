@@ -329,6 +329,9 @@ body {
     text-align: center;
 }
 
+.selected {
+    color: red;
+}
 
 .icon-1 {
     display: flex;
@@ -525,7 +528,7 @@ body {
 
 .deck-header-wrapper{
     padding-top: 10px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     position: sticky;
     top: 54px;
     background-color: var(--background);
@@ -553,6 +556,15 @@ body {
 }
 
 /* Loading page */
+
+.not-found {
+    /* width: 100%; */
+    display: flex;
+    justify-content: center;
+    color: #777;
+    align-self: center;
+    margin: 10px;
+}
 
 .loading{
     width: 100%;

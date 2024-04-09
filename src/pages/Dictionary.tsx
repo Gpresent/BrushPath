@@ -1,126 +1,86 @@
-import React, { Suspense, useContext, useEffect, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import "../styles/styles.css";
 import "../styles/dict.css";
 import Character from "../types/Character";
 import WordList from "../components/WordList";
 import characterParser from "../utils/characterParser";
-import app, { auth, db } from '../utils/Firebase'
-import { AuthContext } from "../utils/FirebaseContext";
-
-
-import MiniSearch from 'minisearch'
+import app, { auth, db } from "../utils/Firebase";
+import { fetchAllCharacters } from "../utils/FirebaseQueries";
 
 import {
-  collection,
-  getDocs,
-  limit,
-  query,
-  where,
+  DocumentData,
 } from "firebase/firestore";
 import Loading from "../components/Loading";
-import { CharacterSearchContext } from "../utils/CharacterSearchContext";
-import LoadingBar from "../components/LoadingBar";
+import InfiniteScroll from "react-infinite-scroller";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 interface DictionaryProps {
   title: string;
+  kanjiList: Character[];
+  setKanjiList: React.Dispatch<React.SetStateAction<any[]>>;
+  lastRef: string;
+  setLastRef: React.Dispatch<React.SetStateAction<string>>;
 }
 
-interface KanjiCharacter {
-  id: string; // Unique identifier for MiniSearch
-  kanji: string;
-  meanings: string[];
-  // Add other properties as needed
-}
+const DictionaryView: React.FC<DictionaryProps> = ({ kanjiList, setKanjiList, title, lastRef, setLastRef }) => {
+  // console.log("what the fuck")
 
-
-
-// Debounce hook
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-
-const DictionaryView: React.FC<DictionaryProps> = ({ title }) => {
-  const contextValue = db;
-
-  const characterCache = useContext(CharacterSearchContext);
-  const [kanjiList, setKanjiList] = useState<KanjiCharacter[]>([]);
-  const [filteredKanjiList, setFilteredKanjiList] = useState<any[]>([]);
+  // const characterCache = useContext(CharacterSearchContext);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
-  // Add debounce delay in milliseconds
-  const debounceDelay = 300;
+  const fetchChars = useCallback(async () => {
 
-  // Debounced search term
-  const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
+    let batch = 30;
 
-  useEffect(() => {
-    setLoading(true);
-    if (debouncedSearchTerm) {
-      const results = characterCache?.search?.search(debouncedSearchTerm, {
-        boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
-        fuzzy: 2,
-        prefix:true
-      });
+    console.log(lastRef)
+    console.log(kanjiList.length)
 
-      const cleanResults = results?.filter(result => result !== undefined && result !== null)
-        .map((result: any) => characterParser(result));
+    await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
+      if (fetchResponse.cachedData) {
+        // console.log("got data")
+        let newData = fetchResponse.cachedData
+          .filter((result) => result !== undefined && result !== null)
+          .map((value: DocumentData) => characterParser(value))
+          .filter(
+            (result) =>
+              result !== null &&
+              result !== undefined &&
+              !kanjiList.includes(result)
+          );
+        // console.log("data is processed")
+        setKanjiList(kanjiList.concat(newData as any));
+      } else {
+        // console.log("deck.data or something not found, not fetching");
+      }
+      setLastRef(fetchResponse.skipRef);
+    });
+  }, [lastRef]);
 
-      setFilteredKanjiList(cleanResults ? cleanResults : []);
-    } else {
-      setFilteredKanjiList(kanjiList);
-    }
-    setLoading(false);
-  }, [debouncedSearchTerm]);
-  
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
-
-
-  useEffect(() => {
-    setLoading(true);
-      const results = characterCache?.search?.search("a", {
-        boost: { unicode: 4, unicode_str: 4, one_word_meaning: 3, meanings: 2 },
-        fuzzy: 2,
-        prefix:true
-      });
-
-      const cleanResults = results?.filter(result => result !== undefined && result !== null)
-        .map((result: any) => characterParser(result));
-
-      setFilteredKanjiList(cleanResults ? cleanResults : []);
-    
-    setLoading(false);
-  }, []);
 
 
   return (
     <div className="dictionary-view">
       <p className="my-words">Dictionary</p>
-      {characterCache.search?.documentCount !== characterCache.numChars &&
-      <LoadingBar progress={characterCache.search?.documentCount || 0} duration={characterCache.numChars} message={"Indexing search..."} />
-}
-      <input className="search-bar" onChange={handleSearch}
-        placeholder="Search kanji..." />
-      {loading ? <Loading /> : <WordList words={filteredKanjiList} />}
+      <InfiniteScroll
+        style={{width: "100%"}}
+        pageStart={0}
+        loadMore={fetchChars}
+        hasMore={(kanjiList.length < 2136) && (lastRef != "poop")}
+        // loader={<LoadingSpinner />}
+        useWindow={false}
+      >
+        {<WordList words={kanjiList} />}
+      </InfiniteScroll>
+      
     </div>
   );
 };
-
 
 export default DictionaryView;

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useContext, useLayoutEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -13,6 +13,8 @@ import Character from "../types/Character";
 import KanjiGrade from "../types/KanjiGrade";
 import { interpretImage } from "../recogition/interpretImage";
 import type PredictionResult from "../recogition/predictionDisplay";
+import { AuthContext } from "../utils/FirebaseContext";
+import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
 import Feedback from "../grading/Feedback";
 import gradeToColor from "../utils/gradeToColor";
 
@@ -56,6 +58,7 @@ const parser = new DOMParser();
 
 interface DrawProps {
   character?: Character;
+  handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
   allowDisplay: boolean;
 }
 // Define types for coordinates
@@ -73,6 +76,7 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
+  const {userData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const canvasElement = document.getElementById("react-sketch-canvas");
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
@@ -102,8 +106,12 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
+  let character = props.character
+
   useLayoutEffect(() => {
     if (props.character) {
+      console.log("in Draw", props.character.unicode)
+      // setKanji(props.character.unicode); 
       setKanji(props.character.unicode);
       setAskInput(false);
     }
@@ -155,6 +163,14 @@ const Draw: React.FC<DrawProps> = (props) => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    // This function will be called whenever someProp changes
+    // Perform any necessary actions here
+    // Example: setState(...)
+    
+    setAllowDisplaySVG(props.allowDisplay)
+  }, [props.allowDisplay]);
 
   return (
     <div style={styles.container}>
@@ -224,9 +240,14 @@ const Draw: React.FC<DrawProps> = (props) => {
             if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
+                console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
+                  if(props.handleComplete && props.character) {
+                    props.handleComplete(props.character,grade)
+                  }
+                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     //console.log(grade)
@@ -250,6 +271,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
                           }));
                         }
+                        
+                        
                       }).catch(error => {
                         console.error('Error interpreting image:', error);
                       });

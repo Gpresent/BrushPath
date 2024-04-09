@@ -1,4 +1,5 @@
 type Character = {
+    id: string;
     unicode: string;
     unicode_str: string;
     on: string[];
@@ -13,7 +14,9 @@ type Character = {
     jlpt: number | null;
     compounds: any;
     parts: string[];
-
+    selected?: boolean;
+    coords: any;
+    totalLengths: number;
 };
 
 export default Character;
