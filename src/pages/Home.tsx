@@ -12,7 +12,7 @@ import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { userInfo } from "os";
-import { getDecksFromRefs, getDeckFromID, getCharacterScoreData, getHydratedCharacterScoreData } from "../utils/FirebaseQueries";
+import { getDecksFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 // interface HomeProps {
@@ -130,9 +130,7 @@ const Home: React.FC = (props) => {
       setLoading(false);
     });
     if(userData) {
-      getHydratedCharacterScoreData(userData.email).then((characterScores:any) => {
-        console.log(characterScores)
-      })
+      
     } 
     
 

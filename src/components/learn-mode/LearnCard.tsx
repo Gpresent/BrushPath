@@ -18,14 +18,14 @@ const LearnCard: React.FC<LearnCardProps>  = ({character, handleAdvance}) => {
 
 
     const handleComplete = (character: Character, grade: KanjiGrade) => {
-        console.log(JSON.stringify(grade));
+        // console.log(JSON.stringify(grade));
         if(!allowDisplay) {
             const gradeIsNull = (grade !== null && grade.overallGrade ===null || isNaN(grade.overallGrade) )
             const gradeIsNotHighEnough = (grade !== null && grade.grades.length > 0 && Math.max(...grade.grades) < 60)
-            debugger;
+            // debugger;
             setAllowDisplay(gradeIsNotHighEnough || gradeIsNull);
         }
-        console.log("complete")
+        // console.log("complete")
                     setGrade(grade);
     }
 

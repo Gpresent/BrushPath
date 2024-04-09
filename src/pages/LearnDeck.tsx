@@ -1,6 +1,6 @@
 import react, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCharacterScoreData, getCharsFromRefs, getDeckFromID, getHydratedCharacterScoreData } from "../utils/FirebaseQueries";
+import { getCharacterScoreData, getCharsFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { AuthContext } from "../utils/FirebaseContext";
 import LoadingSpinner from "../components/LoadingSpinner";

@@ -69,8 +69,8 @@ const LearnCardList: React.FC<LearnCardListProps>  = ({characters, refetch}) => 
     const avgScore = useMemo(() => {
         const scoredChars = characterSessionData.filter((character) => {return character.score !== undefined;});
         return scoredChars.reduce((accumulator,char) => {
-            console.log(char.score?.grades ? Math.max(...char.score?.grades || 0):0);
-            console.log(char.unicode);
+            // console.log(char.score?.grades ? Math.max(...char.score?.grades || 0):0);
+            // console.log(char.unicode);
             return char.score?.grades ? Math.max(...char.score?.grades || 0) + accumulator: accumulator
         },0)/scoredChars.length;
     }, [characterSessionData])
