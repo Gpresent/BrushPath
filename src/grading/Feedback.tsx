@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import KanjiGrade from "../types/KanjiGrade";
+import "../styles/dict.css";
 import "../styles/feedback.css";
 import { useEffect } from "react";
 import { gradeToWord } from "../utils/gradeToColor";
-// import * from "@react-swipeable-views"
-import { MobileStepper } from "@mui/material";
-import ArrowForward from "@mui/icons-material/ArrowForward";
-import SwipeableViews from 'react-swipeable-views'
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import ExpandLess from "@mui/icons-material/ExpandLess";
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
@@ -20,13 +19,17 @@ function pageCreator(feedback: string, index: number) {
   return (
     <div className="feedback" key={index}>
       <div className="feedback-box-strokes">
-        <h4>{sentences[0].slice(0, sentences[0].indexOf(":"))}</h4>
+        <div style={{ fontWeight: "500" }}>
+          {sentences[0].slice(0, sentences[0].indexOf(":"))}
+        </div>
         {sentences.map((sentence, sentenceIndex) => {
           if (sentence.trim() === "") return null;
           if (sentenceIndex === 0) {
             return;
           }
-          return <p key={sentenceIndex * index}>&#x2022; {sentence}</p>;
+          return (
+            <div key={sentenceIndex + "_" + index}>&#x2022; {sentence}</div>
+          );
         })}
       </div>
     </div>
@@ -38,11 +41,14 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const color = props.color;
   const passing = props.passing;
   const canvasElement = document.getElementById("react-sketch-canvas");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showDots, setShowDots] = useState(false);
+  const [gradeInfo, setGradeInfo] = React.useState(false);
+  const [haveGradeInfo, setHaveGradeInfo] = React.useState(true);
 
-console.log(kanji_grade)
+  // console.log(kanji_grade);
 
   useEffect(() => {
-    console.log("color is: " + color);
     document.querySelectorAll(".feedback-container").forEach((container) => {
       let isScrolling: ReturnType<typeof setTimeout>;
 
@@ -56,6 +62,8 @@ console.log(kanji_grade)
           );
 
           if (index !== -1) {
+            // setCurrentIndex(index);
+
             const nextBoxLeft = children[index].offsetLeft;
             const prevBoxLeft = index > 0 ? children[index - 1].offsetLeft : 0;
 
@@ -67,48 +75,125 @@ console.log(kanji_grade)
               left: targetLeft,
               behavior: "smooth",
             });
+            // console.log("index is: " + currentIndex)
           }
         }, 50); // Adjust debounce delay as needed (in milliseconds)
       });
     });
   }, []);
 
+  useEffect(() => {
+    let hasInfo = false;
+    kanji_grade.grades.forEach((grade, index) => {
+      if (
+        grade >= passing ||
+        grade === -1 ||
+        kanji_grade.feedback.length <= index
+      )
+        return;
+      // return null;
+      const path = canvasElement?.getElementsByTagName("path")[index];
+      if (!path) return;
+
+      // setShowDots(true);
+      hasInfo = true;
+      return;
+    });
+    // setHaveGradeInfo(hasInfo);
+    setShowDots(hasInfo);
+  }, [kanji_grade.grades]);
+
   return (
     <>
-      {/* <div className="feedback-container">
-       */}
-       <SwipeableViews>
-       
+      <div>
         <div className="feedback-header">
           {kanji_grade.overallGrade != -1 && (
             <div className="feedback-box">
-              <div style={{display:"flex", alignItems:"center", alignSelf:"start", width:"100%"}}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  alignSelf: "start",
+                  width: "100%",
+                }}
+              >
                 <div
                   className="grade-circle"
                   style={{ backgroundColor: color }}
                 >
                   {Math.round(kanji_grade.overallGrade)}
-                </div> 
+                </div>
 
                 <div className="score-overview">
                   <div className="your-score">Your Score:</div>
                   <div className="feedback-word">
                     {gradeToWord(kanji_grade.overallGrade)}
                   </div>
-                  <ArrowForward/>
                 </div>
               </div>
 
-              {kanji_grade.overallFeedback !== "" && (
-                <p>{kanji_grade.overallFeedback}</p>
+              {haveGradeInfo && (
+                <>
+                  <div
+                    className="grade-info-button"
+                    onClick={() => {
+                      // console.log("clicked");
+                      setGradeInfo(!gradeInfo);
+                      document
+                        .getElementsByClassName("grade-info")[0]
+                        ?.classList.toggle("info-hidden");
+                    }}
+                  >
+                    {gradeInfo ? (
+                      <>
+                        {" "}
+                        Less Feedback <ExpandLess fontSize="medium" />
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        More Feedback <ExpandMore fontSize="medium" />
+                      </>
+                    )}
+                  </div>
+                  <div className="grade-info info-hidden">
+                    {kanji_grade.overallFeedback !== "" && (
+                      <div>{kanji_grade.overallFeedback}</div>
+                    )}
+                    {kanji_grade.grades.map((grade, index) => {
+                      if (
+                        grade >= passing ||
+                        grade === -1 ||
+                        kanji_grade.feedback.length <= index
+                      )
+                        return null;
+                      const path =
+                        canvasElement?.getElementsByTagName("path")[index];
+                      if (!path) return null;
+
+                      return pageCreator(kanji_grade.feedback[index], index);
+                    })}
+                  </div>
+                </>
               )}
-              {/* <MobileStepper steps={}></MobileStepper> */}
             </div>
           )}
         </div>
-        {/* {kanji_grade.feedback.map((feedback) => {
-            return(<div>{feedback}</div>)
-        })} */}
+      </div>
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
+        {showDots && (
+          // <span
+          //   style={{
+          //     display: "inline-block",
+          //     width: "10px",
+          //     height: "10px",
+          //     borderRadius: "50%",
+          //     backgroundColor: 0 === currentIndex ? "blue" : "gray",
+          //     margin: "0 5px",
+          //   }}
+          // />
+          <></>
+        )}
         {kanji_grade.grades.map((grade, index) => {
           if (
             grade >= passing ||
@@ -118,11 +203,22 @@ console.log(kanji_grade)
             return null;
           const path = canvasElement?.getElementsByTagName("path")[index];
           if (!path) return null;
-
-          return pageCreator(kanji_grade.feedback[index], index);
+          return (
+            // <span
+            //   key={index}
+            //   style={{
+            //     display: "inline-block",
+            //     width: "10px",
+            //     height: "10px",
+            //     borderRadius: "50%",
+            //     backgroundColor: index  === currentIndex ? "blue" : "gray",
+            //     margin: "0 5px",
+            //   }}
+            // />
+            <></>
+          );
         })}
-      {/* </div> */}
-      </SwipeableViews>
+      </div>
     </>
   );
 };

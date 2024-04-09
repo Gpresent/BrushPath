@@ -1,8 +1,10 @@
 .grade-info {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     overflow-x: scroll;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
 
 }
 
@@ -28,19 +30,20 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 100%;
-    margin-left: 1rem;
+    /* min-width: 100%;
+    margin-left: 1rem; */
     overflow: wrap;
+    margin-bottom: 10px;
 }
 
 .feedback-box-strokes {
     display: flex;
     flex-direction: column;
-    padding: 0 1rem;
+    /* padding: 0 1rem;
     padding-bottom: 1rem;
-    min-width: calc(99% - 2rem);
+    min-width: calc(99% - 2rem); */
     overflow: wrap;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
 }
 
@@ -51,6 +54,18 @@
     justify-content: center;
     min-width: 100%;
     overflow: wrap;
+}
+
+.grade-info-button {
+    display: flex;
+    width: -webkit-fill-available;
+    border-radius: 10px;
+    justify-content: flex-end;
+    margin: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    color: #3a3a3ad7;
+    gap: 5px;
 }
 
 .score-overview{
@@ -70,14 +85,17 @@
 }
 
 .feedback-box {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     align-items: center;
-    padding: 0 1rem;
+    /* padding: 0 1rem;
+     */
     min-width: calc(99% - 2rem);
     overflow: wrap;
     /* border: 1px solid black; */
-    border-radius: 10px;
+    /* border-radius: 10px; */
+    border-bottom: 1.5px solid rgba(0, 0, 0, 1);
+    /* padding-bottom: 20px; */
 }
 
 .grade-circle {

@@ -75,6 +75,7 @@
     max-height: 0;
     padding-bottom: 0;
     transition: all 0.3s ease;
+    margin-bottom: 0 !important;
 }
 
 .mastery-desc {
@@ -82,14 +83,19 @@
     padding-top: 10px;
     border-top: 1.5px solid rgba(0, 0, 0, 1);
     width: 100%;
+    max-width: 500px;
+
 }
 
 .character-info-button {
     display: flex;
     width: -webkit-fill-available;
+    max-width: 500px;
     border-radius: 10px;
     justify-content: flex-end;
     margin: 10px;
+    margin-left: 0;
+    margin-right: 0;
     color: #3a3a3ad7;
     gap: 5px;
 }
