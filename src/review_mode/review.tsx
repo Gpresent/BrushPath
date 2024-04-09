@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import {reviewItem} from "./features/spacedrep";
+import { ReviewFlashCard } from './components/rv_flashcard';
 import { useState } from 'react';
 import Character from '../types/Character';
 import PlayList from './components/rv_word_list';
 import { review_data } from './testdata';
-import { getCharacterScoreDataByUser, getCharsFromRefs } from '../utils/FirebaseQueries';
+import { getCharacterScoreDataByUser, getCharsFromRefs, getCharacterScoreData, getHydratedCharacterScoreData } from '../utils/FirebaseQueries';
 import { AuthContext } from '../utils/FirebaseContext';
 import { DocumentReference } from 'firebase/firestore';
 const jlptN5Kanji: any = [
@@ -29,46 +30,67 @@ const jlptN5Kanji: any = [
     { id: 19, unicode: "金", hiragana: "きん/こん", one_word_meaning: "gold/metal" },
     { id: 20, unicode: "土", hiragana: "ど/と", one_word_meaning: "earth" },
   ];
+
+const convertTimeStampData = (time: {seconds:number, nanoseconds:number}) => {
+    return new Date(time.seconds * 1000 + Math.round(time.nanoseconds/1e6));
+}
 const Review: React.FC = () => {
     // query all words attempted
     // query all words not attempted
     // update word info
-  const { characterCache } = useContext(AuthContext);
-    
-    
-    const getCharScores = async () => {
-        const chars = await getCharacterScoreDataByUser("naimurrah01@tamu.edu");
-        // console.log(chars)
-        return chars
-    }
-    
-    const convert_char_with_attempt_date  = () => {
-        
 
+    // const getCharScores = async () => {
+    //     const chars = await getCharacterScoreData("naimurrah01@tamu.edu");
+    //     // console.log(chars)
+    //     return chars
+    // }
+    
+    // const getChars = async () => {
+    //     // create char_refs
+    //     let char_scores = await getCharScores();
+    //     let char_refs: DocumentReference[] = [];
+    //     // console.log("chars");
+    //     // console.log(char_scores)
+    //     char_scores?.forEach((item:any)=>{char_refs.push(item.characterRef)})
+    //     let chars = await getCharsFromRefs(char_refs, 0);
+    //     console.log("getchars")
+    //     console.log(chars)
+    // }
+    // getChars();
+    // getCharsWithProps();
+    
+    // functions
+    const getCharsWithProps = async () => {
+        const chars = await getHydratedCharacterScoreData("naimurrah01@tamu.edu");
+        console.log("PROPS");
+        // Object.keys(chars).forEach(item => console.log(convertTimeStampData(chars[item].nextReviewDate)));
+        // chars.forEach((element:any) => {
+        //     console.log(element.nextReviewDate)
+        // });
     }
     
-    const getChars = async () => {
-        // create char_refs
-        let char_scores = await getCharScores();
-        let char_refs: DocumentReference[] = [];
-        // console.log("chars");
-        // console.log(char_scores)
-        char_scores?.forEach((item:any)=>{char_refs.push(item.characterRef)})
-        let chars = await getCharsFromRefs(char_refs, 0);
-        console.log(chars)
-    }
-    getChars();
     const get_queue = (): Character[] => {
         let queue:Character[] = [];
         queue = jlptN5Kanji;
         return queue;
     }
+    
+    // states
     const [words, setWords] = useState<Character[]>(get_queue());
-
+    const [wordIndex, setWordIndex] = useState<number>(1);
     // const [showHeader, setShowHeader] = useState(true);
     return (
         <>
-            <PlayList words={words}/>
+            {/* <PlayList words={words}/> */}
+            <div>
+                <p>Controls</p>
+                <button disabled={false} onClick={()=>setWordIndex(wordIndex - 1 >= 0? wordIndex - 1: 0)}>Previous</button>
+                <button onClick={()=>setWordIndex(wordIndex + 1 < words.length ? wordIndex + 1: words.length-1)}>Continue</button>
+            </div>
+            <div>
+                Word Index={wordIndex}
+            </div>
+            <ReviewFlashCard/>
         </>
         
     );
