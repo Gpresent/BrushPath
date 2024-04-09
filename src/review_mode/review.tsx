@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import Draw from '../pages/Draw';
-import {reviewItem} from "./features/spacedrep";
+import {reviewItem} from "../utils/spacedrep";
 import { ReviewFlashCard } from './components/rv_flashcard';
 import { useState } from 'react';
 import Character from '../types/Character';
@@ -10,6 +10,7 @@ import { getCharacterScoreDataByUser, getCharsFromRefs, getCharacterScoreData, g
 import { AuthContext } from '../utils/FirebaseContext';
 import { DocumentReference } from 'firebase/firestore';
 import DrawReview from '../pages/DrawReview';
+import { Repetition } from './features/repTest';
 
 // const jlptN5Kanji: any = [
 //     { id: 1, unicode: "一", hiragana: "いち", one_word_meaning: "one" },
@@ -129,6 +130,7 @@ const Review: React.FC = () => {
 
             }
             <ReviewFlashCard/>
+            <Repetition/>
         </>
         
     );

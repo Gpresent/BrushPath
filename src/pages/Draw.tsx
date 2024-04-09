@@ -219,7 +219,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                 console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
                   setKanjiGrade(grade);
-                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)
+                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     //console.log(grade)

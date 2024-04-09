@@ -33,7 +33,7 @@ import {
 } from "firebase/storage";
 import { FirebaseError } from "firebase/app";
 import Character from "../types/Character";
-
+import { reviewItem } from "./spacedrep";
 //Sam code
 
 // export const getDecksFromRefs = async (deckRefs: any) => {
@@ -365,7 +365,7 @@ export const updateUserName = async (newName: string) => {
   }
 };
 
-export const upsertCharacterScoreData = async (userID: string, characterID: string, score:number) => {
+export const upsertCharacterScoreData = async (userID: string, characterID: string, grade:number) => {
   try {
     if(userID === "") {
       throw "UserID is empty"
@@ -374,6 +374,7 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
       throw "characterID is empty"
     }
 
+    
     console.log(userID)
     console.log(characterID)
     const characterRef = doc(db, "Character", characterID);
@@ -381,22 +382,32 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
 
     const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef), where("characterRef","==",characterRef));
     const characterScoreResult = await getDocs(characterScoreQuery);
+    
+    let score = grade < 65 ? 0:5;
+    let repetition = 0;
+    let interval= 0;
+    let easeFactor = 1.25;
+    let nextReviewDate = Timestamp.now();
 
+    console.log("result", characterScoreResult);
     // If the document exists, update it; otherwise, create a new document
     if (!characterScoreResult.empty) {
       characterScoreResult.forEach(async (doc) => {
-        await setDoc(doc.ref, { score, last_time_practice: Timestamp.now(), nextReviewDate: Timestamp.now() }, { merge: true });
+        const data = doc.data();
+        const repData = reviewItem(characterID, score, data.repetition, data.interval, data.easeFactor );
+        console.log(data);
+        console.log("updateRepData", repData);
+        
+        await setDoc(doc.ref, { score, last_time_practice: Timestamp.now(), ...repData }, { merge: true });
         console.log("CharacterScore document updated:", doc.id);
       });
     } else {
-      await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, interval: 0, repetition: 0, last_time_practice: Timestamp.now(), nextReviewDate: Timestamp.now()});
+      const repData = reviewItem(characterID, score,repetition, interval, easeFactor);
+      console.log("repData", repData);
+
+      await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, last_time_practice: Timestamp.now(), ...repData});
       console.log("New CharacterScore document created.");
     }
-
-
-
-
-    
 
   } catch (error) {
     console.error("Error upserting CharacterScore:", error);
