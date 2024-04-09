@@ -7,6 +7,7 @@ import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { updateUserDeck } from "../utils/FirebaseQueries";
+import Modal from "./Modal";
 import WordList from "./WordList";
 import SearchableCharacterList from "./SearchableCharacterList";
 
@@ -98,14 +99,10 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>
-          &times;
-        </span>
-        <div className="deck-title-display">
+    <Modal title={"Edit Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
+        {/* <div className="deck-title-display">
           <h2>{deckName}</h2>
-        </div>
+        </div> */}
         {/* <ul className="add-word-list">
           {characters?.map((kanji) => (
             <li key={kanji?.unicode_str}>
@@ -122,8 +119,7 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
         </ul> */}
         <SearchableCharacterList selectable={true} selectedKanji={selectedKanji} setSelectedKanji={setSelectedKanji} />
         <button onClick={handleSubmit}>Submit</button>
-      </div>
-    </div>
+      </Modal>
   );
 };
 

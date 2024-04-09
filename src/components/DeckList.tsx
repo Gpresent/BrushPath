@@ -6,13 +6,14 @@ import { DocumentData } from 'firebase/firestore';
 interface DeckListProps {
   decks: any[],
   user: DocumentData,
+  length: number,
 }
 
-const DeckList: React.FC<DeckListProps> = ({ decks, user }) => {
+const DeckList: React.FC<DeckListProps> = ({ decks, user, length }) => {
 
   return (
     <div className="deck-list">
-      {decks.map((deck, index) => (
+      {decks.slice(0, length).map((deck, index) => (
         <DeckCard
           key={index} // Using the index as a key
           deck={deck}

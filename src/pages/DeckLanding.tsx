@@ -90,12 +90,12 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       </div>
       {/* <HomeStats /> */}
       <div className="deck-list-container">
-        {!userData ? (
-          <LoadingSpinner />
-        ) : (
-          <DeckList decks={decks} user={userData} />
-        )}
-      </div>
+
+        {
+          !userData ? <LoadingSpinner /> : <DeckList decks={decks}
+            user={userData} length={decks.length} />
+        }
+      </div >
       <KanjiModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
