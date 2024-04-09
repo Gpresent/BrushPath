@@ -80,12 +80,12 @@ const LearnCardList: React.FC<LearnCardListProps>  = ({characters, refetch}) => 
 
     //Todo, replace divs with actual tags lol
     return (
-        <div className='learn-cards-container'>
-            <p>
+        <div >
+            {/* <p>
                 Kanji Learned {numKanjiLearned}
                 Kanji Left {characterSessionData.length - numKanjiLearned}
                 
-            </p>
+            </p> */}
             {finished ? 
             <div>
             <p>Finished, here are your stats...</p>
