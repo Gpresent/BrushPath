@@ -451,9 +451,9 @@ export const getHydratedCharacterScoreData = async (userID:string) => {
     //Make hash maps based on unicode #
     let characterMap: any = {}
     console.log(characterData)
-    characterData.forEach((char) => {
+    characterData.forEach((char:any) => {
       if(char !== null && char !== undefined) {
-        characterMap[char._id] = {...char}
+        characterMap[char._id] = {...char, unicode:char.literal}
       }
       
     });
@@ -463,7 +463,6 @@ export const getHydratedCharacterScoreData = async (userID:string) => {
       if(score !== null && score !== undefined) {
         if(characterMap[score?.characterRef?.id]) {
         characterMap[score?.characterRef?.id] = { ...characterMap[score?.characterRef?.id], ...score}
-
         }
       }
       

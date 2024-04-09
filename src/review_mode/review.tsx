@@ -9,6 +9,7 @@ import { review_data } from './testdata';
 import { getCharacterScoreDataByUser, getCharsFromRefs, getCharacterScoreData, getHydratedCharacterScoreData } from '../utils/FirebaseQueries';
 import { AuthContext } from '../utils/FirebaseContext';
 import { DocumentReference } from 'firebase/firestore';
+import DrawReview from '../pages/DrawReview';
 
 // const jlptN5Kanji: any = [
 //     { id: 1, unicode: "一", hiragana: "いち", one_word_meaning: "one" },
@@ -77,6 +78,7 @@ const Review: React.FC = () => {
     const [words, setWords] = useState<any>([]);
     const [wIndex, setWIndex] = useState<number>(0);
     // const [showHeader, setShowHeader] = useState(true);
+    const [showHeader, setShowHeader] = useState(true);
 
     const get_queue = async () => {
         let queue = await getHydratedChars();
@@ -103,9 +105,12 @@ const Review: React.FC = () => {
             {/* <PlayList words={words}/> */}
             <div>
                 <p>Controls</p>
-                <button disabled={false} onClick={()=>{setWIndex(wIndex - 1 >= 0 ? wIndex - 1 : 0)}}>Previous</button>
-                <button onClick={()=>{setWIndex(wIndex + 1 < words.length ? wIndex + 1: words.length-1)
-                }}>Continue</button>
+                <button disabled={wIndex === 0} onClick={()=>{setWIndex(wIndex - 1 >= 0 ? wIndex - 1 : 0)}}>Previous</button>
+                <button 
+                    onClick={()=>{setWIndex(wIndex + 1 < words.length ? wIndex + 1: words.length-1);
+                }}
+                    disabled={wIndex === words.length-1}
+                >Continue</button>
             </div>
             <div>
                 <p>
@@ -117,11 +122,11 @@ const Review: React.FC = () => {
                 <p>Word={words.length > 0 && words[wIndex].unicode_str}</p>
                 
             </div>
-            {/* {currWordObj !== null &&  */}
-                {/* <Draw character={words[wordKeys[wordIndex]]} allowDisplay={true}/> */}
             {
                 words.length > 0 && 
-                <Draw character={words[wIndex]} allowDisplay={true}/>
+                <DrawReview setShowHeader={setShowHeader} char={words[wIndex]} />
+                
+
             }
             <ReviewFlashCard/>
         </>

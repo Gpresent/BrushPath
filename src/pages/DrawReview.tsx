@@ -9,9 +9,10 @@ import React from "react";
 
 interface DrawReviewProps {
   setShowHeader: any;
+  char?:Character;
 }
 
-const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader }) => {
+const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader, char }) => {
 
   // const [] = React.useState<boolean>(false);
 
@@ -20,7 +21,7 @@ const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader }) => {
   }, [setShowHeader]);
 
   let { state } = useLocation();
-  let character: Character = state.character;
+  let character: Character = char || state.character;
 
   let meaning_len = 0;
 
@@ -44,7 +45,7 @@ const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader }) => {
       {character && (
         <>
           <div className="character-prompt">{character.one_word_meaning}</div>
-          <Draw character={character} allowDisplay={false} />
+          <Draw character={character} allowDisplay={true} />
         </>
       )}
     </div>
