@@ -95,7 +95,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
-  
+  let character = props.character
 
   useLayoutEffect(() => {
     if (props.character) {

@@ -167,7 +167,7 @@ const Home: React.FC = (props) => {
       </button>
       
       <h2>Recent Decks</h2>
-      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList user={userData} decks={decks} ></DeckList>}
+      {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList length={3} user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
     </div >

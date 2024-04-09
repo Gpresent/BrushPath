@@ -182,6 +182,9 @@ code {
   box-sizing: border-box;
   /* margin-top: 10px; */
 }
+.selected {
+  background-color: #E0E0E0
+}
 
 .character {
   color: #333;
@@ -222,6 +225,7 @@ code {
   height: 36px;
   border: 1px solid #333;
   border-radius: 10px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   background-color: white;
   color: #333;
@@ -241,10 +245,6 @@ code {
 .toggle-button.active {
   background-color: #333;
 }
-
-
-
-
 
 /* Dark Mode Styles */
 body.dark-mode {

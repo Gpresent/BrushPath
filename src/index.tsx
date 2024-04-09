@@ -10,11 +10,11 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <GoogleOAuthProvider clientId="703184918088-nhbp1qq0r4n7s82f00f7gm2j9ghv95hh.apps.googleusercontent.com">
     <App />
     </GoogleOAuthProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

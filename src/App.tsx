@@ -6,7 +6,7 @@ import './styles/App.css';
 // import Home from './pages/Home';
 import ComponentRouter from './router/router';
 import { AuthProvider } from './utils/FirebaseContext';
-import { CharacterSearchContext, CharacterSearchProvider } from './utils/CharacterSearchContext';
+// import { CharacterSearchContext, CharacterSearchProvider } from './utils/CharacterSearchContext';
  
 function App(this: any) {
   document.addEventListener('dragstart', function(event) {
@@ -17,9 +17,9 @@ function App(this: any) {
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
       <AuthProvider>
-        <CharacterSearchProvider>
+        {/* <CharacterSearchProvider> */}
       <ComponentRouter/>
-      </CharacterSearchProvider>
+      {/* </CharacterSearchProvider> */}
       </AuthProvider>
     </>
   );

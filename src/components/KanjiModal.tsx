@@ -11,7 +11,7 @@ import { User } from "firebase/auth";
 import "../styles/index.css";
 
 import "../styles/index.css";
-
+import Modal from "./Modal";
 
 interface Kanji {
   id: number;
@@ -25,31 +25,41 @@ interface KanjiModalProps {
   isOpen: boolean;
   onClose: () => void;
   kanjiList: Kanji[];
-  characterCache: IndexedDBCachingResult | null,
-  userData: DocumentData | null,
-  user: User | null
+  characterCache: IndexedDBCachingResult | null;
+  userData: DocumentData | null;
+  user: User | null;
 }
 
-
-const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, characterCache, userData, user }) => {
+const KanjiModal: React.FC<KanjiModalProps> = ({
+  isOpen,
+  onClose,
+  kanjiList,
+  characterCache,
+  userData,
+  user,
+}) => {
   const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
   const [deckTitle, setDeckTitle] = useState("");
 
   const characters: Character[] | undefined = useMemo(() => {
     //return characterCache?.data?.map((docData) => characterParser(docData) ).filter((character) => character!==null)
-    return (characterCache?.data || []).map((docData) => characterParser(docData)).filter((character): character is Character => character !== null);
-  }, [characterCache?.data])
+    return (characterCache?.data || [])
+      .map((docData) => characterParser(docData))
+      .filter((character): character is Character => character !== null);
+  }, [characterCache?.data]);
 
   const toggleKanjiSelection = (kanji: Character) => {
-    const isAlreadySelected = selectedKanji.some((k) => k.unicode === kanji.unicode);
+    const isAlreadySelected = selectedKanji.some(
+      (k) => k.unicode === kanji.unicode
+    );
     if (isAlreadySelected) {
-      setSelectedKanji(selectedKanji.filter((k) => k.unicode !== kanji.unicode));
+      setSelectedKanji(
+        selectedKanji.filter((k) => k.unicode !== kanji.unicode)
+      );
     } else {
       setSelectedKanji([...selectedKanji, kanji]);
     }
   };
-
-
 
   const handleSubmit = () => {
     // TODO add logic :)
@@ -60,7 +70,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, cha
     }
 
     if (!user?.email) {
-      console.log("User not found")
+      console.log("User not found");
       return;
     }
     if (selectedKanji.length === 0) {
@@ -70,8 +80,6 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, cha
     if (user?.email) {
       addUserDeck(user?.email, selectedKanji, "", deckTitle);
     }
-
-
 
     setSelectedKanji([]);
     setDeckTitle("");
@@ -87,33 +95,32 @@ const KanjiModal: React.FC<KanjiModalProps> = ({ isOpen, onClose, kanjiList, cha
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>&times;</span>
-        <div className="deck-title-input">
-          <label className="deckTitle" htmlFor="deckTitle">Enter Deck Name:</label>
-          <input
-            type="text"
-            id="deckTitle"
-            value={deckTitle}
-            onChange={(e) => setDeckTitle(e.target.value)}
-          />
-        </div>
-        <ul className="add-word-list">
-          {characters?.map(kanji => (
-            <li key={kanji.unicode}>
-              <input
-                type="checkbox"
-                checked={selectedKanji.some((k) => k.unicode === kanji.unicode)}
-                onChange={() => toggleKanjiSelection(kanji)}
-              />
-              {kanji.unicode} - {kanji.one_word_meaning}
-            </li>
-          ))}
-        </ul>
-        <button onClick={handleSubmit}>Submit</button>
+    <Modal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
+      <div className="deck-title-input">
+        <label className="deckTitle" htmlFor="deckTitle">
+          Enter Deck Name:
+        </label>
+        <input
+          type="text"
+          id="deckTitle"
+          value={deckTitle}
+          onChange={(e) => setDeckTitle(e.target.value)}
+        />
       </div>
-    </div>
+      <ul className="add-word-list">
+        {characters?.map((kanji) => (
+          <li key={kanji.unicode}>
+            <input
+              type="checkbox"
+              checked={selectedKanji.some((k) => k.unicode === kanji.unicode)}
+              onChange={() => toggleKanjiSelection(kanji)}
+            />
+            {kanji.unicode} - {kanji.one_word_meaning}
+          </li>
+        ))}
+      </ul>
+      <button onClick={handleSubmit}>Submit</button>
+    </Modal>
   );
 };
 

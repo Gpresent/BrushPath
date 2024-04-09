@@ -313,6 +313,9 @@ body {
     text-align: center;
 }
 
+.selected {
+    color: red;
+}
 
 .icon-1 {
     display: flex;
@@ -457,7 +460,7 @@ body {
     border-radius: 10px;
     z-index: 30;
     align-self: flex-start;
-    max-height: 60%;
+    max-height: 70%;
     overflow-y: scroll;
 }
 
@@ -476,7 +479,8 @@ body {
 
 .add-word-list {
     overflow: scroll;
-    max-height: 60vh;
+    max-height: 50vh;
+    padding: unset;
 }
 
 .close {
@@ -508,10 +512,11 @@ body {
 
 .deck-header-wrapper{
     padding-top: 10px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     position: sticky;
     top: 54px;
     background-color: white;
+    z-index: 10;
 }
 
 .deck-title {
@@ -535,6 +540,15 @@ body {
 }
 
 /* Loading page */
+
+.not-found {
+    /* width: 100%; */
+    display: flex;
+    justify-content: center;
+    color: #777;
+    align-self: center;
+    margin: 10px;
+}
 
 .loading{
     width: 100%;
