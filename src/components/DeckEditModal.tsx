@@ -8,6 +8,8 @@ import Character from "../types/Character";
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { updateUserDeck } from "../utils/FirebaseQueries";
 import Modal from "./Modal";
+import WordList from "./WordList";
+import SearchableCharacterList from "./SearchableCharacterList";
 
 interface Kanji {
   id: number;
@@ -101,7 +103,7 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
         {/* <div className="deck-title-display">
           <h2>{deckName}</h2>
         </div> */}
-        <ul className="add-word-list">
+        {/* <ul className="add-word-list">
           {characters?.map((kanji) => (
             <li key={kanji?.unicode_str}>
               <input
@@ -114,7 +116,8 @@ const DeckEditModal: React.FC<DeckEditModalProps> = ({
               {kanji?.unicode} - { } - {kanji?.one_word_meaning}
             </li>
           ))}
-        </ul>
+        </ul> */}
+        <SearchableCharacterList selectable={true} selectedKanji={selectedKanji} setSelectedKanji={setSelectedKanji} />
         <button onClick={handleSubmit}>Submit</button>
       </Modal>
   );

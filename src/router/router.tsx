@@ -32,8 +32,13 @@ const decks_info: Deck[] = [
     name: "another dope deck",
   }
 ]
+
 const ComponentRouter: React.FC = () => {
+
   const [showHeader, setShowHeader] = useState(true);
+  const [kanjiList, setKanjiList] = useState<any[]>( []);
+  const [lastRef, setLastRef] = useState("");
+
 
   return (
     <DarkModeProvider>
@@ -41,8 +46,8 @@ const ComponentRouter: React.FC = () => {
         <Layout showHeader={showHeader}>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/draw" element={<Draw allowDisplay={true} />}></Route>
-            <Route path="/dictionary" element={<DictionaryView title={'TEST'} />} />
+            {/* <Route path="/draw" element={<Draw allowDisplay={true} />}></Route> */}
+            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef}/>} />
             <Route path="/character" element={<SingleWordView />} />
             <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
             <Route path="/decks" element={<DeckLandingView title="My Decks" />} />

@@ -7,6 +7,7 @@ import {
   addDoc,
   arrayUnion,
   updateDoc,
+  getDocsFromCache,
 } from "firebase/firestore";
 import {
   collection,
@@ -150,10 +151,11 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
   try {
     const docFromCache = await getDocFromCache(docRef);
 
+
     // console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };
   } catch (error) {
-    console.error("Document not in cache or error fetching from cache:", error);
+    // console.error("Document not in cache or error fetching from cache:", error);
 
     try {
       const docFromServer = await getDoc(docRef);
@@ -168,6 +170,81 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
       console.error("Error fetching document from server:", serverError);
       return null;
     }
+  }
+};
+
+export const fetchAllCharacters = async (skipRef:string, take: number) => {
+
+  console.log("skipRef is: " + skipRef)
+
+  try {
+    if(skipRef === "poop") {
+      throw "Query finished";
+    }
+    // console.log("Fetching Data")
+    
+    // Fetch data from Firebase
+    // const snapshot = await getDocs(collection(firestoreDB, "Character"));
+    let paginatedQuery;
+    //Beginning case, unicode_str = ""
+    if(skipRef === "") {
+      //TODO Order by created date
+      paginatedQuery = query(collection(db, "Character"),
+      orderBy("unicode_str"),
+      limit(take));
+    }
+    //Middle case, unicode_str = something
+    else {
+      //TODO Order by created date
+      // console.log("startAfter: ",{unicode_str: skipRef});
+      let lastDocumentSnapshot
+      try {
+        lastDocumentSnapshot = await getDocFromCache(doc(collection(db, "Character"), skipRef));
+      }catch{
+        lastDocumentSnapshot = await getDoc(doc(collection(db, "Character"), skipRef));
+      }
+      // console.log(lastDocumentSnapshot)
+
+      paginatedQuery = query(collection(db, "Character"),
+      orderBy("unicode_str"),
+      startAfter(lastDocumentSnapshot),
+      limit(take));
+    }
+
+    //TODO Try to get from cache
+    // console.log("getting from cache")
+    let snapshot = await getDocsFromCache(paginatedQuery);
+    // console.log("got from cache")
+    if(snapshot.empty){
+      // console.log("getting from server")
+      snapshot = await getDocs(paginatedQuery)
+    }
+    
+    // debugger;
+    // console.log("done with cache")
+
+     
+    // Extract data from the snapshot
+    // console.log("extracting data")
+    const newData = snapshot.docs.map((doc) => { return { _id: doc.id, ...doc.data() } });
+    // console.log("extracted")
+
+    // Set the data state to the fetched data
+    //   setData(newData);
+    // console.log("Fetch data:",newData)
+
+    //Fix stop case
+    const newSkipRef = newData.length ? newData[newData.length-1]._id:"poop"
+    // console.log("Fetched (starting at ",newSkipRef, cachedData.length)
+
+    // setIndex(index+batch)
+    // setIndexID(newData.length ? newData[newData.length-1]._id:"")
+    return {skipRef: newSkipRef, cachedData: newData};
+
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {skipRef: "poop", cachedData:[]}
   }
 };
 

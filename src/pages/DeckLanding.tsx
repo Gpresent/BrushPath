@@ -58,8 +58,6 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
     if (!userData) {
       getUserData();
     }
-
-
   }, []);
 
   useEffect(() => {
@@ -81,16 +79,14 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
     setModalOpen(false);
   };
 
-
-
   return (
     <div className="deck-landing">
       <div className="deck-header-wrapper">
-      <div className="deck-header">
-        <h2 className="deck-title">My Decks</h2>
-        <AddIcon className="addButton" onClick={handleAddDeck} />
-      </div>
-      <input className="search-bar" />
+        <div className="deck-header">
+          <h2 className="deck-title">My Decks</h2>
+          <AddIcon className="addButton" onClick={handleAddDeck} />
+        </div>
+        <input className="search-bar" />
       </div>
       {/* <HomeStats /> */}
       <div className="deck-list-container">
@@ -108,7 +104,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
         userData={userData}
         user={user}
       />
-    </div >
+    </div>
   );
 };
 

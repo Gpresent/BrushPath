@@ -13,6 +13,7 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
+import MiniSearch from "minisearch";
 
 interface DeckProp {
   title: string;
@@ -24,6 +25,8 @@ type RetrievableData = {
   error: string;
 };
 
+
+
 const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deck, setDeck] = useState<RetrievableData>({
@@ -34,6 +37,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
 
+
   const characterCache = useContext(CharacterSearchContext);
 
   const fetchChars = useCallback(async () => {
@@ -42,11 +46,12 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
     if (deck && deck.data && deck.data.characters) {
       await getCharsFromRefs(deck.data.characters, charIndex).then(
         (fetchedChars) => {
-          curCharacters = curCharacters.concat(
-            fetchedChars
-              .map((character: any) => characterParser(character))
-              .filter((elem) => elem != null && !curCharacters.includes(elem))
-          );
+          let charsToAdd = fetchedChars
+            .map((character: any) => characterParser(character))
+            .filter((elem) => elem != null && !curCharacters.includes(elem));
+
+          // search.addAll(charsToAdd)
+          curCharacters = curCharacters.concat(charsToAdd);
         }
       );
     } else {
@@ -89,17 +94,19 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
           <div className="deck-header-wrapper">
             <div className="deck-header">
               <div className="deck-title-back">
-              <div
-                style={{ display: "flex", alignItems: "center" }}
-                onClick={() => navigate(-1)}
-              >
-                <ArrowBackIosNewIcon style={{ fontSize: "18px"}}></ArrowBackIosNewIcon>
-              </div>
-              <p className="my-words">{deck.data?.name}</p>
+                <div
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={() => navigate(-1)}
+                >
+                  <ArrowBackIosNewIcon
+                    style={{ fontSize: "18px" }}
+                  ></ArrowBackIosNewIcon>
+                </div>
+                <p className="my-words">{deck.data?.name}</p>
               </div>
               <AddIcon className="addButton" onClick={handleEditDeck} />
             </div>
-            <input className="search-bar" />
+            {/* <input className="search-bar" /> */}
           </div>
           <div
           // style={{ maxHeight: "70vh", overflow: "auto" }}

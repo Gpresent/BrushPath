@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { CACHE_SIZE_UNLIMITED, getFirestore } from "firebase/firestore";
 
 
 import { getAuth } from "firebase/auth";
@@ -32,15 +32,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
-
-
-
 const offline_db = initializeFirestore(app,
   {
     localCache:
       persistentLocalCache(/*settings*/{ tabManager: persistentMultipleTabManager() }),
-      experimentalForceLongPolling: true
-
+      experimentalForceLongPolling: true,
+      // cacheSizeBytes: CACHE_SIZE_UNLIMITED,
   });
 
 export const db = offline_db;
