@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useContext, useLayoutEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -57,6 +57,7 @@ const parser = new DOMParser();
 
 interface DrawProps {
   character?: Character;
+  handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
   allowDisplay: boolean;
 }
 // Define types for coordinates
@@ -94,8 +95,12 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
 
+  
+
   useLayoutEffect(() => {
     if (props.character) {
+      console.log("in Draw", props.character.unicode)
+      // setKanji(props.character.unicode); 
       setKanji(props.character.unicode);
       setAskInput(false);
     }
@@ -147,6 +152,14 @@ const Draw: React.FC<DrawProps> = (props) => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    // This function will be called whenever someProp changes
+    // Perform any necessary actions here
+    // Example: setState(...)
+    
+    setAllowDisplaySVG(props.allowDisplay)
+  }, [props.allowDisplay]);
 
   return (
     <div style={styles.container}>
@@ -214,8 +227,12 @@ const Draw: React.FC<DrawProps> = (props) => {
             if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
+                console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
                   setKanjiGrade(grade);
+                  if(props.handleComplete && props.character) {
+                    props.handleComplete(props.character,grade)
+                  }
                   upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
@@ -240,6 +257,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
                           }));
                         }
+                        
+                        
                       }).catch(error => {
                         console.error('Error interpreting image:', error);
                       });
