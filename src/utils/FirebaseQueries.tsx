@@ -14,6 +14,7 @@ import {
   Query,
   getDocsFromCache,
   getDocsFromServer,
+  DocumentData,
 } from "firebase/firestore";
 import {
   collection,
@@ -446,7 +447,7 @@ export const getCharacterScoreData = async (userID: string, next_review_date?: T
   }
 }
 //TODO Implement
-export const getHydratedCharacterScoreData = async (userID:string) => {
+export const getHydratedCharacterScoreData = async (userID:string): Promise<DocumentData[]> => {
   
   try {
     const userRef = doc(db,"User", userID);
@@ -469,7 +470,6 @@ export const getHydratedCharacterScoreData = async (userID:string) => {
       
     });
 
-    console.log(characterScores)
     characterScores.forEach((score: any) => {
       if(score !== null && score !== undefined) {
         if(characterMap[score?.characterRef?.id]) {
@@ -481,7 +481,7 @@ export const getHydratedCharacterScoreData = async (userID:string) => {
 
 
     
-    return characterMap;
+    return Object.values(characterMap);
    
   } catch (error) {
     console.error("Error getting character score data:", error);

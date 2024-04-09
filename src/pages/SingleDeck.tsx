@@ -4,7 +4,7 @@ import WordList from "../components/WordList";
 import characterParser from "../utils/characterParser";
 import AddIcon from "@mui/icons-material/Add";
 import DeckEditModal from "../components/DeckEditModal";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DocumentData } from "firebase/firestore";
 import { getCharsFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
 import Loading from "../components/Loading";
@@ -99,6 +99,9 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               </div>
               <AddIcon className="addButton" onClick={handleEditDeck} />
             </div>
+            <button onClick={() => {navigate(`/deck/${id}/learn`);}}>
+              learn
+            </button>
             <input className="search-bar" />
           </div>
           <div
