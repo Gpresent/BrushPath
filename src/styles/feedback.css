@@ -53,9 +53,26 @@
     overflow: wrap;
 }
 
+.score-overview{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+}
+
+.your-score{
+    font-size: 18px;
+}
+
+.feedback-word{
+    font-size: 18px;
+    font-weight: 500;
+}
+
 .feedback-box {
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 0 1rem;
     min-width: calc(99% - 2rem);
     overflow: wrap;

@@ -36,6 +36,7 @@
     "react-router-dom": "^6.22.1",
     "react-scripts": "^5.0.1",
     "react-sketch-canvas": "^6.2.0",
+    "react-swipeable-views": "^0.14.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.6.0",
@@ -76,6 +77,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-infinite-scroller": "^1.2.5"
+    "@types/react-infinite-scroller": "^1.2.5",
+    "@types/react-swipeable-views": "^0.13.5"
   }
 }
