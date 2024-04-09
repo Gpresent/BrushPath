@@ -96,6 +96,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   useLayoutEffect(() => {
     if (props.character) {
+      console.log("in Draw", props.character.unicode)
+      // setKanji(props.character.unicode); 
       setKanji(props.character.unicode);
       setAskInput(false);
     }
@@ -214,6 +216,7 @@ const Draw: React.FC<DrawProps> = (props) => {
             if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
+                console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
                   setKanjiGrade(grade);
                   upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade < 65?0:5)

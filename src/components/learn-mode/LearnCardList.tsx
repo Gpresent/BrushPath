@@ -38,7 +38,7 @@ const LearnCardList: React.FC<LearnCardListProps>  = ({characters}) => {
                 
             </div>
             <div className="learn-card-draw-container" >
-                <Draw allowDisplay={false} forwardRef={canvasRef} character={currentCharacter}  />
+                {/* <Draw allowDisplay={false} forwardRef={canvasRef} character={currentCharacter}  /> */}
             </div>  
             
             <div className="learn-card-nav-row">
