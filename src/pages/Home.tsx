@@ -149,7 +149,7 @@ const Home: React.FC = (props) => {
           id: 0
         }}
       />}
-      <h2>Review Mode</h2>
+      <div className="deck-title">Review Mode</div>
 
       {userCharacterScoreCount.loading ? <LoadingSpinner /> :
         userCharacterScoreCount.error || userCharacterScoreCount.data === null ? <p>error: {userCharacterScoreCount.error}</p> :
@@ -163,7 +163,7 @@ const Home: React.FC = (props) => {
               <div>Review Mode is currently not available offline.</div>
       }
 
-      <h2>Recent Decks</h2>
+      <div className="deck-title">Recent Decks</div>
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList length={3} user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}
