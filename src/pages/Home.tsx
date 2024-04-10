@@ -11,19 +11,38 @@ import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { userInfo } from "os";
-import { getDecksFromRefs, getDeckFromID } from "../utils/FirebaseQueries";
-import Loading from "../components/Loading";
+
+import { getDecksFromRefs, getDeckFromID, getCharacterScoreData, getCharacterScoreCount } from "../utils/FirebaseQueries";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { DocumentData } from "firebase/firestore";
+import { channel } from "diagnostics_channel";
 
 
-const Home: React.FC = () => {
+
+type RetrievableData = {
+  data: DocumentData[] | null;
+  loading: boolean;
+  error: string;
+};
+
+type RetrievableCount = {
+  data: number | null;
+  loading: boolean;
+  error: string;
+};
+
+const Home: React.FC = (props) => {
+
+  const navigate = useNavigate();
+
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
   const [recentDeck, setRecentDeck] = useState<any>()
+  const [userCharacterScoreData, setUserCharacterScoreData] = useState<RetrievableData>({data: null, loading: true, error: ""});
+  const [userCharacterScoreCount, setUserCharacterScoreCount] = useState<RetrievableCount>({data: -1, loading: true, error: ""});
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -59,40 +78,60 @@ const Home: React.FC = () => {
 
 
     }
-    else {
-
-      const recentDeck = getDeckFromID(userData.last_deck_studied.id).then((result) => { setRecentDeck(result); });
-
-
-    }
+    
 
 
   }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
-      if (userData) {
-        return await getDecksFromRefs(userData.decks);
-      }
+      const decksResult = await getDecksFromRefs(userData?.decks)
+      setDecks(decksResult);
+
+      const userRecentDeck = decksResult.find((deck: any) => deck._id === userData?.last_deck_studied.id);
+      setRecentDeck(userRecentDeck)
+
+      setLoading(false);
     }
 
-    fetchDecks().then((decksResult) => {
-      // console.log(decksResult);
-      setDecks(decksResult);
-      setLoading(false);
-    });
+    //TODO: Maybe this should just get the count. Let's see if its slow on prod
+    // const fetchScores = async () => {
+    //   if(!userData?.email) {
+    //     setUserCharacterScoreData({...userCharacterScoreData, loading:false, error: "No email found"})
+    //   }
+    //   const characterScoreData = await getCharacterScoreData(userData?.email)
+    //   if(characterScoreData === null || characterScoreData === undefined) {
+    //     setUserCharacterScoreData({...userCharacterScoreData, loading:false, error: "Error fetching character scores"})
+    //   }
+    //   console.log(characterScoreData)
+    //   setUserCharacterScoreData({data: characterScoreData, loading: false, error:""})
+    // }
+
+    //Works faster but doesn't work offline
+    const fetchScoreCount = async () => {
+      if(!userData?.email) {
+        setUserCharacterScoreCount({...userCharacterScoreCount, loading:false, error: "No email found"})
+      }
+      const characterScoreCount = await getCharacterScoreCount(userData?.email)
+      if(characterScoreCount === null || characterScoreCount === undefined ) {
+        setUserCharacterScoreCount({...userCharacterScoreCount, loading:false, error: "Error fetching character scores"})
+      }
+      setUserCharacterScoreCount({data: characterScoreCount, loading: false, error:""})
+    }
+
+
+
     if(userData) {
-      
-    } 
+      fetchDecks();
+
+      fetchScoreCount();
+    }
     
 
-
-
-
-
-
   }, [userData]);
-  let navigate = useNavigate()
+
+  
+
 
 
   // const character: Character = characterParser(charData);
@@ -112,11 +151,18 @@ const Home: React.FC = () => {
         }}
       />
       <h2>Review Mode</h2>
+      
+      {userCharacterScoreCount.loading? <LoadingSpinner />:
+      userCharacterScoreCount.error || userCharacterScoreCount.data === null? <p>error: {userCharacterScoreCount.error}</p>:
+      userCharacterScoreCount.data > 0?
       <button onClick={()=> {navigate("/review")}}>
-        {/* <Link to={{pathname:"/review"}}> */}
           Study words so far
-        {/*</Link> */}
       </button>
+      :
+      userCharacterScoreCount.data === 0?
+      <div>Learn some kanji before using review mode.</div>:
+      <div>Review Mode is currently not available offline.</div>
+      }
       
       <h2>Recent Decks</h2>
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList length={3} user={userData} decks={decks} ></DeckList>}
