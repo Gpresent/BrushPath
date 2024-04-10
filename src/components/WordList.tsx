@@ -16,6 +16,7 @@ interface WordListProps {
   selectedWords?: Character[];
   setSelectedWords?: Dispatch<SetStateAction<Character[]>>;
   selectable?: boolean;
+  style?:  React.CSSProperties;
 }
 
 const search = new MiniSearch({
@@ -78,6 +79,7 @@ const WordList: React.FC<WordListProps> = ({
   selectedWords,
   selectable,
   setSelectedWords,
+  style
 }) => {
   const [filteredKanjiList, setFilteredKanjiList] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
@@ -175,12 +177,14 @@ const WordList: React.FC<WordListProps> = ({
 
   return (
     <>
+    
       <input
         className="search-bar"
         onChange={handleSearch}
         placeholder="Search kanji..."
       />
-      <div className="word-list">
+     
+      <div style={style} className="word-list">
         {notFound ? (
           <div className="not-found">No Results</div>
         ) : (

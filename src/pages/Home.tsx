@@ -40,35 +40,35 @@ const Home: React.FC = (props) => {
   const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
-  const [recentDeck, setRecentDeck] = useState<any>()
-  const [userCharacterScoreData, setUserCharacterScoreData] = useState<RetrievableData>({data: null, loading: true, error: ""});
-  const [userCharacterScoreCount, setUserCharacterScoreCount] = useState<RetrievableCount>({data: -1, loading: true, error: ""});
+
+  const [userCharacterScoreData, setUserCharacterScoreData] = useState<RetrievableData>({ data: null, loading: true, error: "" });
+  const [userCharacterScoreCount, setUserCharacterScoreCount] = useState<RetrievableCount>({ data: -1, loading: true, error: "" });
 
   const [loading, setLoading] = useState<boolean>(true);
 
   const createIndexedDB = () => {
-          const indexedDB = window.indexedDB;
-          const request = indexedDB.open("MyDatabase", 1);
+    const indexedDB = window.indexedDB;
+    const request = indexedDB.open("MyDatabase", 1);
 
-          request.onupgradeneeded = (event: any) => {
-              const db = event.target.result;
+    request.onupgradeneeded = (event: any) => {
+      const db = event.target.result;
 
-              // Create an object store
-              const objectStore = db.createObjectStore("MyObjectStore", { keyPath: "id", autoIncrement: true });
+      // Create an object store
+      const objectStore = db.createObjectStore("MyObjectStore", { keyPath: "id", autoIncrement: true });
 
-              console.log("Object store created successfully!");
-          };
+      console.log("Object store created successfully!");
+    };
 
-          request.onerror = (event: any) => {
-              console.error("Database creation error:", event.target.errorCode);
-          };
+    request.onerror = (event: any) => {
+      console.error("Database creation error:", event.target.errorCode);
+    };
 
-          request.onsuccess = (event: any) => {
-              console.log("Database created successfully!");
-          };
-    
+    request.onsuccess = (event: any) => {
+      console.log("Database created successfully!");
+    };
 
-      
+
+
   }
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const Home: React.FC = (props) => {
 
 
     }
-    
+
 
 
   }, []);
@@ -88,8 +88,8 @@ const Home: React.FC = (props) => {
       const decksResult = await getDecksFromRefs(userData?.decks)
       setDecks(decksResult);
 
-      const userRecentDeck = decksResult.find((deck: any) => deck._id === userData?.last_deck_studied.id);
-      setRecentDeck(userRecentDeck)
+
+
 
       setLoading(false);
     }
@@ -109,28 +109,28 @@ const Home: React.FC = (props) => {
 
     //Works faster but doesn't work offline
     const fetchScoreCount = async () => {
-      if(!userData?.email) {
-        setUserCharacterScoreCount({...userCharacterScoreCount, loading:false, error: "No email found"})
+      if (!userData?.email) {
+        setUserCharacterScoreCount({ ...userCharacterScoreCount, loading: false, error: "No email found" })
       }
       const characterScoreCount = await getCharacterScoreCount(userData?.email)
-      if(characterScoreCount === null || characterScoreCount === undefined ) {
-        setUserCharacterScoreCount({...userCharacterScoreCount, loading:false, error: "Error fetching character scores"})
+      if (characterScoreCount === null || characterScoreCount === undefined) {
+        setUserCharacterScoreCount({ ...userCharacterScoreCount, loading: false, error: "Error fetching character scores" })
       }
-      setUserCharacterScoreCount({data: characterScoreCount, loading: false, error:""})
+      setUserCharacterScoreCount({ data: characterScoreCount, loading: false, error: "" })
     }
 
 
 
-    if(userData) {
+    if (userData) {
       fetchDecks();
 
       fetchScoreCount();
     }
-    
+
 
   }, [userData]);
 
-  
+
 
 
 
@@ -142,29 +142,28 @@ const Home: React.FC = (props) => {
         Hello, {user?.displayName}
       </h2>
       {/* <HomeStats /> */}
-      <HomeStudyPrompt
+      {(decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <HomeStudyPrompt
         newUser={userData}
         suggestedDeck={{
-          id: 0,
-          image: "../sample_deck.png",
-          name: recentDeck?.name || ""
+          ...decks[0],
+          id: 0
         }}
-      />
-      <h2>Review Mode</h2>
-      
-      {userCharacterScoreCount.loading? <LoadingSpinner />:
-      userCharacterScoreCount.error || userCharacterScoreCount.data === null? <p>error: {userCharacterScoreCount.error}</p>:
-      userCharacterScoreCount.data > 0?
-      <button onClick={()=> {navigate("/review")}}>
-          Study words so far
-      </button>
-      :
-      userCharacterScoreCount.data === 0?
-      <div>Learn some kanji before using review mode.</div>:
-      <div>Review Mode is currently not available offline.</div>
+      />}
+      <div className="deck-title">Review Mode</div>
+
+      {userCharacterScoreCount.loading ? <LoadingSpinner /> :
+        userCharacterScoreCount.error || userCharacterScoreCount.data === null ? <p>error: {userCharacterScoreCount.error}</p> :
+          userCharacterScoreCount.data > 0 ?
+            <button onClick={() => { navigate("/review") }}>
+              Study words so far
+            </button>
+            :
+            userCharacterScoreCount.data === 0 ?
+              <div>Learn some kanji before using review mode.</div> :
+              <div>Review Mode is currently not available offline.</div>
       }
-      
-      <h2>Recent Decks</h2>
+
+      <div className="deck-title">Recent Decks</div>
       {(loading || decks === null || decks === undefined || userData === null) ? <LoadingSpinner /> : <DeckList length={3} user={userData} decks={decks} ></DeckList>}
       {/* {JSON.stringify(userData)}
     {JSON.stringify(decks)} */}

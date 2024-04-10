@@ -1,110 +1,147 @@
-import react, { useEffect, useMemo, useRef, useState } from 'react';
-import Character from '../../types/Character';
-import Draw from '../../pages/Draw';
-import '../../styles/learn.css'
-import LearnCard from './LearnCard';
-import KanjiGrade from '../../types/KanjiGrade';
-import { grad } from '@tensorflow/tfjs';
+import react, { useEffect, useMemo, useRef, useState } from "react";
+import Character from "../../types/Character";
+import Draw from "../../pages/Draw";
+import "../../styles/learn.css";
+import LearnCard from "./LearnCard";
+import KanjiGrade from "../../types/KanjiGrade";
+import { grad } from "@tensorflow/tfjs";
 // import { CharacterSearchProvider } from '../../utils/FirebaseCharacterSearchContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
+import WideModal from "../WideModal";
 
 interface LearnCardListProps {
-    characters: Character[];
-    refetch?: (numCharacters?: number) => void;
-    
+  characters: Character[];
+  refetch?: (numCharacters?: number) => void;
 }
-type CharacterSessionData =Character & {
-    
-    score?: KanjiGrade;
-}
+type CharacterSessionData = Character & {
+  score?: KanjiGrade;
+};
 
+const LearnCardList: React.FC<LearnCardListProps> = ({
+  characters,
+  refetch,
+}) => {
+  const [currentCharacterIndex, setCurrentCharacterIndex] = useState<number>(0);
 
-const LearnCardList: React.FC<LearnCardListProps>  = ({characters, refetch}) => {
+  const [characterSessionData, setCharacterSessionData] =
+    useState<CharacterSessionData[]>(characters);
 
-    const [currentCharacterIndex, setCurrentCharacterIndex] = useState<number>(0);
+  const [finished, setFinished] = useState<boolean>(false);
 
-    const [characterSessionData, setCharacterSessionData] = useState<CharacterSessionData[]>(characters);
+  const [showSessionModal, setShowSessionModal] = useState<boolean>(false);
 
-    const [finished, setFinished] = useState<boolean>(false);
+  const canvasRef = useRef<any>();
 
-    const canvasRef = useRef<any>();
+  const setRef = (ref: any) => {
+    canvasRef.current = ref;
+  };
 
-    const setRef = (ref: any) => {
-        canvasRef.current = ref;
-    }
+  const handleAdvance = (char: Character, grade: KanjiGrade) => {
+    console.log("Completed: ", char);
 
-    const handleAdvance =(char: Character, grade: KanjiGrade) => {
-        console.log("Completed: ", char);
-        
-        setCharacterSessionData((prevData:CharacterSessionData[]) =>
-            prevData.map(character => {
-                if(character.unicode === char.unicode) {
-                    console.log(grade)
-                    return {...character, score:grade}
-                }
-                
-                return character;
-            })
-        );
-        if(currentCharacterIndex === characterSessionData.length -1) {
-            setFinished(true);
-            return;
+    setCharacterSessionData((prevData: CharacterSessionData[]) =>
+      prevData.map((character) => {
+        if (character.unicode === char.unicode) {
+          console.log(grade);
+          return { ...character, score: grade };
         }
-        setCurrentCharacterIndex((prevIndex) => {
-            return prevIndex + 1;
-        })
+
+        return character;
+      })
+    );
+    if (currentCharacterIndex === characterSessionData.length - 1) {
+      setFinished(true);
+      setShowSessionModal(true);
+      return;
     }
-    const currentCharacter = useMemo(() => {
-        return characterSessionData[currentCharacterIndex]
-    },[currentCharacterIndex])
-    useEffect(() => {
-        //Build components
-        
+    setCurrentCharacterIndex((prevIndex) => {
+      return prevIndex + 1;
+    });
+  };
+  const currentCharacter = useMemo(() => {
+    return characterSessionData[currentCharacterIndex];
+  }, [currentCharacterIndex]);
+  useEffect(() => {
+    //Build components
+  }, []);
 
-    },[]);
-
-    const numKanjiLearned = useMemo(() => {
-        return characterSessionData.filter((character) => {return character.score !== undefined;}).length;
-    }, [characterSessionData])
-    const avgScore = useMemo(() => {
-        const scoredChars = characterSessionData.filter((character) => {return character.score !== undefined;});
-        return scoredChars.reduce((accumulator,char) => {
-            // console.log(char.score?.grades ? Math.max(...char.score?.grades || 0):0);
-            // console.log(char.unicode);
-            return char.score?.grades ? Math.max(...char.score?.grades || 0) + accumulator: accumulator
-        },0)/scoredChars.length;
-    }, [characterSessionData])
-
-    const navigate = useNavigate();
-    let { id } = useParams();
-
-    //Todo, replace divs with actual tags lol
+  const numKanjiLearned = useMemo(() => {
+    return characterSessionData.filter((character) => {
+      return character.score !== undefined;
+    }).length;
+  }, [characterSessionData]);
+  const avgScore = useMemo(() => {
+    const scoredChars = characterSessionData.filter((character) => {
+      return character.score !== undefined;
+    });
     return (
-        <div >
-            {/* <p>
+      scoredChars.reduce((accumulator, char) => {
+        // console.log(char.score?.grades ? Math.max(...char.score?.grades || 0):0);
+        // console.log(char.unicode);
+        return char.score?.grades
+          ? Math.max(...(char.score?.grades || 0)) + accumulator
+          : accumulator;
+      }, 0) / scoredChars.length
+    );
+  }, [characterSessionData]);
+
+  function onClose() {
+    navigate(`/deck/${id}`);
+    setShowSessionModal(false)
+  }
+
+  const navigate = useNavigate();
+  let { id } = useParams();
+
+  //Todo, replace divs with actual tags lol
+  return (
+    <div>
+      {/* <p>
                 Kanji Learned {numKanjiLearned}
                 Kanji Left {characterSessionData.length - numKanjiLearned}
                 
-            </p> */}
-            {finished ? 
-            <div>
-            <p>Finished, here are your stats...</p>
-            <p>Average Score: {avgScore}</p>
-            <button onClick={() => {navigate(`/deck/${id}`)}}>
-                Go back to deck
-            </button>
-            <button onClick={() => {}}>
-                Keep learning this deck
-            </button>
+            </p> 
+            map((on, index) => {
+                      return (index ? ", " : "") + on;
+                    })*/}
+      {finished && showSessionModal ? (
+        <WideModal
+          title={"Session Complete"}
+          isOpen={showSessionModal}
+          onClose={onClose}
+        >
+          <div className="session-recap">
+            <div className="session-info-header">Here's what you did:</div>
+            <div className="session-info">
+              <>Learned {characterSessionData.length} new characters: </>
+
+              {characterSessionData
+                .filter((character) => {
+                  return character.score !== undefined;
+                })
+                .map((word, index) => {
+                  return (index ? ", " : "") + word.unicode;
+                })}
+              <p>Average Score: {Math.floor(avgScore * 100)}</p>
             </div>
-            :
-            <LearnCard character={currentCharacter} handleAdvance={handleAdvance} />
-            }
-            
-        </div>
-    )
-}
-
-
+            <div className="session-buttons">
+            <button
+              onClick={() => {
+                navigate(`/deck/${id}`);
+              }}
+            >
+              Return to Deck
+            </button>
+            {/* Or
+            <button onClick={() => {}}>New Study Session</button> */}
+            </div>
+          </div>
+        </WideModal>
+      ) : (
+        <LearnCard character={currentCharacter} handleAdvance={handleAdvance} />
+      )}
+    </div>
+  );
+};
 
 export default LearnCardList;
