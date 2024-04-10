@@ -96,6 +96,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               <div className="deck-title-back">
                 <div
                   style={{ display: "flex", alignItems: "center" }}
+<<<<<<< HEAD
                   onClick={() => navigate("/")}
                 >
                   <ArrowBackIosNewIcon
@@ -107,6 +108,15 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               {(userData?.email === deck.data?.userRef.id) && (
                 <AddIcon className="addButton" onClick={handleEditDeck} />
               )}
+=======
+                  onClick={() => navigate(-1)}
+                >
+                  <ArrowBackIosNewIcon style={{ fontSize: "18px" }}></ArrowBackIosNewIcon>
+                </div>
+                <p className="my-words">{deck.data?.name}</p>
+              </div>
+              <AddIcon className="addButton" onClick={handleEditDeck} />
+>>>>>>> 73b31279 (testing with vitest)
             </div>
             <div
               className="page-cover-image"

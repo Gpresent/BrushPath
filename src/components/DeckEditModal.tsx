@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../styles/styles.css";
-import  {
+import {
   IndexedDBCachingResult,
 } from "../utils/CharacterSearchContext";
 import characterParser from "../utils/characterParser";

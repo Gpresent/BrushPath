@@ -14,6 +14,9 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
+    "types": [
+      "vitest/importMeta"
+    ],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -21,6 +24,12 @@
     "jsx": "preserve"
   },
   "include": [
-    "src"
+    "src",
+    "src/tests/jsdom-extended.js",
+    "src/utils/FirebaseQueries.tsx",
+    "src/tests/jest.config.ts",
+    "src/tests/FirebaseQueries.test.tsx",
+    "src/tests/setupTests.ts",
+    "src/tests/jest.setup.ts"
   ]
 }

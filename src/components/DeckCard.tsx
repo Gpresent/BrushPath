@@ -86,12 +86,12 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
       </div>
       <p className="title">{deck.name}</p>
 
-    <ConfirmationModal
-      deck={deck}
-      user={user} 
-      isOpen={showConfirmationModal}
-      onClose={closeConfirmationModal}
-    />
+      <ConfirmationModal
+        deck={deck}
+        user={user}
+        isOpen={showConfirmationModal}
+        onClose={closeConfirmationModal}
+      />
 
     </div>
   );

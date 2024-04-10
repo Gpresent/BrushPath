@@ -26,7 +26,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { getAuth, updateProfile } from "firebase/auth";
-
+import { auth } from './Firebase'
 import { db } from "./Firebase";
 import {
   getStorage,
@@ -77,9 +77,12 @@ import { reviewItem } from "./spacedrep";
 
 export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
   try {
+    //console.log(deckRefs)
     const deckPromises = deckRefs.map((ref) =>
       fetchDocument(ref.parent.id, ref.id)
     );
+
+    console.log(auth.currentUser)
 
     const deckSnaps = await Promise.all(deckPromises);
     const validDecks = deckSnaps.filter((deck) => deck !== null);
@@ -153,7 +156,7 @@ export const getCharsFromRefs = async (
   }
 };
 
-const fetchDocument = async (collectionName: string, documentId: string) => {
+export const fetchDocument = async (collectionName: string, documentId: string) => {
   const docRef = doc(db, collectionName, documentId);
 
   try {
@@ -163,12 +166,12 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
     // console.log("Retrieved document from cache");
     return { ...docFromCache.data(), _id: docFromCache.id };
   } catch (error) {
-    // console.error("Document not in cache or error fetching from cache:", error);
+    console.log("Document not in cache or error fetching from cache:", error);
 
     try {
       const docFromServer = await getDoc(docRef);
       if (docFromServer.exists()) {
-        // console.log("Retrieved document from server:");
+        console.log("Retrieved document from server:");
         return { ...docFromServer.data(), _id: docFromServer.id };
       } else {
 
@@ -181,25 +184,25 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
   }
 };
 
-export const fetchAllCharacters = async (skipRef:string, take: number) => {
+export const fetchAllCharacters = async (skipRef: string, take: number) => {
 
   console.log("skipRef is: " + skipRef)
 
   try {
-    if(skipRef === "poop") {
+    if (skipRef === "poop") {
       throw "Query finished";
     }
     // console.log("Fetching Data")
-    
+
     // Fetch data from Firebase
     // const snapshot = await getDocs(collection(firestoreDB, "Character"));
     let paginatedQuery;
     //Beginning case, unicode_str = ""
-    if(skipRef === "") {
+    if (skipRef === "") {
       //TODO Order by created date
       paginatedQuery = query(collection(db, "Character"),
-      orderBy("unicode_str"),
-      limit(take));
+        orderBy("unicode_str"),
+        limit(take));
     }
     //Middle case, unicode_str = something
     else {
@@ -208,30 +211,30 @@ export const fetchAllCharacters = async (skipRef:string, take: number) => {
       let lastDocumentSnapshot
       try {
         lastDocumentSnapshot = await getDocFromCache(doc(collection(db, "Character"), skipRef));
-      }catch{
+      } catch {
         lastDocumentSnapshot = await getDoc(doc(collection(db, "Character"), skipRef));
       }
       // console.log(lastDocumentSnapshot)
 
       paginatedQuery = query(collection(db, "Character"),
-      orderBy("unicode_str"),
-      startAfter(lastDocumentSnapshot),
-      limit(take));
+        orderBy("unicode_str"),
+        startAfter(lastDocumentSnapshot),
+        limit(take));
     }
 
     //TODO Try to get from cache
     // console.log("getting from cache")
     let snapshot = await getDocsFromCache(paginatedQuery);
     // console.log("got from cache")
-    if(snapshot.empty){
+    if (snapshot.empty) {
       // console.log("getting from server")
       snapshot = await getDocs(paginatedQuery)
     }
-    
+
     // debugger;
     // console.log("done with cache")
 
-     
+
     // Extract data from the snapshot
     // console.log("extracting data")
     const newData = snapshot.docs.map((doc) => { return { _id: doc.id, ...doc.data() } });
@@ -242,21 +245,21 @@ export const fetchAllCharacters = async (skipRef:string, take: number) => {
     // console.log("Fetch data:",newData)
 
     //Fix stop case
-    const newSkipRef = newData.length ? newData[newData.length-1]._id:"poop"
+    const newSkipRef = newData.length ? newData[newData.length - 1]._id : "poop"
     // console.log("Fetched (starting at ",newSkipRef, cachedData.length)
 
     // setIndex(index+batch)
     // setIndexID(newData.length ? newData[newData.length-1]._id:"")
-    return {skipRef: newSkipRef, cachedData: newData};
+    return { skipRef: newSkipRef, cachedData: newData };
 
 
   } catch (error) {
     console.error("Error fetching data:", error);
-    return {skipRef: "poop", cachedData:[]}
+    return { skipRef: "poop", cachedData: [] }
   }
 };
 
-const fetchDocuments = async (collection: string, query:Query) => {
+const fetchDocuments = async (collection: string, query: Query) => {
 
   try {
     const docsFromCacheResult = await getDocsFromCache(query);
@@ -275,14 +278,14 @@ const fetchDocuments = async (collection: string, query:Query) => {
     try {
       const docsFromCacheResult = await getDocsFromServer(query);
 
-    // console.log("Retrieved document from cache");
+      // console.log("Retrieved document from cache");
 
-    return docsFromCacheResult.docs.map((doc) => {
-      return {
-        [`_${collection}_id`]: doc.id,
-        ...doc.data()
-      }
-    });
+      return docsFromCacheResult.docs.map((doc) => {
+        return {
+          [`_${collection}_id`]: doc.id,
+          ...doc.data()
+        }
+      });
     } catch (serverError) {
       console.error("Error fetching documents from server:", serverError);
       return null;
@@ -296,8 +299,8 @@ const fetchDocuments = async (collection: string, query:Query) => {
 
 export const getDeckFromID = async (deckId: string) => {
   try {
-    const deckSnap = await fetchDocument("Deck", deckId);
 
+    const deckSnap = await fetchDocument("Deck", deckId);
     return deckSnap;
   } catch (error) {
     console.error("Error fetching user decks:", error);
@@ -443,27 +446,27 @@ export const updateUserName = async (newName: string) => {
   }
 };
 
-export const upsertCharacterScoreData = async (userID: string, characterID: string, grade:number) => {
+export const upsertCharacterScoreData = async (userID: string, characterID: string, grade: number) => {
   try {
-    if(userID === "") {
+    if (userID === "") {
       throw "UserID is empty"
     }
-    if(characterID === "") {
+    if (characterID === "") {
       throw "characterID is empty"
     }
 
-    
+
     console.log(userID)
     console.log(characterID)
     const characterRef = doc(db, "Character", characterID);
     const userRef = doc(db, "User", userID);
 
-    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef), where("characterRef","==",characterRef));
+    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef), where("characterRef", "==", characterRef));
     const characterScoreResult = await getDocs(characterScoreQuery);
-    
-    let score = grade < 65 ? 0:5;
+
+    let score = grade < 65 ? 0 : 5;
     let repetition = 0;
-    let interval= 0;
+    let interval = 0;
     let easeFactor = 1.25;
     let nextReviewDate = Timestamp.now();
 
@@ -472,18 +475,18 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
     if (!characterScoreResult.empty) {
       characterScoreResult.forEach(async (doc) => {
         const data = doc.data();
-        const repData = reviewItem(characterID, score, data.repetition, data.interval, data.easeFactor );
+        const repData = reviewItem(characterID, score, data.repetition, data.interval, data.easeFactor);
         console.log(data);
         console.log("updateRepData", repData);
-        
+
         await setDoc(doc.ref, { score, last_time_practice: Timestamp.now(), ...repData }, { merge: true });
         console.log("CharacterScore document updated:", doc.id);
       });
     } else {
-      const repData = reviewItem(characterID, score,repetition, interval, easeFactor);
+      const repData = reviewItem(characterID, score, repetition, interval, easeFactor);
       console.log("repData", repData);
 
-      await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, last_time_practice: Timestamp.now(), ...repData});
+      await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, last_time_practice: Timestamp.now(), ...repData });
       console.log("New CharacterScore document created.");
     }
 
@@ -494,13 +497,13 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
 
 }
 
-export const getCharacterScoreDataByUser = async (userId:string) => {
+export const getCharacterScoreDataByUser = async (userId: string) => {
   try {
     const userRef = doc(db, "User", userId);
-    const charScoreQuery = query(collection(db, "CharacterScore"),where("userRef", "==", userRef));
+    const charScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef));
     const charScoreData = await getDocs(charScoreQuery);
-    let data:any[] = []
-    charScoreData.forEach((item)=>{data.push(item.data())})
+    let data: any[] = []
+    charScoreData.forEach((item) => { data.push(item.data()) })
     return data;
   } catch (error) {
     console.error(error);
@@ -509,85 +512,85 @@ export const getCharacterScoreDataByUser = async (userId:string) => {
 
 export const getCharacterScoreCount = async (userID: string, next_review_date?: Timestamp) => {
   try {
-    
-    const userRef = doc(db,"User", userID)
-    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef));
+
+    const userRef = doc(db, "User", userID)
+    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef));
     //Fix for offline
-    const characterScoreCount = await getCountFromServer( characterScoreQuery);
-    
+    const characterScoreCount = await getCountFromServer(characterScoreQuery);
+
     return characterScoreCount.data().count;
-   
+
   } catch (error: any) {
     console.error("Error getting character score data count:", error);
-    
-    if(error?.code === "unavailable") {
+
+    if (error?.code === "unavailable") {
       return -1;
     }
-    
+
     throw error;
   }
 }
 
 export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
   try {
-    
-    const userRef = doc(db,"User", userID)
-    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef));
-    const characterScoreResult = await getDocs( characterScoreQuery);
+
+    const userRef = doc(db, "User", userID)
+    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef));
+    const characterScoreResult = await getDocs(characterScoreQuery);
     const characterScoreData = characterScoreResult.docs.map((score) => {
-      return {_score_id: score.id, ...score.data()}
+      return { _score_id: score.id, ...score.data() }
     })
     return characterScoreData;
-   
+
   } catch (error) {
     console.error("Error getting character score data:", error);
     throw error;
   }
 }
 //TODO Implement
-export const getHydratedCharacterScoreData = async (userID:string): Promise<DocumentData[]> => {
-  
+export const getHydratedCharacterScoreData = async (userID: string): Promise<DocumentData[]> => {
+
   try {
-    const userRef = doc(db,"User", userID);
+    const userRef = doc(db, "User", userID);
     const characterScores = await getCharacterScoreData(userID);
-    if(!characterScores) {
+    if (!characterScores) {
       throw "Error grabbing initial score docs";
     }
-    const characterRefs = characterScores?.map((score:any) => score.characterRef);
+    const characterRefs = characterScores?.map((score: any) => score.characterRef);
 
     //TODO Fix for paging...
-    const characterData = await getCharsFromRefs(characterRefs,0);
+    const characterData = await getCharsFromRefs(characterRefs, 0);
 
     //Make hash maps based on unicode #
     let characterMap: any = {}
     console.log(characterData)
-    characterData.forEach((char:any) => {
-      if(char !== null && char !== undefined) {
-        characterMap[char._id] = {...char, unicode:char.literal}
+    characterData.forEach((char: any) => {
+      if (char !== null && char !== undefined) {
+        characterMap[char._id] = { ...char, unicode: char.literal }
       }
-      
+
     });
 
     characterScores.forEach((score: any) => {
-      if(score !== null && score !== undefined) {
-        if(characterMap[score?.characterRef?.id]) {
-        characterMap[score?.characterRef?.id] = { ...characterMap[score?.characterRef?.id], ...score}
+      if (score !== null && score !== undefined) {
+        if (characterMap[score?.characterRef?.id]) {
+          characterMap[score?.characterRef?.id] = { ...characterMap[score?.characterRef?.id], ...score }
         }
       }
-      
+
     });
 
 
-    
+
     return Object.values(characterMap);
-   
+
   } catch (error) {
     console.error("Error getting character score data:", error);
     throw error;
   }
 }
 
-export const getCharScoreDataByID = async (userID:string, charID:string) => {
+export const getCharScoreDataByID = async (userID: string, charID: string) => {
   try {
     const userRef = doc(db, "User", userID);
     const charRef = doc(db, "Character", charID);
