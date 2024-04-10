@@ -30,9 +30,15 @@
 
 .learn-card-nav-left,
 .learn-card-nav-right {
-    border: none;
-    padding: 1rem;
+    border: 1px solid #9c9c9c;
+    /* padding: 1rem; */
     cursor: pointer;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
 }
 
 
