@@ -16,6 +16,7 @@ import type PredictionResult from "../recogition/predictionDisplay";
 import { AuthContext } from "../utils/FirebaseContext";
 import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
 import Feedback from "../grading/Feedback";
+import gradeToColor from "../utils/gradeToColor";
 
 
 const passing = 0.65;
@@ -91,6 +92,16 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  const [color, setColor] = React.useState("rgba(0,0,0,0)");
+
+  useEffect(() => {
+      console.log("in useeffect")
+      // if(kanji_grade.overallGrade > -1){
+          setColor(gradeToColor(kanji_grade.overallGrade))
+          console.log("updated color")
+      // }
+  }, [kanji_grade])
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
@@ -176,7 +187,9 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
+      
       <div className="canvas">
+         <div className="canvas-color" style={{border: `7px solid ${color}`, opacity:'.5'}}></div>
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -229,6 +242,7 @@ const Draw: React.FC<DrawProps> = (props) => {
               canvas.current.exportSvg().then((data: any) => {
                 console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
+
                   setKanjiGrade(grade);
                   if(props.handleComplete && props.character) {
                     props.handleComplete(props.character,grade)
@@ -276,7 +290,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium"/>
         </button>
       </div>
-      <Feedback kanjiGrade={kanji_grade} passing={passing} />
+      <Feedback kanjiGrade={kanji_grade} passing={passing} color={color}/>
     </div>
 
   );
