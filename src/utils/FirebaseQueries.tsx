@@ -82,7 +82,7 @@ export const getDecksFromRefs = async (deckRefs: DocumentReference[]) => {
       fetchDocument(ref.parent.id, ref.id)
     );
 
-    console.log(auth.currentUser)
+    //console.log(auth.currentUser)
 
     const deckSnaps = await Promise.all(deckPromises);
     const validDecks = deckSnaps.filter((deck) => deck !== null);
@@ -159,6 +159,7 @@ export const getCharsFromRefs = async (
 export const fetchDocument = async (collectionName: string, documentId: string) => {
   const docRef = doc(db, collectionName, documentId);
 
+
   try {
     const docFromCache = await getDocFromCache(docRef);
 
@@ -175,11 +176,11 @@ export const fetchDocument = async (collectionName: string, documentId: string) 
         return { ...docFromServer.data(), _id: docFromServer.id };
       } else {
 
-        return null;
+        throw new Error("Document does not exist on the server.");
       }
     } catch (serverError) {
-      console.error("Error fetching document from server:", serverError);
-      return null;
+      //console.error("Error fetching document from server:", serverError);
+      throw serverError;
     }
   }
 };
@@ -299,12 +300,14 @@ const fetchDocuments = async (collection: string, query: Query) => {
 
 export const getDeckFromID = async (deckId: string) => {
   try {
-
+    console.log(deckId)
     const deckSnap = await fetchDocument("Deck", deckId);
+
     return deckSnap;
   } catch (error) {
     console.error("Error fetching user decks:", error);
-    throw error;
+
+    throw new Error("Error fetching user decks");
   }
 };
 

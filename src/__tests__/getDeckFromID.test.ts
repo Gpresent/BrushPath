@@ -6,6 +6,8 @@ import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
 import { initializeFirestore } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { getDeckFromID } from '../utils/FirebaseQueries'; // Adjust the path as necessary
+import Deck from '../types/Deck';
+
 
 
 const firebaseConfig = {
@@ -37,7 +39,7 @@ vi.mock('../utils/FirebaseQueries', async () => {
     const originalModule = await vi.importActual('../utils/FirebaseQueries'); // Correct usage of importActual
     return {
         ...originalModule,
-        fetchDocument: vi.fn(() => Promise.resolve({ title: 'Mocked Title', _id: 'mockedId' })), // Example mock implementation
+        fetchDocument: vi.fn((collectionName: string, documentId: string) => Promise.resolve({ name: 'JLPT N1', _id: 'JLPT_1' })),
     };
 });
 
@@ -46,20 +48,23 @@ describe('getDeckFromID', () => {
         vi.clearAllMocks();
     });
 
-    // it('should successfully retrieve a deck by ID', async () => {
-    //     const mockDeckData = { title: 'JLPT_1', _id: 'JLPT_1' };
-    //     vi.mocked(fetchDocument).mockResolvedValue(mockDeckData);
+    it('should successfully retrieve a deck by ID', async () => {
+        // Assuming the mock is setup globally, no need to mock fetchDocument here again
 
-    //     const result = await getDeckFromID('JLPT_1');
-    //     console.log(result)
+        //FirebaseQueries.fetchDocument.mockResolvedValue(mockReturn);
+        // Call `getDeckFromID` with the expected ID
+        const result = await getDeckFromID('JLPT_1') as Deck;
+        expect(result._id).toBe('JLPT_1')
+        expect(result.name).toBe('JLPT N1')
 
-    //     // expect(result).toEqual(mockDeckData);
-    //     expect(vi.mocked(fetchDocument)).toHaveBeenCalledWith("Deck", "JLPT_1");
-    // });
+
+        //expect(FirebaseQueries.fetchDocument).toHaveBeenCalledWith(expectedCollection, expectedDocId);
+    });
+
 
     it('should throw an error when fetching the deck fails', async () => {
-        const mockError = new Error('Failed to get document from cache. (However, this document may exist on the server. Run again without setting \'source\' in the GetOptions to attempt to retrieve the document from the server.)');
-        vi.mocked(fetchDocument).mockRejectedValue(mockError);
+        const mockError = new Error("Error fetching user decks");
+        vi.mocked(fetchDocument).mockRejectedValueOnce(mockError); // Use mockRejectedValueOnce for a more specific control
 
         await expect(getDeckFromID('deckFail')).rejects.toThrow("Error fetching user decks");
     });

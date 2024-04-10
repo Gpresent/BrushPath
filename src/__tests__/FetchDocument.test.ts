@@ -76,7 +76,7 @@ describe('fetchDocument', () => {
             ref: {}, // Add a stub for ref, adjust as needed
         } as unknown as DocumentSnapshot<DocumentData>)
 
-        const document = await fetchDocument('Deck', 'POOP_NAN');
-        expect(document).toBeNull(); // Assuming your function returns null for non-existent documents
+        await expect(fetchDocument('Deck', 'POOP_NAN')).rejects.toThrow("Document does not exist");
+
     });
 });
