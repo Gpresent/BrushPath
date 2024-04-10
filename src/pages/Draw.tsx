@@ -58,9 +58,9 @@ const parser = new DOMParser();
 
 interface DrawProps {
   character?: Character;
-  handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
   allowDisplay: boolean;
-  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   recall: boolean;
 }
 // Define types for coordinates
@@ -78,7 +78,7 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
-  const {userData } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
@@ -108,8 +108,8 @@ const Draw: React.FC<DrawProps> = (props) => {
     });
   }
 
-  
-  
+
+
   const checkStrokeNumber = () => {
     const canvasElement = document.getElementById("react-sketch-canvas");
     const paths = canvasElement?.getElementsByTagName("path").length;
@@ -160,9 +160,9 @@ const Draw: React.FC<DrawProps> = (props) => {
             startDot.setAttribute("cx", startPosition.x.toString());
             startDot.setAttribute("cy", startPosition.y.toString());
             startDot.setAttribute("r", "4");
-            startDot.setAttribute("fill", "rgba(0, 246, 156, 0.75)"); 
+            startDot.setAttribute("fill", "rgba(0, 246, 156, 0.75)");
             svg.appendChild(startDot);
-            
+
             const endDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const pathLength = paths[i].getTotalLength();
             const endPosition = paths[i].getPointAtLength(pathLength);
@@ -212,7 +212,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     // This function will be called whenever someProp changes
     // Perform any necessary actions here
     // Example: setState(...)
-    
+
     setAllowDisplaySVG(props.allowDisplay)
   }, [props.allowDisplay]);
 
@@ -231,9 +231,9 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      
+
       <div className="canvas" onMouseUp={checkStrokeNumber} onTouchEnd={checkStrokeNumber}>
-         <div className="canvas-color" style={{border: `7px solid ${color}`, opacity:'.5'}}></div>
+        <div className="canvas-color" style={{ border: `7px solid ${color}`, opacity: '.5' }}></div>
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -275,10 +275,10 @@ const Draw: React.FC<DrawProps> = (props) => {
               setDisplaySVG(!displaySVG);
             }}
           >
-            {displaySVG ? <VisibilityOffIcon fontSize="medium"/> : <VisibilityIcon fontSize="medium"/>}
+            {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
-          <button
+        <button
           className="check-kanji"
           style={styles.button}
           onClick={() => {
@@ -288,14 +288,16 @@ const Draw: React.FC<DrawProps> = (props) => {
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
-                  if(props.handleComplete && props.character) {
-                    props.handleComplete(props.character,grade)
+                  if (props.handleComplete && props.character) {
+                    props.handleComplete(props.character, grade)
                   }
-                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade)
+                  upsertCharacterScoreData(userData?.email || "", props.character?.unicode_str || "", grade.overallGrade)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
+
+                        console.log("Predictions:", result);
 
                         setPrediction(result);
                         if (kanji === result?.[0]?.label) return;
@@ -314,8 +316,8 @@ const Draw: React.FC<DrawProps> = (props) => {
 
                           }));
                         }
-                        
-                        
+
+
                       }).catch(error => {
                         console.error('Error interpreting image:', error);
                       });
@@ -330,10 +332,10 @@ const Draw: React.FC<DrawProps> = (props) => {
             }
           }}
         >
-          <DoneIcon fontSize="medium"/>
+          <DoneIcon fontSize="medium" />
         </button>
       </div>
-      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
+      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );

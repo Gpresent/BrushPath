@@ -10,7 +10,7 @@ import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDo
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void }>({ user: null, userData: null, getUserData: () => { }});
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, initalGetUserData: () => void }>({ user: null, userData: null, getUserData: () => { }, initalGetUserData: () => { } });
 
 export const useAuth = () => {
   return useContext(AuthContext)
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
         setUserData({ email: user.email, ...userDoc.data() });
-        console.log("Data fetched successfully", userDoc.data());
+        // console.log("Data fetched successfully", userDoc.data());
         if (userDoc.metadata.fromCache) {
           console.log("You are currently offline. The data might be outdated.");
         }
@@ -49,16 +49,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
 
+  ///Inital Wait METHOD could be removed if splash page is created
+  const initalGetUserData = async () => {
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second and HIT firebase
+
+    try {
+      getUserData()
+
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+
+  };
+
 
   const updateUserDatabase = async (user: any) => {
     try {
       const userRef = await doc(db, "User", user.email);
       await runTransaction(db, async (transaction) => {
-
         const userDoc = await transaction.get(userRef);
-        if (userDoc.exists()) {
-          getUserData();
-          return;
+        if (!userDoc.exists()) {
+          transaction.set(userRef, {
+            admin: false,
+            student: false,
+            teacher: false,
+            last_login_time: Timestamp.now(),
+            decks: [
+              doc(db, "Deck/JLPT_1"),
+              doc(db, "Deck/JLPT_2"),
+              doc(db, "Deck/JLPT_3"),
+              doc(db, "Deck/JLPT_4"),
+              doc(db, "Deck/JLPT_5")
+            ],
+            name: user.displayName,
+            total_use_time: 0,
+            last_deck_studied: doc(db, "Deck/JLPT_1")
+          });
         }
 
 
@@ -76,9 +102,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         //Add character_progress collection?
       });
-      console.log("Transaction successfully committed!");
+      // console.log("Transaction successfully committed!");
+      await getUserData(); // Fetch user data after updating
     } catch (e) {
-      console.log("Transaction failed: ", e);
+      console.error("Transaction failed: ", e);
+      throw e; // Re-throw to handle it in the caller
     }
   }
   // const characterCache = useIndexedDBCaching();
@@ -99,8 +127,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // console.log(auth)
       setLoading(true);
       setUser(firebaseUser);
+
       if (firebaseUser != null) {
+
         updateUserDatabase(firebaseUser);
+
+
         // handleCacheAsync();
       }
       setLoading(false);
@@ -114,6 +146,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     userData: userData,
     getUserData: getUserData,
+    initalGetUserData: initalGetUserData,
     user: user,
   }
 

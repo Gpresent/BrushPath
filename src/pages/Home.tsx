@@ -37,7 +37,7 @@ const Home: React.FC = (props) => {
   const navigate = useNavigate();
 
   //const {user} = useParams<any>();
-  const { user, userData, getUserData } = useContext(AuthContext);
+  const { user, userData, getUserData, initalGetUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
 
@@ -67,30 +67,18 @@ const Home: React.FC = (props) => {
       console.log("Database created successfully!");
     };
 
-
-
   }
 
   useEffect(() => {
     if (!userData) {
-      getUserData();
-
-
-
+      initalGetUserData();
     }
-
-
-
   }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
       const decksResult = await getDecksFromRefs(userData?.decks)
       setDecks(decksResult);
-
-
-
-
       setLoading(false);
     }
 
@@ -119,14 +107,10 @@ const Home: React.FC = (props) => {
       setUserCharacterScoreCount({ data: characterScoreCount, loading: false, error: "" })
     }
 
-
-
     if (userData) {
       fetchDecks();
-
       fetchScoreCount();
     }
-
 
   }, [userData]);
 
