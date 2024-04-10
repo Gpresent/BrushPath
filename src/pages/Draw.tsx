@@ -60,6 +60,8 @@ interface DrawProps {
   character?: Character;
   handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
   allowDisplay: boolean;
+  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  recall: boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -92,6 +94,18 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  function clearKanji() {
+    canvas.current.clearCanvas();
+    setReadOnly(false);
+    setKanjiGrade({
+      overallGrade: -1,
+      overallFeedback: "",
+      grades: [],
+      feedback: [],
+      strokeInfo: [],
+    });
+  }
 
   const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
@@ -290,7 +304,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium"/>
         </button>
       </div>
-      <Feedback kanjiGrade={kanji_grade} passing={passing} color={color}/>
+      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
     </div>
 
   );

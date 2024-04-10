@@ -6,19 +6,22 @@ import Draw from "./Draw";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import React from "react";
+import KanjiGrade from "../types/KanjiGrade";
 
 interface DrawReviewProps {
-  setShowHeader: any;
+  // setShowHeader: any;
   char?:Character;
+  handleAdvance: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleComplete: (arg0: Character, arg1: KanjiGrade) => void;
 }
 
-const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader, char }) => {
+const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdvance }) => {
 
   // const [] = React.useState<boolean>(false);
 
-  useEffect(() => {
-    setShowHeader(false);
-  }, [setShowHeader]);
+  // useEffect(() => {
+  //   setShowHeader(false);
+  // }, [setShowHeader]);
 
   let { state } = useLocation();
   let character: Character = char || state.character;
@@ -45,7 +48,7 @@ const DrawReview: React.FC<DrawReviewProps> = ({ setShowHeader, char }) => {
       {character && (
         <>
           <div className="character-prompt">{character.one_word_meaning}</div>
-          <Draw character={character} allowDisplay={true} />
+          <Draw recall={true} handleAdvance={handleAdvance} handleComplete={handleComplete} character={character} allowDisplay={true} />
         </>
       )}
     </div>

@@ -52,7 +52,7 @@ const ComponentRouter: React.FC = () => {
             {/* <Route path="/draw" element={<Draw allowDisplay={true} />}></Route> */}
             <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef}/>} />
             <Route path="/character" element={<SingleWordView />} />
-            <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} />
+            {/* <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} /> */}
             <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
             <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
             <Route path="/settings" element={<SettingsView />} />
