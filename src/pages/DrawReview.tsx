@@ -15,7 +15,7 @@ interface DrawReviewProps {
   handleComplete: (arg0: Character, arg1: KanjiGrade) => void;
 }
 
-const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete }) => {
+const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdvance }) => {
 
   // const [] = React.useState<boolean>(false);
 
@@ -48,7 +48,7 @@ const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete }) => {
       {character && (
         <>
           <div className="character-prompt">{character.one_word_meaning}</div>
-          <Draw handleComplete={handleComplete} character={character} allowDisplay={true} />
+          <Draw recall={true} handleAdvance={handleAdvance} handleComplete={handleComplete} character={character} allowDisplay={true} />
         </>
       )}
     </div>

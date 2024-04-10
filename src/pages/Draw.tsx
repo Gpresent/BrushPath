@@ -60,6 +60,8 @@ interface DrawProps {
   character?: Character;
   handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
   allowDisplay: boolean;
+  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  recall: boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -290,7 +292,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium"/>
         </button>
       </div>
-      <Feedback kanjiGrade={kanji_grade} passing={passing} color={color}/>
+      <Feedback recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
     </div>
 
   );

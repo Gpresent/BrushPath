@@ -6,11 +6,17 @@ import { useEffect } from "react";
 import { gradeToWord } from "../utils/gradeToColor";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
+import ArrowForward from "@mui/icons-material/ArrowForward";
+import Character from "../types/Character";
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
+  character: Character;
   passing: number;
   color: string;
+  recall: boolean;
+  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
 }
 
 function pageCreator(feedback: string, index: number) {
@@ -45,6 +51,8 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const [showDots, setShowDots] = useState(false);
   const [gradeInfo, setGradeInfo] = React.useState(false);
   const [haveGradeInfo, setHaveGradeInfo] = React.useState(true);
+  const [grade, setGrade] = useState<KanjiGrade | null>(null);
+  const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
 
   // console.log(kanji_grade);
 
@@ -115,8 +123,13 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   alignItems: "center",
                   alignSelf: "start",
                   width: "100%",
+                  justifyContent: "space-between"
                 }}
               >
+
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",}}>
                 <div
                   className="grade-circle"
                   style={{ backgroundColor: color }}
@@ -130,10 +143,24 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                     {gradeToWord(kanji_grade.overallGrade)}
                   </div>
                 </div>
+                </div>
+
+                {kanji_grade && kanji_grade.overallGrade > 50 && props.recall && (
+                  <button
+                    onClick={() => {
+                      setAllowDisplay(false);
+                      props.handleAdvance!(props.character, kanji_grade)
+                      setGrade(null);
+                    }}
+                    className="learn-card-nav-right"
+                  >
+                    <ArrowForward />
+                  </button>
+                )}
               </div>
 
-              {haveGradeInfo && (
-                <>
+              {haveGradeInfo && kanji_grade.overallFeedback && (
+                <div className="feedback-detail">
                   <div
                     className="grade-info-button"
                     onClick={() => {
@@ -174,7 +201,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                       return pageCreator(kanji_grade.feedback[index], index);
                     })}
                   </div>
-                </>
+                </div>
               )}
             </div>
           )}

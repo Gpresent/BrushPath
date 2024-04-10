@@ -71,7 +71,7 @@
 .score-overview{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: space-between; */
     margin: 10px;
 }
 
@@ -94,8 +94,11 @@
     overflow: wrap;
     /* border: 1px solid black; */
     /* border-radius: 10px; */
-    border-bottom: 1.5px solid var(--border);
     /* padding-bottom: 20px; */
+}
+
+.feedback-detail {
+    border-bottom: 1.5px solid var(--border);
 }
 
 .grade-circle {

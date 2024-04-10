@@ -5,6 +5,7 @@ import "../../styles/learn.css";
 import KanjiGrade from "../../types/KanjiGrade";
 import { debug } from "console";
 import DrawReview from "../../pages/DrawReview";
+import ArrowForward from "@mui/icons-material/ArrowForward";
 
 interface LearnCardProps {
   character: Character;
@@ -54,7 +55,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance }) => {
 
       <div className="learn-card-nav-row">
         {/* <div></div> */}
-        {grade && grade.overallGrade > 50 && (
+        {/* {grade && grade.overallGrade > 50 && (
           <button
             onClick={() => {
               setAllowDisplay(false);
@@ -63,9 +64,9 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance }) => {
             }}
             className="learn-card-nav-right"
           >
-            {">"}
+            <ArrowForward/>
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

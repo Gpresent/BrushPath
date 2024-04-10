@@ -30,7 +30,7 @@
 
 .learn-card-nav-left,
 .learn-card-nav-right {
-    border: 1px solid #9c9c9c;
+    border: 1px solid var(--border);
     /* padding: 1rem; */
     cursor: pointer;
     aspect-ratio: 1/1;
@@ -53,5 +53,5 @@
     flex-direction: column;
     /* justify-content: center; */
     /* align-items: center; */
-    height: 80vh;
+    /* height: 80vh; */
 }
