@@ -107,6 +107,7 @@ const SingleWordView: React.FC = () => {
               </div>
               <div className="mastery-desc">
                 <CharacterFamiliarityInfo character={character} />
+              </div>
             </div>
             <Draw recall={false} character={character} allowDisplay={true} />
           </>
