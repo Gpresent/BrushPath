@@ -16,7 +16,7 @@ const ReviewWordView: React.FC = () => {
   return (
     <>
     <div className="character-prompt">{state.character.one_word_meaning}</div>
-    <Draw character={state.character} allowDisplay={false} />
+    <Draw recall={true} character={state.character} allowDisplay={false} />
     </>
   );
 };

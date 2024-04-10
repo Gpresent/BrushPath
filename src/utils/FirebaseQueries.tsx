@@ -15,6 +15,7 @@ import {
   getDocsFromCache,
   getDocsFromServer,
   DocumentData,
+  getCountFromServer,
 } from "firebase/firestore";
 import {
   collection,
@@ -503,6 +504,27 @@ export const getCharacterScoreDataByUser = async (userId:string) => {
     return data;
   } catch (error) {
     console.error(error);
+  }
+}
+
+export const getCharacterScoreCount = async (userID: string, next_review_date?: Timestamp) => {
+  try {
+    
+    const userRef = doc(db,"User", userID)
+    const characterScoreQuery =query(collection(db,"CharacterScore"),where("userRef","==",userRef));
+    //Fix for offline
+    const characterScoreCount = await getCountFromServer( characterScoreQuery);
+    
+    return characterScoreCount.data().count;
+   
+  } catch (error: any) {
+    console.error("Error getting character score data count:", error);
+    
+    if(error?.code === "unavailable") {
+      return -1;
+    }
+    
+    throw error;
   }
 }
 

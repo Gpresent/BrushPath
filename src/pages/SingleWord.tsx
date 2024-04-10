@@ -58,17 +58,15 @@ const SingleWordView: React.FC = () => {
               )}
             </div>
             
-            <div className="character-info-button" style={{width: "100%", display: "flex", justifyContent: "center"}}>
-              <button
-                onClick={() => {
+            <div className="character-info-button" onClick={() => {
                   console.log("clicked");
                   setCharacterInfo(!characterinfo);
                   document.getElementsByClassName("info")[0]?.classList.toggle("info-hidden");
-                }}
-                style={{border: "none", backgroundColor: "transparent", color: "black", height: "40px"}}
-              >
-                {characterinfo ? <ExpandLess fontSize="large"/> : <ExpandMore fontSize="large"/>}
-              </button>
+                }}>
+              
+                
+                {characterinfo ? <> Less Info <ExpandLess fontSize="medium"/></> : <> More Info <ExpandMore fontSize="medium"/></>}
+            
             </div>
             <div className="info info-hidden">
               <div className="character-info">
@@ -109,9 +107,8 @@ const SingleWordView: React.FC = () => {
               </div>
               <div className="mastery-desc">
                 <CharacterFamiliarityInfo character={character} />
-              </div>
             </div>
-            <Draw character={character} allowDisplay={true} />
+            <Draw recall={false} character={character} allowDisplay={true} />
           </>
         )}
       </div>

@@ -1,8 +1,10 @@
 .grade-info {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     overflow-x: scroll;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
 
 }
 
@@ -28,19 +30,20 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 100%;
-    margin-left: 1rem;
+    /* min-width: 100%;
+    margin-left: 1rem; */
     overflow: wrap;
+    margin-bottom: 10px;
 }
 
 .feedback-box-strokes {
     display: flex;
     flex-direction: column;
-    padding: 0 1rem;
+    /* padding: 0 1rem;
     padding-bottom: 1rem;
-    min-width: calc(99% - 2rem);
+    min-width: calc(99% - 2rem); */
     overflow: wrap;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
 }
 
@@ -53,12 +56,60 @@
     overflow: wrap;
 }
 
-.feedback-box {
+.grade-info-button {
+    display: flex;
+    width: -webkit-fill-available;
+    border-radius: 10px;
+    justify-content: flex-end;
+    margin: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    color: var(--deemphasized-1);
+    gap: 5px;
+}
+
+.score-overview{
     display: flex;
     flex-direction: column;
-    padding: 0 1rem;
+    /* justify-content: space-between; */
+    margin: 10px;
+}
+
+.your-score{
+    font-size: 18px;
+}
+
+.feedback-word{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.feedback-box {
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+    /* padding: 0 1rem;
+     */
     min-width: calc(99% - 2rem);
     overflow: wrap;
-    border: 1px solid black;
-    border-radius: 10px;
+    /* border: 1px solid black; */
+    /* border-radius: 10px; */
+    /* padding-bottom: 20px; */
+}
+
+.feedback-detail {
+    border-bottom: 1.5px solid var(--border);
+}
+
+.grade-circle {
+    border-radius: 50%;
+    width: 70px;
+    border: 1px solid var(--border);
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 500;
+    margin: 10px;
 }

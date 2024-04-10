@@ -10,13 +10,60 @@
     overflow: auto;
 }
 
+.session-complete {
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.session-buttons{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.session-info-header{
+    font-size: 24px;
+}
+
+.session-info {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.session-recap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* margin-left: 20px; */
+    /* margin-right: 20px;  */
+}
+
 .learn-card-title {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
 }
+
+.learn-deck-prompt {
+    color: var(--deemphasized-2);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+    margin-top: 10px;
+    /* margin-bottom: 10px; */
+    cursor: pointer;
+}
+
 .learn-card-draw-container {
-    width:70%
+    /* width:70% */
 }
 .learn-card-info {
 
@@ -30,22 +77,27 @@
 
 .learn-card-nav-left,
 .learn-card-nav-right {
-    border: none;
-    padding: 1rem;
+    border: 1px solid var(--border);
+    /* padding: 1rem; */
     cursor: pointer;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
 }
-
-
 
 .learn-card-nav-left:hover,
 .learn-card-nav-right:hover {
     background-color: #ccc;
 }
+
 .learn-cards-container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* height: 80vh; */
 }
