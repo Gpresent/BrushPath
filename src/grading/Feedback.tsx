@@ -17,6 +17,7 @@ interface feedbackProps {
   recall: boolean;
   handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
   handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
+  clearKanji?: () => void;
 }
 
 function pageCreator(feedback: string, index: number) {
@@ -149,6 +150,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <button
                     onClick={() => {
                       setAllowDisplay(false);
+                      if(props.clearKanji)  props.clearKanji() 
                       props.handleAdvance!(props.character, kanji_grade)
                       setGrade(null);
                     }}

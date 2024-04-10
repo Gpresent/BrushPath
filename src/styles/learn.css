@@ -15,6 +15,7 @@
     font-weight: bold;
     margin-bottom: 10px;
 }
+
 .learn-card-draw-container {
     /* width:70% */
 }
@@ -41,12 +42,11 @@
     margin: 5px;
 }
 
-
-
 .learn-card-nav-left:hover,
 .learn-card-nav-right:hover {
     background-color: #ccc;
 }
+
 .learn-cards-container {
     width: 100%;
     display: flex;

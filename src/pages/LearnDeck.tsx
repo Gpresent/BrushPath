@@ -1,4 +1,4 @@
-import react, { useContext, useEffect, useState } from "react";
+import react, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   getCharacterScoreData,
@@ -30,11 +30,11 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
 
   const { user, userData, getUserData } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-    }
-  }, []);
+  // useLayoutEffect(() => {
+  //   if (!userData) {
+  //     getUserData();
+  //   }
+  // }, []);
 
   const fetchCharactersToLearn = (numCharacters: number = 30) => {
     if (!id) {

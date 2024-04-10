@@ -95,6 +95,18 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
+  function clearKanji() {
+    canvas.current.clearCanvas();
+    setReadOnly(false);
+    setKanjiGrade({
+      overallGrade: -1,
+      overallFeedback: "",
+      grades: [],
+      feedback: [],
+      strokeInfo: [],
+    });
+  }
+
   const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
   useEffect(() => {
@@ -292,7 +304,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium"/>
         </button>
       </div>
-      <Feedback recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
+      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
     </div>
 
   );
