@@ -35,6 +35,8 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
+  const excludedDeckIds = ['JLPT_1', 'JLPT_2', 'JLPT_3', 'JLPT_4', 'JLPT_5'];
+
 
   const characterCache = useContext(CharacterSearchContext);
 
@@ -103,8 +105,9 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
                 </div>
                 <p className="my-words">{deck.data?.name}</p>
               </div>
-
-              <AddIcon className="addButton" onClick={handleEditDeck} />
+              {!excludedDeckIds.includes(deck.data?._id) && (
+                <AddIcon className="addButton" onClick={handleEditDeck} />
+              )}
             </div>
             <div
               className="page-cover-image"
