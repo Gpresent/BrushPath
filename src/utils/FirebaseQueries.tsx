@@ -564,3 +564,24 @@ export const getHydratedCharacterScoreData = async (userID:string): Promise<Docu
     throw error;
   }
 }
+
+export const getCharScoreDataByID = async (userID:string, charID:string) => {
+  try {
+    const userRef = doc(db, "User", userID);
+    const charRef = doc(db, "Character", charID);
+
+    const charScoreQuery = query(collection(db, "CharacterScore"), where("characterRef", "==", charRef), where("userRef", "==", userRef));
+    const charScoreResult = await getDocs(charScoreQuery);
+    if (charScoreResult.empty) {
+      return undefined;
+    }
+    else {
+      return charScoreResult.docs[0].data();
+    }
+    // charScoreResult.docs.map(item => console.log(item.data()));
+
+  } catch (error) {
+    console.error("getCharScoreDataByID", error);
+    throw error;
+  }
+}

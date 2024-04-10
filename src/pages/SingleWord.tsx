@@ -7,6 +7,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import React from "react";
+import { CharacterFamiliarityInfo } from "../components/CharacterFamiliarityInfo";
 
 const SingleWordView: React.FC = () => {
   let { state } = useLocation();
@@ -107,7 +108,7 @@ const SingleWordView: React.FC = () => {
                 )}
               </div>
               <div className="mastery-desc">
-                You are <b>unfamiliar</b> with this character.
+                <CharacterFamiliarityInfo character={character} />
               </div>
             </div>
             <Draw character={character} allowDisplay={true} />
