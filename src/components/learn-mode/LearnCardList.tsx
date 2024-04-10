@@ -127,10 +127,10 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
             <div className="session-buttons">
             <button
               onClick={() => {
-                navigate(`/deck/${id}`);
+                navigate(`/`);
               }}
             >
-              Return to Deck
+              Return to Home
             </button>
             {/* Or
             <button onClick={() => {}}>New Study Session</button> */}
