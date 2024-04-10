@@ -80,8 +80,8 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 const Draw: React.FC<DrawProps> = (props) => {
   const {userData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
-  const canvasElement = document.getElementById("react-sketch-canvas");
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
+  const [inputStrokes, setInputStrokes] = React.useState<number>(0);
   const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
@@ -106,6 +106,15 @@ const Draw: React.FC<DrawProps> = (props) => {
       strokeInfo: [],
     });
   }
+
+  
+  
+  const checkStrokeNumber = () => {
+    const canvasElement = document.getElementById("react-sketch-canvas");
+    console.log("checking strokes")
+    const paths = canvasElement?.getElementsByTagName("path").length;
+    setInputStrokes(paths || 0);
+  };
 
   const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
@@ -142,17 +151,40 @@ const Draw: React.FC<DrawProps> = (props) => {
         svg.setAttribute("width", "100%");
         svg.setAttribute("height", "100%");
         const paths = svg.getElementsByTagName("path");
+        var circles = svg.getElementsByTagName("circle");
+        while (circles.length > 0) {
+          circles[0].remove();
+        }
         for (var i = 0; i < paths.length; i++) {
           paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
           paths[i].setAttribute("stroke-width", "3");
+
+          if (i === inputStrokes) {
+            const startDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const startPosition = paths[i].getPointAtLength(0);
+            startDot.setAttribute("cx", startPosition.x.toString());
+            startDot.setAttribute("cy", startPosition.y.toString());
+            startDot.setAttribute("r", "4");
+            startDot.setAttribute("fill", "rgba(0, 246, 156, 0.75)"); 
+            svg.appendChild(startDot);
+            
+            const endDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const pathLength = paths[i].getTotalLength();
+            const endPosition = paths[i].getPointAtLength(pathLength);
+            endDot.setAttribute("cx", endPosition.x.toString());
+            endDot.setAttribute("cy", endPosition.y.toString());
+            endDot.setAttribute("r", "4");
+            endDot.setAttribute("fill", "rgba(246, 0, 0, 0.75)"); // Change color as needed
+            svg.appendChild(endDot);
+          }
         }
         const nums = svg.getElementsByTagName("text");
         for (var i = 0; i < nums.length; i++) {
           nums[i].setAttribute("fill", "rgba(140, 140, 241, .75)");
         }
-        // while (nums.length > 0) {
-        //   nums[0].remove();
-        // }
+        while (nums.length > 0) {
+          nums[0].remove();
+        }
         svgText = svg.outerHTML;
 
         setSvgHtml({ __html: svgText });
@@ -163,7 +195,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       ? props.character?.unicode_str
       : "";
     loadSvg(unicode);
-  }, [kanji]);
+  }, [kanji, inputStrokes]);
 
   useEffect(() => {
     const checkDarkMode = () => {
@@ -171,6 +203,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     };
 
     checkDarkMode();
+    checkStrokeNumber();
 
     const observer = new MutationObserver(checkDarkMode);
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
@@ -202,7 +235,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         </div>
       )}
       
-      <div className="canvas">
+      <div className="canvas" onMouseUp={checkStrokeNumber} onTouchEnd={checkStrokeNumber}>
          <div className="canvas-color" style={{border: `7px solid ${color}`, opacity:'.5'}}></div>
         <ReactSketchCanvas
           ref={canvas}
@@ -224,6 +257,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           style={styles.button}
           onClick={() => {
             canvas.current.clearCanvas();
+            setInputStrokes(0);
             setReadOnly(false);
             setKanjiGrade({
               overallGrade: -1,
