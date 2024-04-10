@@ -1,9 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { DocumentSnapshot, DocumentData, SnapshotMetadata } from 'firebase/firestore';
 import { fetchDocument } from '../utils/FirebaseQueries'; // Adjust the import path as necessary
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
-import { initializeFirestore } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { getDeckFromID } from '../utils/FirebaseQueries'; // Adjust the path as necessary
 import Deck from '../types/Deck';
@@ -39,12 +36,15 @@ vi.mock('../utils/FirebaseQueries', async () => {
     const originalModule = await vi.importActual('../utils/FirebaseQueries'); // Correct usage of importActual
     return {
         ...originalModule,
-        fetchDocument: vi.fn((collectionName: string, documentId: string) => Promise.resolve({ name: 'JLPT N1', _id: 'JLPT_1' })),
+        fetchDocument: vi.fn((collectionName: string, documentId: string) => {
+            return Promise.resolve({ name: 'JLPT N1', _id: 'JLPT_1' });
+        }),
     };
 });
 
 describe('getDeckFromID', () => {
     beforeEach(() => {
+        vi.resetModules();
         vi.clearAllMocks();
     });
 
@@ -58,7 +58,7 @@ describe('getDeckFromID', () => {
         expect(result.name).toBe('JLPT N1')
 
 
-        //expect(FirebaseQueries.fetchDocument).toHaveBeenCalledWith(expectedCollection, expectedDocId);
+
     });
 
 

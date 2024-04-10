@@ -28,48 +28,9 @@ import {
 import { getAuth, updateProfile } from "firebase/auth";
 import { auth } from './Firebase'
 import { db } from "./Firebase";
-import {
-  getStorage,
-  ref as storageRef,
-  getDownloadURL,
-} from "firebase/storage";
 import { FirebaseError } from "firebase/app";
 import Character from "../types/Character";
 import { reviewItem } from "./spacedrep";
-//Sam code
-
-// export const getDecksFromRefs = async (deckRefs: any) => {
-//   try {
-
-//     // Ensure each reference in deckRefs has a get() method
-//     // const invalidRefs = deckRefs.filter((ref:any) => typeof ref.get !== 'function');
-//     // if (invalidRefs.length > 0) {
-//     //     console.error("Invalid references found:", invalidRefs);
-//     //     throw new Error("Invalid Firestore references");
-//     // }
-//     const decks = await runTransaction(db, async (transaction) => {
-//       let deckPromises: any[] = [];
-//       deckRefs.forEach((ref: DocumentReference) => {
-//         deckPromises.push(transaction.get(ref));
-//       });
-//       const deckSnaps = await Promise.all(deckPromises);
-
-//       const decks = deckSnaps
-//         .map((snap) => (snap.exists ? snap.data() : null))
-//         .filter((data) => data !== null);
-
-//       console.log(decks);
-//       return decks;
-//     });
-//     console.log(decks);
-//     return decks;
-
-//   } catch (error) {
-//     console.error("Error fetching user decks:", error);
-//     throw error;
-//     return [];
-//   }
-// };
 
 // Fetching system will first hit the cache to see if deck exists
 // Else it will then fetch from Firebase
