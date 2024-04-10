@@ -97,7 +97,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               <div className="deck-title-back">
                 <div
                   style={{ display: "flex", alignItems: "center" }}
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate("/")}
                 >
                   <ArrowBackIosNewIcon
                     style={{ fontSize: "18px" }}

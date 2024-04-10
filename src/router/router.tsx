@@ -17,6 +17,7 @@ import { DarkModeProvider } from '../components/DarkModeContext';
 import Review from '../review_mode/review';
 import ReviewWordView from '../review_mode/components/rv_wordview';
 import Learn from '../pages/LearnDeck';
+import { CharacterFamiliarityInfo } from '../components/CharacterFamiliarityInfo';
 
 const decks_info: Deck[] = [
   {
