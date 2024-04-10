@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userData, setUserData] = useState<any>(null);
 
   const getUserData = async () => {
+    setLoading(true);
     if (user === null || user.email === null) return;
     const userRef = doc(db, "User", user.email);
     try {
@@ -45,19 +46,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Error fetching user data:", error);
 
+    } finally {
+      setLoading(false);
     }
   };
 
 
-  ///Inital Wait METHOD could be removed if splash page is created
+
   const initalGetUserData = async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second and HIT firebase
 
+    setLoading(true);
     try {
-      getUserData()
-
+      await getUserData();
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("Initial data fetch error:", error);
+
+    } finally {
+      setLoading(false);
     }
 
   };

@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { channel } from "diagnostics_channel";
+import { initializeApp } from "firebase/app";
 
 
 
@@ -71,7 +72,7 @@ const Home: React.FC = (props) => {
 
   useEffect(() => {
     if (!userData) {
-      initalGetUserData();
+      getUserData();
     }
   }, []);
 
