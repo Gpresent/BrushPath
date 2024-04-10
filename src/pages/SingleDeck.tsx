@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
 import MiniSearch from "minisearch";
+import ArrowForward from "@mui/icons-material/ArrowForward";
 
 interface DeckProp {
   title: string;
@@ -25,8 +26,6 @@ type RetrievableData = {
   error: string;
 };
 
-
-
 const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deck, setDeck] = useState<RetrievableData>({
@@ -36,7 +35,6 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
-
 
   const characterCache = useContext(CharacterSearchContext);
 
@@ -71,6 +69,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
         } else {
           setDeck({ data: null, loading: false, error: "Deck not found" });
         }
+        console.log(deckData);
       });
     } else {
       setDeck({ data: null, loading: false, error: "No url parameter" });
@@ -104,13 +103,24 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
                 </div>
                 <p className="my-words">{deck.data?.name}</p>
               </div>
+
               <AddIcon className="addButton" onClick={handleEditDeck} />
             </div>
-            <button onClick={() => {navigate(`/deck/${id}/learn`);}}>
-              learn
-            </button>
+            <div
+              className="page-cover-image"
+              style={{ backgroundImage: `url(${deck.data.image as string})` }}
+            ></div>
+            <div
+              className="learn-deck-prompt"
+              onClick={() => {
+                navigate(`/deck/${id}/learn`);
+              }}
+            >
+              <span>Practice this Deck</span> <ArrowForward />
+            </div>
             {/* <input className="search-bar" /> */}
           </div>
+
           <div
           // style={{ maxHeight: "70vh", overflow: "auto" }}
           >
@@ -121,7 +131,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               loader={<></>}
               useWindow={false}
             >
-              {<WordList words={characters} />}
+              {<WordList style={{ maxHeight: "48vh"}} words={characters} />}
             </InfiniteScroll>
           </div>
 
