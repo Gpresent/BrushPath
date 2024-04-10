@@ -66,7 +66,6 @@
     font-weight: 300;
     justify-content: space-between;
     padding-bottom: 20px;
-    border-bottom: 1.5px solid rgba(0, 0, 0, 1);
     columns: 2;
     transition: all 0.3s ease;
 }
@@ -76,9 +75,27 @@
     max-height: 0;
     padding-bottom: 0;
     transition: all 0.3s ease;
+    margin-bottom: 0 !important;
 }
 
 .mastery-desc {
     font-size: 20px;
-    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1.5px solid var(--border);
+    width: 100%;
+    max-width: 500px;
+
+}
+
+.character-info-button {
+    display: flex;
+    width: -webkit-fill-available;
+    max-width: 500px;
+    border-radius: 10px;
+    justify-content: flex-end;
+    margin: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    color: var(--deemphasized-1);
+    gap: 5px;
 }
