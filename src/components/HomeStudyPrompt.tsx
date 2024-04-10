@@ -18,10 +18,13 @@ const HomeStudyPrompt: React.FC<HomeStudyPromptProps> = ({ newUser, suggestedDec
 
   const handleDeckClick = (deckId: any) => {
 
+
     if (suggestedDeck._id) {
       updateUserRecentDeck(newUser?.email, suggestedDeck._id, userData?.decks);
-      //getUserData();
+
     }
+    //console.log(suggestedDeck)
+
     navigate(`/deck/${suggestedDeck._id}`);
 
   };
