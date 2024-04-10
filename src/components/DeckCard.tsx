@@ -17,6 +17,7 @@ interface DeckCardProps {
 }
 
 
+
 const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   const navigate = useNavigate();
   const { userData, getUserData } = useContext(AuthContext);
@@ -24,7 +25,6 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   let pressTimer: ReturnType<typeof setTimeout> | null = null;
   const [isShaking, setIsShaking] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-
 
   const handleDeckClick = (deckId: any) => {
     if (!showDeleteIcon && !showConfirmationModal) {
@@ -79,7 +79,7 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
       onTouchEnd={handleMouseUpOrTouchEnd}
       onTouchMove={handleMouseLeaveOrTouchMove}
     >
-      {showDeleteIcon && (
+      {(userData?.email === deck.userRef?.id) && showDeleteIcon && (
         <DeleteForeverIcon className="delete-icon" onClick={() => handleTrashClick()} />
       )}
       <div className="cover-image" style={{ backgroundImage: `url(${deck.image})` }}>
