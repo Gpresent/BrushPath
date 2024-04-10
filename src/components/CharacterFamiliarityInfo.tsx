@@ -26,8 +26,7 @@ export const CharacterFamiliarityInfo : React.FC<FamiliarityProps> = ({character
 
     return (
         <>
-        <p>You suck at this character</p>
-        <p>interval: {wordInfo? wordInfo.interval: 0}</p>
+        <p>You are <b>{wordInfo.repetition > 5? "familiar" : "unfamiliar"}</b> with this character</p>
         </>
     );
 
