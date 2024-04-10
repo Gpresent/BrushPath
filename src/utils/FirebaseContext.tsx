@@ -67,10 +67,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           student: false,
           teacher: false,
           last_login_time: Timestamp.now(),
-          decks: [doc(db, "Deck/JLPT_1"), doc(db, "Deck/JLPT_2"), doc(db, "Deck/JLPT_3"), doc(db, "Deck/JLPT_4"), doc(db, "Deck/JLPT_5")],
+          decks: [doc(db, "Deck/JLPT_5"), doc(db, "Deck/JLPT_4"), doc(db, "Deck/JLPT_3"), doc(db, "Deck/JLPT_2"), doc(db, "Deck/JLPT_1")],
           name: user.displayName,
           total_use_time: 0,
-          last_deck_studied: doc(db, "Deck/JLPT_1")
+          last_deck_studied: doc(db, "Deck/JLPT_5")
         });
         getUserData();
 

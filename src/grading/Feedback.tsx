@@ -161,7 +161,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 )}
               </div>
 
-              {haveGradeInfo && kanji_grade.overallFeedback && (
+              {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
                 <div className="feedback-detail">
                   <div
                     className="grade-info-button"
