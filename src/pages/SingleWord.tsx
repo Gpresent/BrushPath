@@ -6,13 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import React from "react";
+import React, { useEffect, useState} from "react";
 import { CharacterFamiliarityInfo } from "../components/CharacterFamiliarityInfo";
+import AddToDeckModal from "../components/AddToDeckModal";
 
 const SingleWordView: React.FC = () => {
   let { state } = useLocation();
   let character: Character = state.character;
   const [characterinfo, setCharacterInfo] = React.useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   let meaning_len = 0;
 
@@ -31,6 +33,16 @@ const SingleWordView: React.FC = () => {
     }
   }
   let navigate = useNavigate();
+
+
+  const handleAddToDeck = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <>
       <div className="single-word-view">
@@ -57,14 +69,15 @@ const SingleWordView: React.FC = () => {
                 </div>
               )}
             </div>
-            
+
+            <button className="AddToDeckButton" onClick={() => handleAddToDeck()}> Add To Deck </button>
+
             <div className="character-info-button" onClick={() => {
                   console.log("clicked");
                   setCharacterInfo(!characterinfo);
                   document.getElementsByClassName("info")[0]?.classList.toggle("info-hidden");
                 }}>
-              
-                
+            
                 {characterinfo ? <> Less Info <ExpandLess fontSize="medium"/></> : <> More Info <ExpandMore fontSize="medium"/></>}
             
             </div>
@@ -112,6 +125,10 @@ const SingleWordView: React.FC = () => {
             <Draw recall={false} character={character} allowDisplay={true} />
           </>
         )}
+        <AddToDeckModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        />
       </div>
     </>
   );

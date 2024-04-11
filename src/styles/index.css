@@ -254,6 +254,11 @@ code {
   color: var(--deemphasized-2);
 }
 
+.AddToDeckButton {
+  position: absolute;
+  margin-top: 100px;
+}
+
 /* Dark Mode Toggle */
 .toggle-button {
   width: 20px;
