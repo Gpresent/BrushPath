@@ -146,6 +146,7 @@ const Draw: React.FC<DrawProps> = (props) => {
         svg.setAttribute("height", "100%");
         const paths = svg.getElementsByTagName("path");
         var circles = svg.getElementsByTagName("circle");
+        checkStrokeNumber();
         while (circles.length > 0) {
           circles[0].remove();
         }
