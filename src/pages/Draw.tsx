@@ -112,7 +112,6 @@ const Draw: React.FC<DrawProps> = (props) => {
   
   const checkStrokeNumber = () => {
     const canvasElement = document.getElementById("react-sketch-canvas");
-    console.log("checking strokes")
     const paths = canvasElement?.getElementsByTagName("path").length;
     setInputStrokes(paths || 0);
   };
@@ -120,11 +119,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
   useEffect(() => {
-      console.log("in useeffect")
-      // if(kanji_grade.overallGrade > -1){
-          setColor(gradeToColor(kanji_grade.overallGrade))
-          console.log("updated color")
-      // }
+    setColor(gradeToColor(kanji_grade.overallGrade))
   }, [kanji_grade])
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
@@ -134,8 +129,6 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   useLayoutEffect(() => {
     if (props.character) {
-      console.log("in Draw", props.character.unicode)
-      // setKanji(props.character.unicode); 
       setKanji(props.character.unicode);
       setAskInput(false);
     }
@@ -291,7 +284,6 @@ const Draw: React.FC<DrawProps> = (props) => {
             if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
-                console.log("kanji", kanji);
                 grade(data, kanji, passing).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
@@ -301,7 +293,6 @@ const Draw: React.FC<DrawProps> = (props) => {
                   upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade)
 
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                    //console.log(grade)
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
 
@@ -332,7 +323,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                     });
                   }
                 }).catch((e: any) => {
-                  console.log(e);
+                  console.error(e);
                 });
               });
             }
