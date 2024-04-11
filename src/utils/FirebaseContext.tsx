@@ -10,7 +10,7 @@ import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDo
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void, initalGetUserData: () => void }>({ user: null, userData: null, getUserData: () => { }, initalGetUserData: () => { } });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: () => void }>({ user: null, userData: null, getUserData: () => { } });
 
 export const useAuth = () => {
   return useContext(AuthContext)
@@ -53,19 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
 
-  const initalGetUserData = async () => {
 
-    setLoading(true);
-    try {
-      await getUserData();
-    } catch (error) {
-      console.error("Initial data fetch error:", error);
-
-    } finally {
-      setLoading(false);
-    }
-
-  };
 
 
   const updateUserDatabase = async (user: any) => {
@@ -151,7 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     userData: userData,
     getUserData: getUserData,
-    initalGetUserData: initalGetUserData,
     user: user,
   }
 

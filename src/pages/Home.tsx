@@ -38,7 +38,7 @@ const Home: React.FC = (props) => {
   const navigate = useNavigate();
 
   //const {user} = useParams<any>();
-  const { user, userData, getUserData, initalGetUserData } = useContext(AuthContext);
+  const { user, userData, getUserData } = useContext(AuthContext);
 
   const [decks, setDecks] = useState<any>([]);
 
