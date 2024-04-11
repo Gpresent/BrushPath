@@ -86,6 +86,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
+  const [showStrokeGuide, setStrokeGuide] = React.useState<boolean>(true);
   const [allowDisplaySVG, setAllowDisplaySVG] = React.useState<boolean>(props.allowDisplay);
   const [kanji_grade, setKanjiGrade] = React.useState<KanjiGrade>({
     overallGrade: -1,
@@ -159,7 +160,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
           paths[i].setAttribute("stroke-width", "3");
 
-          if (i === inputStrokes) {
+          if (showStrokeGuide && i === inputStrokes) {
             const startDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const startPosition = paths[i].getPointAtLength(0);
             startDot.setAttribute("cx", startPosition.x.toString());
@@ -182,8 +183,10 @@ const Draw: React.FC<DrawProps> = (props) => {
         for (var i = 0; i < nums.length; i++) {
           nums[i].setAttribute("fill", "rgba(140, 140, 241, .75)");
         }
-        while (nums.length > 0) {
-          nums[0].remove();
+        if (inputStrokes < nums.length) {
+          while (nums.length > 0) {
+            nums[0].remove();
+          }
         }
         svgText = svg.outerHTML;
 
