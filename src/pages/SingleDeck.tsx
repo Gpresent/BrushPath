@@ -35,8 +35,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
-  const excludedDeckIds = ['JLPT_1', 'JLPT_2', 'JLPT_3', 'JLPT_4', 'JLPT_5'];
-
+  const {userData} = useContext(AuthContext);
 
   const characterCache = useContext(CharacterSearchContext);
 
@@ -97,7 +96,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               <div className="deck-title-back">
                 <div
                   style={{ display: "flex", alignItems: "center" }}
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate("/")}
                 >
                   <ArrowBackIosNewIcon
                     style={{ fontSize: "18px" }}
@@ -105,7 +104,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
                 </div>
                 <p className="my-words">{deck.data?.name}</p>
               </div>
-              {!excludedDeckIds.includes(deck.data?._id) && (
+              {(userData?.email === deck.data?.userRef.id) && (
                 <AddIcon className="addButton" onClick={handleEditDeck} />
               )}
             </div>
@@ -113,6 +112,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               className="page-cover-image"
               style={{ backgroundImage: `url(${deck.data.image as string})` }}
             ></div>
+
             <div
               className="learn-deck-prompt"
               onClick={() => {

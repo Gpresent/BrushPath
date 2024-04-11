@@ -1,0 +1,2 @@
+// const getCharScore
+export {}
