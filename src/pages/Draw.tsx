@@ -138,8 +138,16 @@ const Draw: React.FC<DrawProps> = (props) => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
-        const svgModule = await fetch("/joyo_kanji/" + unicode + ".svg");
-        var svgText = await svgModule.text();
+        
+        var svgText;
+        if(character?.svg)  {
+          console.log("SVG Found")
+          svgText = character?.svg
+        }
+        else {
+          const svgModule = await fetch("/joyo_kanji/" + unicode + ".svg");
+          svgText = await svgModule.text();
+        }
         var doc = parser.parseFromString(svgText, "image/svg+xml");
         const svg = doc.getElementsByTagName("svg")[0];
         svg.setAttribute("width", "100%");

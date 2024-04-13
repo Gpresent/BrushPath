@@ -22,6 +22,7 @@ function characterParser(data: any) {
         parts: [],
         coords: null,
         totalLengths: 0,
+        svg: undefined
     }
 
     if (data == null) {
@@ -49,7 +50,8 @@ function characterParser(data: any) {
         compounds: data.compounds,
         parts: data.parts,
         coords: [],
-        totalLengths: data.totalLengths
+        totalLengths: data.totalLengths,
+        svg: data.svg
     }
 
     if (character.one_word_meaning == "") {
