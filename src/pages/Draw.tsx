@@ -293,7 +293,15 @@ const Draw: React.FC<DrawProps> = (props) => {
             if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
               setReadOnly(true);
               canvas.current.exportSvg().then((data: any) => {
-                grade(data, kanji, passing).then((grade: KanjiGrade) => {
+
+                const convertCoords = (coords: any) => {
+                  let coordsArr: any[] = []
+                  Object.keys(coords).sort().forEach((coordKey) => {
+                      coordsArr.push(coords[coordKey].map((coordsSet: {x: number, y:number}) => [coordsSet.x,coordsSet.y]))
+                  })
+                  return coordsArr;
+              }
+                grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
                   if (props.handleComplete && props.character) {

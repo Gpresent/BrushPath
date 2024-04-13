@@ -33,6 +33,8 @@ function characterParser(data: any) {
     //     data = data.data
     // }
 
+
+    
     character = {
         id: data.unicode_str,
         unicode: data.literal || data.unicode,
@@ -49,7 +51,7 @@ function characterParser(data: any) {
         jlpt: data.jlpt,
         compounds: data.compounds,
         parts: data.parts,
-        coords: [],
+        coords: data.coords,
         totalLengths: data.totalLengths,
         svg: data.svg
     }
