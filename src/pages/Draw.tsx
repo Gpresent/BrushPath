@@ -17,6 +17,7 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
 import Feedback from "../grading/Feedback";
 import gradeToColor from "../utils/gradeToColor";
+import { DocumentData } from "@firebase/firestore";
 
 
 const passing = 0.65;
@@ -78,7 +79,7 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
-  const { userData } = useContext(AuthContext);
+  const {userData, getUserData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
@@ -106,6 +107,27 @@ const Draw: React.FC<DrawProps> = (props) => {
       feedback: [],
       strokeInfo: [],
     });
+  }
+
+  
+
+  const handleUpsertCharacterScoreData = async (characterID: string, grade:number) => {
+    if(!userData) {
+      const buffer = async () => {
+        getUserData();
+      }
+      buffer().then(() => {
+        if(userData) {
+          upsertCharacterScoreData((userData as DocumentData)?.email || "", characterID,grade);
+        }
+        
+      });
+    }
+    else {
+      upsertCharacterScoreData(userData?.email, characterID,grade);
+    }
+    
+
   }
 
 
@@ -304,11 +326,19 @@ const Draw: React.FC<DrawProps> = (props) => {
                 grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
-                  if (props.handleComplete && props.character) {
-                    props.handleComplete(props.character, grade)
+                  if(props.character) {
+                    if(props.handleComplete) {
+                      props.handleComplete(props.character,grade)
+                    }
+                    if(props.character.unicode_str) {
+                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
+                    }
+                    else {
+                      console.log("Character score not saved..")
+                    }
+                    
                   }
-                  upsertCharacterScoreData(userData?.email || "", props.character?.unicode_str || "", grade.overallGrade)
-
+                  
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
