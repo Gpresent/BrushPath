@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { channel } from "diagnostics_channel";
+import { initializeApp } from "firebase/app";
 
 
 
@@ -67,30 +68,18 @@ const Home: React.FC = (props) => {
       console.log("Database created successfully!");
     };
 
-
-
   }
 
   useEffect(() => {
     if (!userData) {
       getUserData();
-
-
-
     }
-
-
-
   }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
       const decksResult = await getDecksFromRefs(userData?.decks)
       setDecks(decksResult);
-
-
-
-
       setLoading(false);
     }
 
@@ -119,14 +108,10 @@ const Home: React.FC = (props) => {
       setUserCharacterScoreCount({ data: characterScoreCount, loading: false, error: "" })
     }
 
-
-
     if (userData) {
       fetchDecks();
-
       fetchScoreCount();
     }
-
 
   }, [userData]);
 
