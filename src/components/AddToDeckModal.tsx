@@ -34,6 +34,7 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
   
   const { userData, getUserData, user } = useContext(AuthContext);
   const [decks, setDecks] = useState<any>([]);
+  const [selectedDecks, setSelectedDecks] = useState<any>([]);
 
   useEffect(() => {
     if (!userData) {
@@ -44,8 +45,11 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
   useEffect(() => {
     const fetchDecks = async () => {
       if (userData && userData.decks) {
-        const fetchedDecks = await getDecksFromRefs(userData.decks);
+        const fetchedDecks = await getDecksFromRefs(userData.decks)
         setDecks(fetchedDecks);
+        setSelectedDecks(fetchedDecks.filter((deck: any) => deck.characters.some((ref: { id: string; }) => ref.id === character.unicode_str) ));
+
+        
       }
     };
 
@@ -69,6 +73,25 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
     onClose();
   };
 
+  const handleDeckClick = (deckID: string, selectedState: boolean) => {
+    //Update Selected
+    setSelectedDecks((prevSelectedDecks: any) => {
+      if(selectedState) {
+        if(prevSelectedDecks.some((deck: any) => deck._id === deckID)) {
+          return prevSelectedDecks;
+        }else {
+          return [prevSelectedDecks, ...decks.filter((deck: any) => deck._id === deckID)]
+        }
+        
+      }
+      else {
+        return prevSelectedDecks.filter((deck: any) => deck._id !== deckID)
+      }
+      
+    })
+    
+  }
+
   if (!isOpen) return null;
 
   return (
@@ -82,11 +105,11 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
         <div className="deck-list-container">
 
         {
-          !userData ? <LoadingSpinner /> : <><p>Saved in </p><SelectableDeckList decks={savedInDecks}
-            user={userData}  />
+          !userData ? <LoadingSpinner /> : <><p>Saved in </p><SelectableDeckList decks={savedInDecks} 
+            user={userData} preSelect={true} handleDeckClick={handleDeckClick} />
             <p>Other Decks</p>
             <SelectableDeckList decks={notSavedInDecks}
-            user={userData} />
+            user={userData} handleDeckClick={handleDeckClick} />
             </>
         }
       </div >

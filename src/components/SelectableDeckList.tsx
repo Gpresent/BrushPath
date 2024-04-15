@@ -7,9 +7,11 @@ import DeckListRow from './DeckListRow';
 interface SelectableDeckListProps {
   decks: any[],
   user: DocumentData,
+  preSelect?: boolean,
+  handleDeckClick: (arg0: string, arg1: boolean) => void
 }
 
-const SelectableDeckList: React.FC<SelectableDeckListProps> = ({ decks, user }) => {
+const SelectableDeckList: React.FC<SelectableDeckListProps> = ({ decks, user, preSelect , handleDeckClick}) => {
 
   return (
     <div className="deck-list">
@@ -18,6 +20,8 @@ const SelectableDeckList: React.FC<SelectableDeckListProps> = ({ decks, user }) 
           key={index} // Using the index as a key
           deck={deck}
           user={user}
+          initialSelected={preSelect || false}
+          handleDeckClick={handleDeckClick}
         />
       ))}
 

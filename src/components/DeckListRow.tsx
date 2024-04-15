@@ -14,54 +14,48 @@ import {
 interface DeckListRowProps {
   deck: Deck;
   user: DocumentData
+  initialSelected?: boolean
+  handleDeckClick: (arg0: string, arg1: boolean) => void
 }
 
 
 
-const DeckListRow: React.FC<DeckListRowProps> = ({ deck, user }) => {
+const DeckListRow: React.FC<DeckListRowProps> = ({ deck, user,initialSelected, handleDeckClick }) => {
   const navigate = useNavigate();
   const { userData, getUserData } = useContext(AuthContext);
   const [showDeleteIcon, setShowDeleteIcon] = useState<boolean>(false);
   let pressTimer: ReturnType<typeof setTimeout> | null = null;
   const [isShaking, setIsShaking] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selected, setSelected] = useState<boolean>(initialSelected || false);
 
-  const handleDeckClick = (deckId: any) => {
+  const handleDeckClickHandler = () => {
     
-    
+    setSelected((prevState: boolean) => {
+        const newState = !selected;
+        if(deck._id) {
+            handleDeckClick(deck._id,newState)
+        }
+        
+        return newState;
+        }
+        );
   };
 
-  const closeConfirmationModal = () => {
-    setShowConfirmationModal(false);
-  }
+  
 
-  const startPressTimer = () => {
-    pressTimer = setTimeout(() => setShowDeleteIcon(true), 1000); // adjust time as needed
-  };
+  
+  
 
-  const clearTimer = () => {
-    if (pressTimer) {
-      clearTimeout(pressTimer);
-      pressTimer = null;
-    }
-  };
-
-  const handleMouseUpOrTouchEnd = () => {
-    clearTimer();
-  };
-
-  const handleMouseLeaveOrTouchMove = () => {
-    clearTimer();
-    setShowDeleteIcon(false);
-  };
+  
 
   return (
     
     <>
-      <div className="deck-card">
+      <div className="deck-card" onClick={handleDeckClickHandler}>
         <p className="deck-name">{deck.name}</p>
         <p className="hiragana">{ }</p>
-        <input type="checkbox" className="deck-check"/>
+        <input type="checkbox" checked={selected} className="deck-check"/>
       </div>
     </>
     
