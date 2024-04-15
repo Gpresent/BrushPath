@@ -63,6 +63,7 @@ interface DrawProps {
   allowDisplay: boolean;
   handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   recall: boolean;
+  learn?:boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -96,6 +97,8 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  const [attempts, setAttempts] = React.useState<KanjiGrade[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
@@ -143,6 +146,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   useEffect(() => {
     setColor(gradeToColor(kanji_grade.overallGrade))
   }, [kanji_grade])
+
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
@@ -326,6 +330,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                 grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
+                  setAttempts((prevAttempts) => [...prevAttempts,grade])
                   if(props.character) {
                     if(props.handleComplete) {
                       props.handleComplete(props.character,grade)
@@ -381,7 +386,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           <DoneIcon fontSize="medium" />
         </button>
       </div>
-      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      <Feedback setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );

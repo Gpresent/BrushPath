@@ -115,7 +115,7 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
       ) : characters.error || characters.data == null ? (
         <p>{characters.error}</p>
       ) : characters.data.length > 0 ? (
-        <LearnCardList characters={characters.data} />
+        <LearnCardList learn={true} characters={characters.data} />
       ) : (
         <p>Learned them all</p>
       )}

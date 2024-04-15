@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import KanjiGrade from "../types/KanjiGrade";
 import "../styles/dict.css";
 import "../styles/feedback.css";
@@ -11,10 +11,13 @@ import Character from "../types/Character";
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
+  attempts: KanjiGrade[];
   character: Character;
+  setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
   passing: number;
   color: string;
   recall: boolean;
+  learn: boolean;
   handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
   handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
   clearKanji?: () => void;
@@ -53,8 +56,25 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const [gradeInfo, setGradeInfo] = React.useState(false);
   const [haveGradeInfo, setHaveGradeInfo] = React.useState(true);
   const [grade, setGrade] = useState<KanjiGrade | null>(null);
-  const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
 
+  const displayNextButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    if(!props.recall) {
+      return false;
+    }
+
+    //Learn Mode
+    if(props.learn) {
+      if(props.attempts.length > 1) {
+        return props.kanjiGrade && props.kanjiGrade.overallGrade > 50 
+      }
+    } 
+    //Review Mode
+    else {
+      return props.kanjiGrade && props.kanjiGrade.overallGrade > 50 
+    }
+    
+  },[props])
   // console.log(kanji_grade);
 
   useEffect(() => {
@@ -145,11 +165,12 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   </div>
                 </div>
                 </div>
-
-                {kanji_grade && kanji_grade.overallGrade > 50 && props.recall && (
+                
+                
+                {displayNextButton && (
                   <button
                     onClick={() => {
-                      setAllowDisplay(false);
+                      props.setAllowDisplay(false);
                       if(props.clearKanji)  props.clearKanji() 
                       props.handleAdvance!(props.character, kanji_grade)
                       setGrade(null);
@@ -159,6 +180,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                     <ArrowForward />
                   </button>
                 )}
+                
               </div>
 
               {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
