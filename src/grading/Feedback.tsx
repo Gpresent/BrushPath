@@ -204,7 +204,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 <div className="score-overview">
                   <div className="your-score">Your Score:</div>
                   <div className="feedback-word">
-                    {gradeToWord(kanji_grade.overallGrade)}
+                    {gradeToWord(Math.round(kanji_grade.overallGrade))}
                   </div>
                   {props.learn && props.attempts.length === 1 &&
                     <div className="feedback-word">

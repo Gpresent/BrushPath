@@ -131,7 +131,7 @@
     height: 5px;
 }
 .page-dot-inactive {
-    background-color: rgba(140, 140, 241, .75);
+    background-color: rgba(140, 140, 241, .50);
     border-radius: 5px;
     height: 5px;
 }
