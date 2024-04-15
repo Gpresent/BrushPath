@@ -14,6 +14,8 @@ export const interpretImage = async (imageDataUrl: string) => {
     image.src = imageDataUrl;
 
 
+
+
     await new Promise((resolve, reject) => {
         image.onload = resolve;
         image.onerror = reject;
@@ -38,6 +40,9 @@ export const interpretImage = async (imageDataUrl: string) => {
         .div(tf.scalar(255));
 
     tensor = tensor.mean(2).expandDims(2).expandDims();
+
+
+
 
     //console.log(tensor.shape)
     //Start prediciton 

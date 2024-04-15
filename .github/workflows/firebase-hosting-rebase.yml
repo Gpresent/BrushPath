@@ -1,0 +1,31 @@
+name: Rebase firebase-hosting on Demand
+
+on:
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+  push:
+    branches:
+      - main  # Triggers the workflow when there is a push to the main branch (optional)
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all tags and branches
+
+      - name: Checkout firebase-hosting branch
+        run: git checkout firebase-hosting
+
+      - name: Rebase firebase-hosting onto main
+        run: |
+          git fetch origin main
+          git rebase origin/main
+          git push origin firebase-hosting -f
+        env:
+          GIT_COMMITTER_NAME: 'GitHub Actions'
+          GIT_COMMITTER_EMAIL: 'actions@github.com'
+          GIT_AUTHOR_NAME: 'GitHub Actions'
+          GIT_AUTHOR_EMAIL: 'actions@github.com'
+        continue-on-error: true
