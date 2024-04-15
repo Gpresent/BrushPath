@@ -52,15 +52,12 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
     }   
     if (!badLocations.length) return '';
     var regions = [0]
-    console.log("Bad locations:", badLocations)
-    console.log("Target angles:", targetAngles)
     for (let i = 0; i < targetAngles.length - 1; i++) {
         if (targetAngles[i] > 180) targetAngles[i] -= 360;
         if (targetAngles[i] < -180) targetAngles[i] += 360;
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
-    console.log("Target regions", regions);
     feedback += 'The angle of this stroke is off. Make sure that';
     var startFeedback = false;
     var regionIndex = 0;

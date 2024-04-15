@@ -64,7 +64,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   useEffect(() => {
     let nextIndex = 0;
     for (let i = 0; i < childIndex; i++) {
-      while (kanji_grade.grades[nextIndex] > passing) nextIndex++;
+      while (kanji_grade.grades[nextIndex] > passing || kanji_grade.grades[nextIndex] === -1) nextIndex++;
       nextIndex++;
     }
     nextIndex--;
@@ -137,8 +137,9 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
   useEffect(() => {
     let hasInfo = false;
-    let pages = kanji_grade.grades.filter((value) => value < passing).length
+    let pages = kanji_grade.grades.filter((value) => value < passing && value !== -1).length;
     if (pages !== pagenumber) setPageNumber(pages)
+    console.log(pages)
     setChildIndex(0)
     document.querySelectorAll(".feedback-container").forEach((container) => {
       container.scrollTo({ left: 0, behavior: "smooth" });
@@ -248,6 +249,8 @@ const Feedback: React.FC<feedbackProps> = (props) => {
         {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
           <>
             {kanji_grade.grades.map((grade, index) => {
+              const extras = kanji_grade.grades.filter((value, eIndex) => value === -1 && eIndex < index).length
+              index -= extras
               if (
                 grade >= passing ||
                 grade === -1 ||
