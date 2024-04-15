@@ -128,6 +128,7 @@ const SingleWordView: React.FC = () => {
         <AddToDeckModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        character={character}
         />
       </div>
     </>

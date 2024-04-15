@@ -17,6 +17,8 @@ import "../styles/index.css";
 
 import "../styles/index.css";
 import Modal from "./Modal";
+import WideModal from "./WideModal";
+import SelectableDeckList from "./SelectableDeckList";
 
 interface Deck {
   id: string;
@@ -25,13 +27,12 @@ interface Deck {
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
+  character: Character;
 }
 
-const KanjiModal: React.FC<AddModalProps> = ({isOpen, onClose}) => {
-  const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
-  const [deckTitle, setDeckTitle] = useState("");
+const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) => {
+  
   const { userData, getUserData, user } = useContext(AuthContext);
-  const characterCache = useContext(CharacterSearchContext);
   const [decks, setDecks] = useState<any>([]);
 
   useEffect(() => {
@@ -51,6 +52,14 @@ const KanjiModal: React.FC<AddModalProps> = ({isOpen, onClose}) => {
     fetchDecks();
   }, [userData]);
 
+  const savedInDecks = useMemo(() => {
+    return decks.filter((deck: any) => deck.characters.some((ref: { id: string; }) => ref.id === character.unicode_str) )
+  },[decks,character])
+
+  const notSavedInDecks = useMemo(() => {
+    return decks.filter((deck: any) => !deck.characters.some((ref: { id: string; }) => ref.id === character.unicode_str) )
+  },[decks,character])
+
   const handleSubmit = () => {
     // TODO add logic :)
     onClose();
@@ -63,7 +72,7 @@ const KanjiModal: React.FC<AddModalProps> = ({isOpen, onClose}) => {
   if (!isOpen) return null;
 
   return (
-    <Modal title={"Add To Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
+    <WideModal title={"Add To Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
       <div className="deck-title-input">
         <label className="deckTitle" htmlFor="deckTitle">
         </label>
@@ -71,16 +80,21 @@ const KanjiModal: React.FC<AddModalProps> = ({isOpen, onClose}) => {
       <ul className="add-word-list">
 
         <div className="deck-list-container">
+
         {
-          !userData ? <LoadingSpinner /> : <DeckList decks={decks}
-            user={userData} length={decks.length} />
+          !userData ? <LoadingSpinner /> : <><p>Saved in </p><SelectableDeckList decks={savedInDecks}
+            user={userData}  />
+            <p>Other Decks</p>
+            <SelectableDeckList decks={notSavedInDecks}
+            user={userData} />
+            </>
         }
       </div >
         
       </ul>
       <button onClick={handleSubmit}>Submit</button>
-    </Modal>
+    </WideModal>
   );
 };
 
-export default KanjiModal;
+export default AddToDeckModal;
