@@ -80,7 +80,7 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
                 } else if (index === regions.length - 1) {
                     startFeedback ? feedback += ' and ' : feedback += ' the stroke ';
                     const startRegion = Math.round(regions[index - 1] / targetAngles.length * 10) * 10
-                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the end';
+                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index - 1]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the end';
                     regionIndex = index;
                     break;
                 } else {
