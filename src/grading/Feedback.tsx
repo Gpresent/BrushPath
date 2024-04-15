@@ -4,8 +4,6 @@ import "../styles/dict.css";
 import "../styles/feedback.css";
 import { useEffect } from "react";
 import { gradeToWord } from "../utils/gradeToColor";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ExpandLess from "@mui/icons-material/ExpandLess";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
 
@@ -48,51 +46,50 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const color = props.color;
   const passing = props.passing;
   const canvasElement = document.getElementById("react-sketch-canvas");
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [showDots, setShowDots] = useState(false);
   const [gradeInfo, setGradeInfo] = React.useState(false);
   const [haveGradeInfo, setHaveGradeInfo] = React.useState(true);
   const [grade, setGrade] = useState<KanjiGrade | null>(null);
   const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
+  const [childIndex, setChildIndex] = useState(0);
+  const [pagenumber, setPageNumber] = useState(0);
 
   // console.log(kanji_grade);
 
   useEffect(() => {
     document.querySelectorAll(".feedback-container").forEach((container) => {
-      let isScrolling: ReturnType<typeof setTimeout>;
+      container.addEventListener("scrollend", () => {
+        const scrollLeft = container.scrollLeft;
+        const children = Array.from(container.children) as HTMLElement[];
+        const index = children.findIndex(
+          (child) => child.offsetLeft > scrollLeft
+        );
+        setChildIndex(Math.floor(scrollLeft / container.clientWidth))
+        console.log(childIndex)
 
-      container.addEventListener("scroll", () => {
-        clearTimeout(isScrolling);
-        isScrolling = setTimeout(() => {
-          const scrollLeft = container.scrollLeft;
-          const children = Array.from(container.children) as HTMLElement[];
-          const index = children.findIndex(
-            (child) => child.offsetLeft > scrollLeft
-          );
+        if (index !== -1) {
+          
 
-          if (index !== -1) {
-            // setCurrentIndex(index);
+          const nextBoxLeft = children[index].offsetLeft;
+          const prevBoxLeft = index > 0 ? children[index - 1].offsetLeft : 0;
 
-            const nextBoxLeft = children[index].offsetLeft;
-            const prevBoxLeft = index > 0 ? children[index - 1].offsetLeft : 0;
-
-            const targetLeft =
-              scrollLeft - prevBoxLeft < nextBoxLeft - scrollLeft
-                ? prevBoxLeft
-                : nextBoxLeft;
-            container.scrollTo({
-              left: targetLeft,
-              behavior: "smooth",
-            });
-            // console.log("index is: " + currentIndex)
-          }
-        }, 50); // Adjust debounce delay as needed (in milliseconds)
+          const targetLeft =
+            scrollLeft - prevBoxLeft < nextBoxLeft - scrollLeft
+              ? prevBoxLeft
+              : nextBoxLeft;
+          container.scrollTo({
+            left: targetLeft,
+            behavior: "smooth",
+          });
+        }
       });
     });
   }, []);
 
   useEffect(() => {
     let hasInfo = false;
+    let pages = kanji_grade.grades.filter((value) => value < passing).length + 1
+    if (pages != pagenumber) setPageNumber(pages)
     kanji_grade.grades.forEach((grade, index) => {
       if (
         grade >= passing ||
@@ -114,7 +111,19 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
   return (
     <>
-      <div>
+      {pagenumber > 0 && (
+        <div className="page-dots-container">
+          {[...Array(pagenumber)].map((_, index) => (
+            <div
+              key={index}
+              className={`page-dot ${
+                childIndex === index ? "page-dot-active" : "page-dot-inactive"
+              }`}
+            ></div>
+          ))}
+        </div>
+      )}
+      <div className="feedback-container">
         <div className="feedback-header">
           {kanji_grade.overallGrade != -1 && (
             <div className="feedback-box">
@@ -146,7 +155,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 </div>
                 </div>
 
-                {kanji_grade && kanji_grade.overallGrade > 50 && props.recall && (
+                {kanji_grade && kanji_grade.overallGrade > 65 && props.recall && (
                   <button
                     onClick={() => {
                       setAllowDisplay(false);
@@ -160,93 +169,31 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   </button>
                 )}
               </div>
-
-              {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
-                <div className="feedback-detail">
-                  <div
-                    className="grade-info-button"
-                    onClick={() => {
-                      // console.log("clicked");
-                      setGradeInfo(!gradeInfo);
-                      document
-                        .getElementsByClassName("grade-info")[0]
-                        ?.classList.toggle("info-hidden");
-                    }}
-                  >
-                    {gradeInfo ? (
-                      <>
-                        {" "}
-                        Less Feedback <ExpandLess fontSize="medium" />
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        More Feedback <ExpandMore fontSize="medium" />
-                      </>
-                    )}
-                  </div>
-                  <div className="grade-info info-hidden">
-                    {kanji_grade.overallFeedback !== "" && (
-                      <div>{kanji_grade.overallFeedback}</div>
-                    )}
-                    {kanji_grade.grades.map((grade, index) => {
-                      if (
-                        grade >= passing ||
-                        grade === -1 ||
-                        kanji_grade.feedback.length <= index
-                      )
-                        return null;
-                      const path =
-                        canvasElement?.getElementsByTagName("path")[index];
-                      if (!path) return null;
-
-                      return pageCreator(kanji_grade.feedback[index], index);
-                    })}
-                  </div>
+              {kanji_grade.overallFeedback && (
+                <div className="feedback-text">
+                  {kanji_grade.overallFeedback}
                 </div>
               )}
             </div>
           )}
         </div>
-      </div>
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
-        {showDots && (
-          // <span
-          //   style={{
-          //     display: "inline-block",
-          //     width: "10px",
-          //     height: "10px",
-          //     borderRadius: "50%",
-          //     backgroundColor: 0 === currentIndex ? "blue" : "gray",
-          //     margin: "0 5px",
-          //   }}
-          // />
-          <></>
+        {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
+          <>
+            {kanji_grade.grades.map((grade, index) => {
+              if (
+                grade >= passing ||
+                grade === -1 ||
+                kanji_grade.feedback.length <= index
+              )
+                return null;
+              const path =
+                canvasElement?.getElementsByTagName("path")[index];
+              if (!path) return null;
+
+              return pageCreator(kanji_grade.feedback[index], index);
+            })}
+          </>
         )}
-        {kanji_grade.grades.map((grade, index) => {
-          if (
-            grade >= passing ||
-            grade === -1 ||
-            kanji_grade.feedback.length <= index
-          )
-            return null;
-          const path = canvasElement?.getElementsByTagName("path")[index];
-          if (!path) return null;
-          return (
-            // <span
-            //   key={index}
-            //   style={{
-            //     display: "inline-block",
-            //     width: "10px",
-            //     height: "10px",
-            //     borderRadius: "50%",
-            //     backgroundColor: index  === currentIndex ? "blue" : "gray",
-            //     margin: "0 5px",
-            //   }}
-            // />
-            <></>
-          );
-        })}
       </div>
     </>
   );

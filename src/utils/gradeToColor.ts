@@ -28,9 +28,11 @@ export function gradeToWord(score: number) {
         return "Needs Work";
     }else if(60 < score && score < 80){
         return "Fair";
-    }else if(80 < score){
+    }else if(80 < score && score < 100){
         return "Good";
-    }else{
+    }else if (score === 100){
+        return "Perfect";
+    } else {
         return "";
     }
 }

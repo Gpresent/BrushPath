@@ -30,8 +30,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* min-width: 100%;
-    margin-left: 1rem; */
+    min-width: 100%;
+    margin-left: 1rem; 
     overflow: wrap;
     margin-bottom: 10px;
 }
@@ -39,11 +39,11 @@
 .feedback-box-strokes {
     display: flex;
     flex-direction: column;
-    /* padding: 0 1rem;
+    padding: 1rem;
     padding-bottom: 1rem;
-    min-width: calc(99% - 2rem); */
+    min-width: calc(99% - 2rem);
     overflow: wrap;
-    /* border: 1px solid black; */
+    border: 1px solid black; 
     border-radius: 10px;
 }
 
@@ -71,7 +71,7 @@
 .score-overview{
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
+    justify-content: space-between; 
     margin: 10px;
 }
 
@@ -85,16 +85,15 @@
 }
 
 .feedback-box {
-    /* display: flex; */
+    display: flex;
     flex-direction: column;
     align-items: center;
-    /* padding: 0 1rem;
-     */
+    padding: 0 1rem;
+    
     min-width: calc(99% - 2rem);
     overflow: wrap;
-    /* border: 1px solid black; */
-    /* border-radius: 10px; */
-    /* padding-bottom: 20px; */
+    border: 1px solid black;
+    border-radius: 10px;
 }
 
 .feedback-detail {
@@ -112,4 +111,30 @@
     font-size: 30px;
     font-weight: 500;
     margin: 10px;
+}
+
+.feedback-text {
+    padding-bottom: 20px;
+}
+
+.page-dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    height: 20px;
+    width: 100%;
+}
+
+.page-dot-active {
+    background-color: blue;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+.page-dot-inactive {
+    background-color: grey;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
 }
