@@ -65,7 +65,6 @@ const Feedback: React.FC<feedbackProps> = (props) => {
           (child) => child.offsetLeft > scrollLeft
         );
         setChildIndex(Math.floor(scrollLeft / container.clientWidth))
-        console.log(childIndex)
 
         if (index !== -1) {
           
@@ -88,8 +87,8 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
   useEffect(() => {
     let hasInfo = false;
-    let pages = kanji_grade.grades.filter((value) => value < passing).length + 1
-    if (pages != pagenumber) setPageNumber(pages)
+    let pages = kanji_grade.grades.filter((value) => value < passing).length
+    if (pages !== pagenumber) setPageNumber(pages)
     kanji_grade.grades.forEach((grade, index) => {
       if (
         grade >= passing ||
@@ -113,7 +112,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     <>
       {pagenumber > 0 && (
         <div className="page-dots-container">
-          {[...Array(pagenumber)].map((_, index) => (
+          {[...Array(pagenumber + 1)].map((_, index) => (
             <div
               key={index}
               className={`page-dot ${
@@ -189,7 +188,6 @@ const Feedback: React.FC<feedbackProps> = (props) => {
               const path =
                 canvasElement?.getElementsByTagName("path")[index];
               if (!path) return null;
-
               return pageCreator(kanji_grade.feedback[index], index);
             })}
           </>
