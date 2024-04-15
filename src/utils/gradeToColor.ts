@@ -4,7 +4,7 @@ export default function gradeToColor(score: number) {
 
     // console.log("score is: " + score)
 
-    if (0 <= score && score < 40){
+    if (0 <= score && score < 45){
         return "#D9544D";
     }else if(45 < score && score < 65){
         return "#F69B46";

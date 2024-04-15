@@ -26,18 +26,25 @@ function order_feedback(order: number[]) {
         return;
     }
     var feedback = "Stroke order:\n";
+    var feedbackCount = 0;
     for (let i = 0; i < order.length; i++) {
         if (order[i] !== i + 1) {
             if (order[order[i] - 1] === i + 1) {
                 if (order[i] < order[order[i] - 1]) {
                     feedback += "\tSwap strokes " + order[i] + " and " + default_order[i] + ".\n";
                     kanji_grade.overallGrade -= 2 * (100 - passing * 100);
+                    feedbackCount++;
                 }
             } else {
                 feedback += "\tStroke " + order[i] + " should be stroke " + default_order[i] + ".\n";
                 kanji_grade.overallGrade -= (100 - passing * 100);
+                feedbackCount++;
             }
         }
+    }
+    if (feedbackCount > 3) {
+        kanji_grade.overallFeedback += "Review the stroke order and try again.\n";
+        return;
     }
     kanji_grade.overallFeedback += feedback;
 }
