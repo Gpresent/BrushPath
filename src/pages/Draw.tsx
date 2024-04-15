@@ -4,6 +4,7 @@ import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -84,7 +85,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
-  const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(props.learn || false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
@@ -242,6 +243,15 @@ const Draw: React.FC<DrawProps> = (props) => {
     return () => observer.disconnect();
   }, []);
 
+  const handleAdvance = (character: Character, grade: KanjiGrade) => {
+    setAttempts([]);
+    if(props.handleAdvance) {
+      props.handleAdvance(character,grade);
+    }
+    
+
+  }
+
   useEffect(() => {
     // This function will be called whenever someProp changes
     // Perform any necessary actions here
@@ -312,6 +322,26 @@ const Draw: React.FC<DrawProps> = (props) => {
             {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
+        { kanji_grade.overallGrade !== -1 ?
+        <button
+        className="check-kanji"
+        style={styles.button}
+        onClick={() => {
+          canvas.current.clearCanvas();
+          setInputStrokes(0);
+          setReadOnly(false);
+          setKanjiGrade({
+            overallGrade: -1,
+            overallFeedback: "",
+            grades: [],
+            feedback: [],
+            strokeInfo: [],
+          });
+        }}
+        >
+           <AutorenewIcon fontSize="medium"/>
+        </button>
+        :
         <button
           className="check-kanji"
           style={styles.button}
@@ -330,6 +360,17 @@ const Draw: React.FC<DrawProps> = (props) => {
                 grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
+                  //If in learn mode, hide svg on second attempt
+                  if(props.learn) {
+                    if(attempts.length === 0) {
+                      setAllowDisplaySVG(false)
+                      setDisplaySVG(false)
+                    }
+                    else if(!allowDisplaySVG){
+                      setAllowDisplaySVG(true)
+                    }
+                    
+                  }
                   setAttempts((prevAttempts) => [...prevAttempts,grade])
                   if(props.character) {
                     if(props.handleComplete) {
@@ -343,6 +384,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                     }
                     
                   }
+                  
                   
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     canvas.current.exportImage('jpeg').then((data: any) => {
@@ -385,8 +427,9 @@ const Draw: React.FC<DrawProps> = (props) => {
         >
           <DoneIcon fontSize="medium" />
         </button>
+        }
       </div>
-      <Feedback setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );

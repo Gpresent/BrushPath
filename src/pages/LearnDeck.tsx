@@ -103,6 +103,12 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
   };
 
   useEffect(() => {
+    if (!userData) {
+      getUserData();
+    }
+  }, []);
+
+  useEffect(() => {
     if (userData) {
       fetchCharactersToLearn(7);
     }

@@ -14,6 +14,8 @@ interface feedbackProps {
   attempts: KanjiGrade[];
   character: Character;
   setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
+  setDisplaySVG: React.Dispatch<React.SetStateAction<boolean>>;
+
   passing: number;
   color: string;
   recall: boolean;
@@ -56,6 +58,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const [gradeInfo, setGradeInfo] = React.useState(false);
   const [haveGradeInfo, setHaveGradeInfo] = React.useState(true);
   const [grade, setGrade] = useState<KanjiGrade | null>(null);
+  
 
   const displayNextButton = useMemo(() => {
     //If not in recall mode (ex dictionary page), don't show button
@@ -66,7 +69,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     //Learn Mode
     if(props.learn) {
       if(props.attempts.length > 1) {
-        return props.kanjiGrade && props.kanjiGrade.overallGrade > 50 
+        return props.kanjiGrade 
       }
     } 
     //Review Mode
@@ -170,7 +173,14 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 {displayNextButton && (
                   <button
                     onClick={() => {
-                      props.setAllowDisplay(false);
+                      
+                      if(props.learn) {
+                        props.setDisplaySVG(true);
+                      }
+                      else {
+                          props.setAllowDisplay(false);
+                      
+                      }
                       if(props.clearKanji)  props.clearKanji() 
                       props.handleAdvance!(props.character, kanji_grade)
                       setGrade(null);

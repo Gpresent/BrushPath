@@ -35,7 +35,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
-  const {userData} = useContext(AuthContext);
+  const {userData, getUserData} = useContext(AuthContext);
 
   const characterCache = useContext(CharacterSearchContext);
 
@@ -63,7 +63,13 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   let { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (!userData) {
+      getUserData();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userData && id) {
       getDeckFromID(id).then((deckData) => {
         if (deckData) {
           setDeck({ data: deckData, loading: false, error: "" });
@@ -75,7 +81,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
     } else {
       setDeck({ data: null, loading: false, error: "No url parameter" });
     }
-  }, []);
+  }, [userData]);
 
   const handleEditDeck = () => {
     setIsEditModalOpen(!isEditModalOpen);
