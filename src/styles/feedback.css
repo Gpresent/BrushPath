@@ -43,7 +43,7 @@
     padding-bottom: 1rem;
     min-width: calc(99% - 2rem);
     overflow: wrap;
-    border: 1px solid black; 
+    /* border: 1px solid black;  */
     border-radius: 10px;
 }
 
@@ -92,7 +92,7 @@
     
     min-width: calc(99% - 2rem);
     overflow: wrap;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 10px;
 }
 
@@ -121,20 +121,17 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 10px;
-    height: 20px;
+    height: 15px;
     width: 100%;
 }
 
 .page-dot-active {
-    background-color: blue;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
+    background-color: rgba(40, 40, 41, .75);
+    border-radius: 5px;
+    height: 5px;
 }
 .page-dot-inactive {
-    background-color: grey;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
+    background-color: rgba(140, 140, 241, .75);
+    border-radius: 5px;
+    height: 5px;
 }

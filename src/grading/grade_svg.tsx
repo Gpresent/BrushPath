@@ -51,11 +51,16 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
         }
     }   
     if (!badLocations.length) return '';
-    var regions = [0];
-    for (let i = 0; i < targetAngles.length; i++) {
+    var regions = [0]
+    console.log("Bad locations:", badLocations)
+    console.log("Target angles:", targetAngles)
+    for (let i = 0; i < targetAngles.length - 1; i++) {
+        if (targetAngles[i] > 180) targetAngles[i] -= 360;
+        if (targetAngles[i] < -180) targetAngles[i] += 360;
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
+    console.log("Target regions", regions);
     feedback += 'The angle of this stroke is off. Make sure that';
     var startFeedback = false;
     var regionIndex = 0;
@@ -65,7 +70,7 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
             if (regions[index] > badLocations[i]) {
                 if (index === 1) {
                     if (index === regions.length - 1) {
-                        feedback += ' the stroke slopes ' + classify_angle(targetAngles[0]); 
+                        feedback += ' the stroke slopes ' + classify_angle(targetAngles[regions[index] - 1]); 
                     } else {
                         feedback += ' the stroke slopes ' + classify_angle(targetAngles[0]) + ' until the ' + Math.round(regions[index] / targetAngles.length * 10) * 10 + '% mark';
                     }
@@ -75,7 +80,7 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
                 } else if (index === regions.length - 1) {
                     startFeedback ? feedback += ' and ' : feedback += ' the stroke ';
                     const startRegion = Math.round(regions[index - 1] / targetAngles.length * 10) * 10
-                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index - 1]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the end';
+                    feedback += 'slopes ' + classify_angle(targetAngles[regions[index]]) + ' from the ' + (startRegion === 0 ? 'beginning' : startRegion + '% mark') + ' to the end';
                     regionIndex = index;
                     break;
                 } else {

@@ -53,8 +53,23 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
   const [childIndex, setChildIndex] = useState(0);
   const [pagenumber, setPageNumber] = useState(0);
+  const [currentStroke, setCurrentStroke] = useState(-1);
+  const [currentStrokeColor, setCurrentStrokeColor] = useState("black");
 
-  // console.log(kanji_grade);
+  useEffect(() => {
+    let nextIndex = 0;
+    for (let i = 0; i < childIndex; i++) {
+      while (kanji_grade.grades[nextIndex] > passing) nextIndex++;
+      nextIndex++;
+    }
+    nextIndex--;
+    const nextStroke = canvasElement?.getElementsByTagName("path")[nextIndex];
+    const currStroke = canvasElement?.getElementsByTagName("path")[currentStroke];
+    currStroke?.setAttribute("stroke", currentStrokeColor);
+    setCurrentStroke(nextIndex);
+    setCurrentStrokeColor(nextStroke?.getAttribute("stroke") || "black");
+    if (childIndex !== 0) nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
+ }, [childIndex]);
 
   useEffect(() => {
     document.querySelectorAll(".feedback-container").forEach((container) => {
@@ -89,6 +104,10 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     let hasInfo = false;
     let pages = kanji_grade.grades.filter((value) => value < passing).length
     if (pages !== pagenumber) setPageNumber(pages)
+    setChildIndex(0)
+    document.querySelectorAll(".feedback-container").forEach((container) => {
+      container.scrollTo({ left: 0, behavior: "smooth" });
+    });
     kanji_grade.grades.forEach((grade, index) => {
       if (
         grade >= passing ||
@@ -118,6 +137,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
               className={`page-dot ${
                 childIndex === index ? "page-dot-active" : "page-dot-inactive"
               }`}
+              style={{ width: `${100 / (pagenumber + 1)}%` }}
             ></div>
           ))}
         </div>
