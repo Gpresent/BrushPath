@@ -26,18 +26,25 @@ function order_feedback(order: number[]) {
         return;
     }
     var feedback = "Stroke order:\n";
+    var feedbackCount = 0;
     for (let i = 0; i < order.length; i++) {
         if (order[i] !== i + 1) {
             if (order[order[i] - 1] === i + 1) {
                 if (order[i] < order[order[i] - 1]) {
                     feedback += "\tSwap strokes " + order[i] + " and " + default_order[i] + ".\n";
                     kanji_grade.overallGrade -= 2 * (100 - passing * 100);
+                    feedbackCount++;
                 }
             } else {
                 feedback += "\tStroke " + order[i] + " should be stroke " + default_order[i] + ".\n";
                 kanji_grade.overallGrade -= (100 - passing * 100);
+                feedbackCount++;
             }
         }
+    }
+    if (feedbackCount > 3) {
+        kanji_grade.overallFeedback += "Review the stroke order and try again.\n";
+        return;
     }
     kanji_grade.overallFeedback += feedback;
 }
@@ -151,7 +158,7 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
     var iCoordsCorrected = iCoords.slice(0, iCoords.length - lengthdiff);
     var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(JSON.parse(JSON.stringify(iCoordsCorrected)), tCoords, passing);
     if (failing > iCoords.length * 0.75) {
-        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        kanji_grade.overallFeedback += "Review the model and try again.\n";
         return [[],[],[],"",0];
     }
     var avgGrade = 0
@@ -169,7 +176,7 @@ function extraStrokes(iCoords: number[][][], tCoords: number[][][], passing: num
                 break;
             }
             if (failing > tCoords.length * 0.75) {
-                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                kanji_grade.overallFeedback += "Review the model and try again.\n";
                 return [[],[],[],"",0];
             }
         }
@@ -210,7 +217,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
     var tCoordsCorrected = tCoords.slice(0, tCoords.length - lengthdiff);
     var [grades, strokeInfo, feedback, aspectString, failing, sOrder] = alternateStrokeOrder(iCoords, JSON.parse(JSON.stringify(tCoordsCorrected)), passing);
     if (failing > iCoords.length * 0.75) {
-        kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+        kanji_grade.overallFeedback += "Review the model and try again.\n";
         return [[],[],[],"",0];
     }
     var avgGrade = 0;
@@ -229,7 +236,7 @@ function missingStrokes(iCoords: number[][][], tCoords: number[][][], passing: n
             }
             console.log(failing, tCoords.length * 0.75)
             if (failing > iCoords.length * 0.75) {
-                kanji_grade.overallFeedback += "It looks like you drew the wrong kanji.\n";
+                kanji_grade.overallFeedback += "Review the model and try again.\n";
                 return [[],[],[],"",0];
             }
         }
@@ -286,7 +293,7 @@ export default function grade(input: string, targetKanji: string, passing: numbe
                         color_input([]);
                         kanji_grade = {
                             overallGrade: 0,
-                            overallFeedback: "It looks like you drew the wrong kanji.\n",
+                            overallFeedback: "Review the model and try again.\n",
                             grades: [],
                             feedback: [],
                             strokeInfo: []
@@ -346,7 +353,7 @@ export default function grade(input: string, targetKanji: string, passing: numbe
                             color_input([]);
                             kanji_grade = {
                                 overallGrade: 0,
-                                overallFeedback: "It looks like you drew the wrong kanji.\n",
+                                overallFeedback: "Review the model and try again.\n",
                                 grades: [],
                                 feedback: [],
                                 strokeInfo: []
