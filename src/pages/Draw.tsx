@@ -352,7 +352,7 @@ const Draw: React.FC<DrawProps> = (props) => {
 
                 const convertCoords = (coords: any) => {
                   let coordsArr: any[] = []
-                  Object.keys(coords).sort().forEach((coordKey) => {
+                  Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
                       coordsArr.push(coords[coordKey].map((coordsSet: {x: number, y:number}) => [coordsSet.x,coordsSet.y]))
                   })
                   return coordsArr;
