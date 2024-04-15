@@ -4,6 +4,7 @@ import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -63,6 +64,7 @@ interface DrawProps {
   allowDisplay: boolean;
   handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   recall: boolean;
+  learn?:boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -83,7 +85,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
-  const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(props.learn || false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
@@ -96,6 +98,8 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  const [attempts, setAttempts] = React.useState<KanjiGrade[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
@@ -143,6 +147,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   useEffect(() => {
     setColor(gradeToColor(kanji_grade.overallGrade))
   }, [kanji_grade])
+
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
@@ -238,6 +243,15 @@ const Draw: React.FC<DrawProps> = (props) => {
     return () => observer.disconnect();
   }, []);
 
+  const handleAdvance = (character: Character, grade: KanjiGrade) => {
+    setAttempts([]);
+    if(props.handleAdvance) {
+      props.handleAdvance(character,grade);
+    }
+    
+
+  }
+
   useEffect(() => {
     // This function will be called whenever someProp changes
     // Perform any necessary actions here
@@ -308,6 +322,26 @@ const Draw: React.FC<DrawProps> = (props) => {
             {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
+        { kanji_grade.overallGrade !== -1 ?
+        <button
+        className="check-kanji"
+        style={styles.button}
+        onClick={() => {
+          canvas.current.clearCanvas();
+          setInputStrokes(0);
+          setReadOnly(false);
+          setKanjiGrade({
+            overallGrade: -1,
+            overallFeedback: "",
+            grades: [],
+            feedback: [],
+            strokeInfo: [],
+          });
+        }}
+        >
+           <AutorenewIcon fontSize="medium"/>
+        </button>
+        :
         <button
           className="check-kanji"
           style={styles.button}
@@ -326,6 +360,18 @@ const Draw: React.FC<DrawProps> = (props) => {
                 grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
 
                   setKanjiGrade(grade);
+                  //If in learn mode, hide svg on second attempt
+                  if(props.learn) {
+                    if(attempts.length === 0) {
+                      setAllowDisplaySVG(false)
+                      setDisplaySVG(false)
+                    }
+                    else if(!allowDisplaySVG){
+                      setAllowDisplaySVG(true)
+                    }
+                    
+                  }
+                  setAttempts((prevAttempts) => [...prevAttempts,grade])
                   if(props.character) {
                     if(props.handleComplete) {
                       props.handleComplete(props.character,grade)
@@ -338,6 +384,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                     }
                     
                   }
+                  
                   
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     canvas.current.exportImage('jpeg').then((data: any) => {
@@ -380,8 +427,9 @@ const Draw: React.FC<DrawProps> = (props) => {
         >
           <DoneIcon fontSize="medium" />
         </button>
+        }
       </div>
-      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );

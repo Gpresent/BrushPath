@@ -10,29 +10,34 @@ import ArrowForward from "@mui/icons-material/ArrowForward";
 interface LearnCardProps {
   character: Character;
   handleAdvance: (arg0: Character, arg1: KanjiGrade) => void;
+  learn: boolean;
 }
 
-const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance }) => {
+const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }) => {
   const [grade, setGrade] = useState<KanjiGrade | null>(null);
+  const [attempts, setAttempts] = useState<KanjiGrade[]>([]);
   const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
   const [numAttempts, setNumAttempts] = useState<number>(0);
 
   const handleComplete = (character: Character, grade: KanjiGrade) => {
-    // console.log(JSON.stringify(grade));
-    if (!allowDisplay) {
-      const gradeIsNull =
-        (grade !== null && grade.overallGrade === null) ||
-        isNaN(grade.overallGrade);
-      const gradeIsNotHighEnough =
-        grade !== null &&
-        grade.grades.length > 0 &&
-        Math.max(...grade.grades) < 60;
-      // debugger;
-      setAllowDisplay(gradeIsNotHighEnough || gradeIsNull);
-    }
-    // console.log("complete")
-    console.log(grade);
     setGrade(grade);
+    setAttempts((prevAttempts) => {
+      
+      if (!allowDisplay) {
+        const gradeIsNull =
+          (grade !== null && grade.overallGrade === null) ||
+          isNaN(grade.overallGrade);
+        const gradeIsNotHighEnough =
+          grade !== null &&
+          grade.grades.length > 0 &&
+          Math.max(...grade.grades) < 60;
+        // debugger;
+        setAllowDisplay(gradeIsNotHighEnough || gradeIsNull);
+      }
+      return [...prevAttempts, grade]
+    })
+    
+    
   };
 
   //Todo, replace divs with actual tags lol
@@ -50,6 +55,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance }) => {
           handleComplete={handleComplete}
           char={character}
           handleAdvance={handleAdvance}
+          learn={learn}
         ></DrawReview>
       </div>
 
