@@ -166,6 +166,11 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <div className="feedback-word">
                     {gradeToWord(kanji_grade.overallGrade)}
                   </div>
+                  {props.learn && props.attempts.length === 1 &&
+                    <div className="feedback-word">
+                    <strong>Try again without the kanji to continue</strong>
+                  </div>
+                  }
                 </div>
                 </div>
                 
