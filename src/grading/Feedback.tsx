@@ -73,7 +73,16 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     currStroke?.setAttribute("stroke", currentStrokeColor);
     setCurrentStroke(nextIndex);
     setCurrentStrokeColor(nextStroke?.getAttribute("stroke") || "black");
-    if (childIndex !== 0) nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
+    const flashColor = nextStroke?.getAttribute("stroke") || "black";
+    if (childIndex !== 0) {
+      nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
+      setTimeout(() => {
+        nextStroke?.setAttribute("stroke", flashColor);
+      }, 200)   
+      setTimeout(() => {
+        nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
+      }, 400) 
+    }
  }, [childIndex]);
   
 
