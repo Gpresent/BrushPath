@@ -528,6 +528,23 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
+export const editCharInDecks = async (userID: string, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
+  debugger;
+  try {
+    
+
+  } catch (error: any) {
+    console.error("Error adding char to decks:", error);
+    
+    if(error?.code === "unavailable") {
+      return -1;
+    }
+    
+    throw error;
+  }
+
+}
+
 export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
   try {
     
@@ -607,3 +624,4 @@ export const getCharScoreDataByID = async (userID:string, charID:string) => {
     throw error;
   }
 }
+

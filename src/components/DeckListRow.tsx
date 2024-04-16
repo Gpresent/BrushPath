@@ -30,7 +30,9 @@ const DeckListRow: React.FC<DeckListRowProps> = ({ deck, user,initialSelected, h
   const [selected, setSelected] = useState<boolean>(initialSelected || false);
 
   const handleDeckClickHandler = () => {
-    
+    if(deck?.userRef?.id !== user.email) {
+      return;
+    }
     setSelected((prevState: boolean) => {
         const newState = !selected;
         if(deck._id) {
@@ -55,7 +57,7 @@ const DeckListRow: React.FC<DeckListRowProps> = ({ deck, user,initialSelected, h
       <div className="deck-card" onClick={handleDeckClickHandler}>
         <p className="deck-name">{deck.name}</p>
         <p className="hiragana">{ }</p>
-        <input type="checkbox" checked={selected} className="deck-check"/>
+        <input type="checkbox" checked={selected} disabled={deck?.userRef?.id !== user.email} className="deck-check"/>
       </div>
     </>
     

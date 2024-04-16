@@ -4,8 +4,8 @@ import "../styles/styles.css";
 import Character from "../types/Character";
 import { IndexedDBCachingResult } from "../utils/CharacterSearchContext";
 import characterParser from "../utils/characterParser";
-import { DocumentData } from "firebase/firestore";
-import { addUserDeck } from "../utils/FirebaseQueries";
+import { DocumentData, DocumentReference } from "firebase/firestore";
+import { addUserDeck, editCharInDecks } from "../utils/FirebaseQueries";
 import { User } from "firebase/auth";
 import { AuthContext } from "../utils/FirebaseContext";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
@@ -66,6 +66,13 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
 
   const handleSubmit = () => {
     // TODO add logic :)
+    if(user?.email) {
+      //where to remove from
+      const decksToRemoveChar = savedInDecks.filter((deck: any) => !selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
+      const decksToAddChar = notSavedInDecks.filter((deck: any) => selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
+      editCharInDecks(user?.email,decksToAddChar,decksToRemoveChar);
+
+    }
     onClose();
   };
 
@@ -75,20 +82,33 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
 
   const handleDeckClick = (deckID: string, selectedState: boolean) => {
     //Update Selected
-    setSelectedDecks((prevSelectedDecks: any) => {
-      if(selectedState) {
-        if(prevSelectedDecks.some((deck: any) => deck._id === deckID)) {
-          return prevSelectedDecks;
-        }else {
-          return [prevSelectedDecks, ...decks.filter((deck: any) => deck._id === deckID)]
-        }
-        
-      }
-      else {
-        return prevSelectedDecks.filter((deck: any) => deck._id !== deckID)
-      }
+    if(userData) {
+      //User can't edit decks they can't own
+      if(decks.some((deck: any) => deck.userRef === user?.email) ){
+        debugger;
       
-    })
+        setSelectedDecks((prevSelectedDecks: any) => {
+          if(selectedState) {
+            if(prevSelectedDecks.some((deck: any) => deck._id === deckID)) {
+              return prevSelectedDecks;
+            }else {
+              return [prevSelectedDecks, ...decks.filter((deck: any) => deck._id === deckID)]
+            }
+            
+          }
+          else {
+            return prevSelectedDecks.filter((deck: any) => deck._id !== deckID)
+          }
+        
+        
+         })
+
+    }
+  }
+    else {
+      getUserData();
+    }
+    
     
   }
 
@@ -109,7 +129,7 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
             user={userData} preSelect={true} handleDeckClick={handleDeckClick} />
             <p>Other Decks</p>
             <SelectableDeckList decks={notSavedInDecks}
-            user={userData} handleDeckClick={handleDeckClick} />
+            user={userData} handleDeckClick={handleDeckClick}  />
             </>
         }
       </div >
