@@ -44,6 +44,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   const [deckTitle, setDeckTitle] = useState("");
   const { kanjiList, fetchCharacters, lastRef } = useCharacters();
 
+
   useEffect(() => {
     // console.log("HI")
     // if (kanjiList.length == 0) {
@@ -69,7 +70,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         return [...prevSelected, kanji];
       }
     });
-};
+  };
 
   const handleSubmit = () => {
     // TODO add logic :)
@@ -126,7 +127,8 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         // loader={<LoadingSpinner />}
         useWindow={false}
       >
-        {<AddWordList style={{ maxHeight: "55vh" }} words={kanjiList} selectable={true} />}
+        {<AddWordList style={{ maxHeight: "55vh" }} words={kanjiList} selectable={true} selectedWords={selectedKanji}
+          setSelectedWords={setSelectedKanji} />}
       </InfiniteScroll>
 
       <ul className="add-word-list">

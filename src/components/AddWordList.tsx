@@ -164,18 +164,21 @@ const AddWordList: React.FC<WordListProps> = ({
 
     const handleClick = (selectedCharacter: Character) => {
         console.log("Selected ", selectedCharacter);
-        // if (setSelectedWords && selectedWords) {
-        //     //If it is selected, remove it
-        //     if (selectedCharacter.selected) {
-        //         setSelectedWords(
-        //             selectedWords.filter(
-        //                 (char) => char.unicode !== selectedCharacter.unicode
-        //             )
-        //         );
-        //     } else {
-        //         setSelectedWords([...selectedWords, selectedCharacter]);
-        //     }
-        // }
+        if (setSelectedWords && selectedWords) {
+            //If it is selected, remove it
+            if (selectedCharacter.selected) {
+                setSelectedWords(
+                    selectedWords.filter(
+                        (char) => char.unicode !== selectedCharacter.unicode
+                    )
+                );
+            } else {
+                setSelectedWords([...selectedWords, selectedCharacter]);
+            }
+
+        }
+
+
     };
 
     return (
