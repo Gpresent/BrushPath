@@ -70,9 +70,9 @@ const Review: React.FC = () => {
         <div>
         {
             words.loading? <LoadingSpinner />:
-        words.error || words.data === null? <p>words.error</p> : 
+            words.error || words.data === null? <p>words.error</p> : 
             <LearnCardList characters={words.data} />
-    }
+        }
     
     
     </div>

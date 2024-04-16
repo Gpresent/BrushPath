@@ -138,7 +138,10 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
           </div>
         </WideModal>
       ) : (
-        <LearnCard character={currentCharacter} handleAdvance={handleAdvance} />
+        <>
+          <p style={{marginBottom:"5px"}}>Kanji Complete: {currentCharacterIndex}/{characterSessionData.length}</p>
+          <LearnCard character={currentCharacter} handleAdvance={handleAdvance} />
+        </>
       )}
     </div>
   );
