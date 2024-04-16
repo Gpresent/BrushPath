@@ -87,7 +87,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     }
  }, [childIndex]);
 
- const displayRetryText = useMemo(() => {
+ const displayRetryButton = useMemo(() => {
   //If not in recall mode (ex dictionary page), don't show button
   if(!props.recall) {
     return false;
@@ -239,17 +239,23 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <div className="feedback-word">
                     {gradeToWord(Math.round(kanji_grade.overallGrade))}
                   </div>
-                  {displayRetryText &&
-                <div>
-                  <strong>Please retry without the kanji guide to advance.</strong>
-                </div>
-}
+                  
                   
                 </div>
                 
                 </div>
                 
-                
+                {displayRetryButton &&(
+                  <button
+                  onClick={() => {
+                    
+                    if(props.clearKanji)  props.clearKanji() 
+                  }}
+                  className="learn-card-nav-right"
+                >
+                  <ArrowForward />
+                </button>
+                )}
                 {displayNextButton && (
                   <button
                     onClick={() => {
