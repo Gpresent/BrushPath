@@ -54,11 +54,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
   const characterCache = useContext(CharacterSearchContext);
   const [decks, setDecks] = useState<any>([]);
 
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-    }
-  }, []);
+
 
   useEffect(() => {
     const fetchDecks = async () => {
