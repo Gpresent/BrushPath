@@ -10,10 +10,11 @@ import { debounce } from "lodash";
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
-  attempts: KanjiGrade[];
+  attempts: (KanjiGrade & {hint:boolean})[];
   character: Character;
   setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
   setDisplaySVG: React.Dispatch<React.SetStateAction<boolean>>;
+  allowDisplay: boolean;
 
   passing: number;
   color: string;
@@ -95,7 +96,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
     //Learn Mode
     if(props.learn) {
-      if(props.attempts.length > 1) {
+      if(props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
         return props.kanjiGrade 
       }
     } 
@@ -212,11 +213,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <div className="feedback-word">
                     {gradeToWord(Math.round(kanji_grade.overallGrade))}
                   </div>
-                  {props.learn && props.attempts.length === 1 &&
-                    <div className="feedback-word">
-                    <strong>Try again without the kanji to continue</strong>
-                  </div>
-                  }
+                  
                 </div>
                 </div>
                 
