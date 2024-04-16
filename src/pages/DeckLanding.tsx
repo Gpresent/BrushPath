@@ -10,45 +10,16 @@ import { getDecksFromRefs } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
 
+
 interface DeckProps {
   //message: string;
   title: string;
+  kanjiList: Character[];
+  lastRef: string;
 }
 
-// const decks = [
-//   {
-//     id: 0,
-//     coverImage: "../sample_deck.png",
-//     name: "JLPT N5",
-//   },
-//   {
-//     id: 1,
-//     coverImage: "../deck-covers/sample1.jpeg",
-//     name: "JLPT N4",
-//   },
-//   {
-//     id: 2,
-//     coverImage: "../deck-covers/sample2.jpeg",
-//     name: "JLPT N3",
-//   },
-//   {
-//     id: 3,
-//     coverImage: "../deck-covers/sample3.jpeg",
-//     name: "JLPT N2",
-//   },
-//   {
-//     id: 4,
-//     coverImage: "../deck-covers/sample4.jpeg",
-//     name: "JLPT N1",
-//   },
-//   {
-//     id: 5,
-//     coverImage: "../deck-covers/sample5.jpeg",
-//     name: "Custom Deck",
-//   },
-// ];
 
-const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
+const DeckLandingView: React.FC<DeckProps> = ({ title, kanjiList, lastRef }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { userData, getUserData, user } = useContext(AuthContext);
   const characterCache = useContext(CharacterSearchContext);
@@ -84,6 +55,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
         </div>
         <input className="search-bar" />
       </div>
+
       {/* <HomeStats /> */}
       <div className="deck-list-container">
 
@@ -100,6 +72,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
         userData={userData}
         user={user}
       />
+
     </div>
   );
 };

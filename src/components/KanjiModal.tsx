@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "../styles/styles.css";
 
 import Character from "../types/Character";
@@ -7,11 +7,14 @@ import characterParser from "../utils/characterParser";
 import { DocumentData } from "firebase/firestore";
 import { addUserDeck } from "../utils/FirebaseQueries";
 import { User } from "firebase/auth";
-
+import AddWordList from "./AddWordList";
 import "../styles/index.css";
+import { useCharacters } from "../utils/FBCharacterContext";
 
 import "../styles/index.css";
 import Modal from "./Modal";
+import InfiniteScroll from "react-infinite-scroller";
+import WordList from "./WordList";
 
 interface Kanji {
   id: number;
@@ -24,7 +27,7 @@ interface Kanji {
 interface KanjiModalProps {
   isOpen: boolean;
   onClose: () => void;
-  kanjiList: Kanji[];
+  kanjiList: Character[];
   characterCache: IndexedDBCachingResult | null;
   userData: DocumentData | null;
   user: User | null;
@@ -33,13 +36,22 @@ interface KanjiModalProps {
 const KanjiModal: React.FC<KanjiModalProps> = ({
   isOpen,
   onClose,
-  kanjiList,
   characterCache,
   userData,
   user,
 }) => {
   const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
   const [deckTitle, setDeckTitle] = useState("");
+  const { kanjiList, fetchCharacters, lastRef } = useCharacters();
+
+  useEffect(() => {
+    // console.log("HI")
+    // if (kanjiList.length == 0) {
+    //   console.log("calling dfetch ")
+    //   fetchCharacters();  // call this function to fetch characters if not already loaded
+    // }
+    console.log(kanjiList.length)
+  }, []);
 
   const characters: Character[] | undefined = useMemo(() => {
     //return characterCache?.data?.map((docData) => characterParser(docData) ).filter((character) => character!==null)
@@ -96,6 +108,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
 
   return (
     <Modal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
+
       <div className="deck-title-input">
         <label className="deckTitle" htmlFor="deckTitle">
           Enter Deck Name:
@@ -107,6 +120,17 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
           onChange={(e) => setDeckTitle(e.target.value)}
         />
       </div>
+      <InfiniteScroll
+        style={{ width: "100%" }}
+        pageStart={0}
+        loadMore={fetchCharacters}
+        hasMore={(kanjiList.length < 2136) && (lastRef != "poop")}
+        // loader={<LoadingSpinner />}
+        useWindow={false}
+      >
+        {<AddWordList style={{ maxHeight: "70vh" }} words={kanjiList} selectable={true} />}
+      </InfiniteScroll>
+
       <ul className="add-word-list">
         {characters?.map((kanji) => (
           <li key={kanji.unicode}>
