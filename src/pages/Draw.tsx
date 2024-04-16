@@ -64,7 +64,7 @@ interface DrawProps {
   allowDisplay: boolean;
   handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   recall: boolean;
-  learn?:boolean;
+  learn?: boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -81,7 +81,7 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
-  const {userData, getUserData } = useContext(AuthContext);
+  const { userData, getUserData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
@@ -113,24 +113,24 @@ const Draw: React.FC<DrawProps> = (props) => {
     });
   }
 
-  
 
-  const handleUpsertCharacterScoreData = async (characterID: string, grade:number) => {
-    if(!userData) {
+
+  const handleUpsertCharacterScoreData = async (characterID: string, grade: number) => {
+    if (!userData) {
       const buffer = async () => {
-        getUserData();
+
       }
       buffer().then(() => {
-        if(userData) {
-          upsertCharacterScoreData((userData as DocumentData)?.email || "", characterID,grade);
+        if (userData) {
+          upsertCharacterScoreData((userData as DocumentData)?.email || "", characterID, grade);
         }
-        
+
       });
     }
     else {
-      upsertCharacterScoreData(userData?.email, characterID,grade);
+      upsertCharacterScoreData(userData?.email, characterID, grade);
     }
-    
+
 
   }
 
@@ -165,9 +165,9 @@ const Draw: React.FC<DrawProps> = (props) => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
-        
+
         var svgText;
-        if(character?.svg)  {
+        if (character?.svg) {
           console.log("SVG Found")
           svgText = character?.svg
         }
@@ -245,10 +245,10 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   const handleAdvance = (character: Character, grade: KanjiGrade) => {
     setAttempts([]);
-    if(props.handleAdvance) {
-      props.handleAdvance(character,grade);
+    if (props.handleAdvance) {
+      props.handleAdvance(character, grade);
     }
-    
+
 
   }
 
@@ -322,111 +322,111 @@ const Draw: React.FC<DrawProps> = (props) => {
             {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
-        { kanji_grade.overallGrade !== -1 ?
-        <button
-        className="check-kanji"
-        style={styles.button}
-        onClick={() => {
-          canvas.current.clearCanvas();
-          setInputStrokes(0);
-          setReadOnly(false);
-          setKanjiGrade({
-            overallGrade: -1,
-            overallFeedback: "",
-            grades: [],
-            feedback: [],
-            strokeInfo: [],
-          });
-        }}
-        >
-           <AutorenewIcon fontSize="medium"/>
-        </button>
-        :
-        <button
-          className="check-kanji"
-          style={styles.button}
-          onClick={() => {
-            if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
-              setReadOnly(true);
-              canvas.current.exportSvg().then((data: any) => {
-
-                const convertCoords = (coords: any) => {
-                  let coordsArr: any[] = []
-                  Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
-                      coordsArr.push(coords[coordKey].map((coordsSet: {x: number, y:number}) => [coordsSet.x,coordsSet.y]))
-                  })
-                  return coordsArr;
-              }
-                grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
-
-                  setKanjiGrade(grade);
-                  //If in learn mode, hide svg on second attempt
-                  if(props.learn) {
-                    if(attempts.length === 0) {
-                      setAllowDisplaySVG(false)
-                      setDisplaySVG(false)
-                    }
-                    else if(!allowDisplaySVG){
-                      setAllowDisplaySVG(true)
-                    }
-                    
-                  }
-                  setAttempts((prevAttempts) => [...prevAttempts,grade])
-                  if(props.character) {
-                    if(props.handleComplete) {
-                      props.handleComplete(props.character,grade)
-                    }
-                    if(props.character.unicode_str) {
-                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
-                    }
-                    else {
-                      console.log("Character score not saved..")
-                    }
-                    
-                  }
-                  
-                  
-                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                    canvas.current.exportImage('jpeg').then((data: any) => {
-                      interpretImage(data).then(result => {
-
-                        console.log("Predictions:", result);
-
-                        setPrediction(result);
-                        if (kanji === result?.[0]?.label) return;
-
-
-                        if (grade.overallFeedback === "") {
-                          setKanjiGrade(prevState => ({
-                            ...prevState,
-                            overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
-                          }));
-                        }
-                        else {
-                          setKanjiGrade(prevState => ({
-                            ...prevState,
-                            overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
-
-                          }));
-                        }
-
-
-                      }).catch(error => {
-                        console.error('Error interpreting image:', error);
-                      });
-                    }).catch((e: any) => {
-                      console.error(e);
-                    });
-                  }
-                }).catch((e: any) => {
-                  console.error(e);
-                });
+        {kanji_grade.overallGrade !== -1 ?
+          <button
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              canvas.current.clearCanvas();
+              setInputStrokes(0);
+              setReadOnly(false);
+              setKanjiGrade({
+                overallGrade: -1,
+                overallFeedback: "",
+                grades: [],
+                feedback: [],
+                strokeInfo: [],
               });
-            }
-          }}
-        >
-          <DoneIcon fontSize="medium" />
-        </button>
+            }}
+          >
+            <AutorenewIcon fontSize="medium" />
+          </button>
+          :
+          <button
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+                setReadOnly(true);
+                canvas.current.exportSvg().then((data: any) => {
+
+                  const convertCoords = (coords: any) => {
+                    let coordsArr: any[] = []
+                    Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
+                      coordsArr.push(coords[coordKey].map((coordsSet: { x: number, y: number }) => [coordsSet.x, coordsSet.y]))
+                    })
+                    return coordsArr;
+                  }
+                  grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
+
+                    setKanjiGrade(grade);
+                    //If in learn mode, hide svg on second attempt
+                    if (props.learn) {
+                      if (attempts.length === 0) {
+                        setAllowDisplaySVG(false)
+                        setDisplaySVG(false)
+                      }
+                      else if (!allowDisplaySVG) {
+                        setAllowDisplaySVG(true)
+                      }
+
+                    }
+                    setAttempts((prevAttempts) => [...prevAttempts, grade])
+                    if (props.character) {
+                      if (props.handleComplete) {
+                        props.handleComplete(props.character, grade)
+                      }
+                      if (props.character.unicode_str) {
+                        handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
+                      }
+                      else {
+                        console.log("Character score not saved..")
+                      }
+
+                    }
+
+
+                    if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                      canvas.current.exportImage('jpeg').then((data: any) => {
+                        interpretImage(data).then(result => {
+
+                          console.log("Predictions:", result);
+
+                          setPrediction(result);
+                          if (kanji === result?.[0]?.label) return;
+
+
+                          if (grade.overallFeedback === "") {
+                            setKanjiGrade(prevState => ({
+                              ...prevState,
+                              overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
+                            }));
+                          }
+                          else {
+                            setKanjiGrade(prevState => ({
+                              ...prevState,
+                              overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
+
+                            }));
+                          }
+
+
+                        }).catch(error => {
+                          console.error('Error interpreting image:', error);
+                        });
+                      }).catch((e: any) => {
+                        console.error(e);
+                      });
+                    }
+                  }).catch((e: any) => {
+                    console.error(e);
+                  });
+                });
+              }
+            }}
+          >
+            <DoneIcon fontSize="medium" />
+          </button>
         }
       </div>
       <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
