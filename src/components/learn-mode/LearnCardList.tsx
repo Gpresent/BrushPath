@@ -12,6 +12,7 @@ import WideModal from "../WideModal";
 interface LearnCardListProps {
   characters: Character[];
   refetch?: (numCharacters?: number) => void;
+  learn:boolean
 }
 type CharacterSessionData = Character & {
   score?: KanjiGrade;
@@ -20,6 +21,7 @@ type CharacterSessionData = Character & {
 const LearnCardList: React.FC<LearnCardListProps> = ({
   characters,
   refetch,
+  learn
 }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState<number>(0);
 
@@ -140,7 +142,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
       ) : (
         <>
           <p style={{marginBottom:"5px"}}>Kanji Complete: {currentCharacterIndex}/{characterSessionData.length}</p>
-          <LearnCard character={currentCharacter} handleAdvance={handleAdvance} />
+          <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
         </>
       )}
     </div>

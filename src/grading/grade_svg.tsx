@@ -51,8 +51,10 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
         }
     }   
     if (!badLocations.length) return '';
-    var regions = [0];
-    for (let i = 0; i < targetAngles.length; i++) {
+    var regions = [0]
+    for (let i = 0; i < targetAngles.length - 1; i++) {
+        if (targetAngles[i] > 180) targetAngles[i] -= 360;
+        if (targetAngles[i] < -180) targetAngles[i] += 360;
         if (classify_angle(targetAngles[i]) !== classify_angle(targetAngles[i + 1])) regions.push(i + 1);
     }
     if (!regions.includes(targetAngles.length)) regions.push(targetAngles.length);
@@ -65,7 +67,7 @@ function gen_feedback_angles(targetAngles: number[], angleDiffs: number[]): stri
             if (regions[index] > badLocations[i]) {
                 if (index === 1) {
                     if (index === regions.length - 1) {
-                        feedback += ' the stroke slopes ' + classify_angle(targetAngles[0]); 
+                        feedback += ' the stroke slopes ' + classify_angle(targetAngles[regions[index] - 1]); 
                     } else {
                         feedback += ' the stroke slopes ' + classify_angle(targetAngles[0]) + ' until the ' + Math.round(regions[index] / targetAngles.length * 10) * 10 + '% mark';
                     }
