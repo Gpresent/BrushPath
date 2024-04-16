@@ -366,7 +366,6 @@ const Draw: React.FC<DrawProps> = (props) => {
                       const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
                       if(!some) {
                         if(allowDisplaySVG) {
-                          debugger;
                           if(grade.overallGrade > 65) {
                             setAllowDisplaySVG(false)
                             setDisplaySVG(false)
@@ -374,13 +373,11 @@ const Draw: React.FC<DrawProps> = (props) => {
                           
                         }
                         else {
-                          debugger;
                           setAllowDisplaySVG(true)
                           setDisplaySVG(true)
                         }
                       }
                       else {
-                        debugger;
                         setAllowDisplaySVG(true)
                         setDisplaySVG(true)
                       }
