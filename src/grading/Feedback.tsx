@@ -249,7 +249,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <button
                   onClick={() => {
                     
-                    if(props.clearKanji)  props.clearKanji() 
+                    props.clearKanji!()
                   }}
                   className="learn-card-nav-right"
                 >
