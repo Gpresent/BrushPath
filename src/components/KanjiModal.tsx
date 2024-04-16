@@ -12,7 +12,7 @@ import "../styles/index.css";
 import { useCharacters } from "../utils/FBCharacterContext";
 
 import "../styles/index.css";
-import Modal from "./Modal";
+import WideModal from "./WideModal";
 import InfiniteScroll from "react-infinite-scroller";
 import WordList from "./WordList";
 
@@ -61,17 +61,15 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   }, [characterCache?.data]);
 
   const toggleKanjiSelection = (kanji: Character) => {
-    const isAlreadySelected = selectedKanji.some(
-      (k) => k.unicode === kanji.unicode
-    );
-    if (isAlreadySelected) {
-      setSelectedKanji(
-        selectedKanji.filter((k) => k.unicode !== kanji.unicode)
-      );
-    } else {
-      setSelectedKanji([...selectedKanji, kanji]);
-    }
-  };
+    setSelectedKanji((prevSelected) => {
+      const isAlreadySelected = prevSelected.some(k => k.unicode === kanji.unicode);
+      if (isAlreadySelected) {
+        return prevSelected.filter(k => k.unicode !== kanji.unicode);
+      } else {
+        return [...prevSelected, kanji];
+      }
+    });
+};
 
   const handleSubmit = () => {
     // TODO add logic :)
@@ -107,7 +105,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <Modal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
+    <WideModal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
 
       <div className="deck-title-input">
         <label className="deckTitle" htmlFor="deckTitle">
@@ -128,7 +126,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         // loader={<LoadingSpinner />}
         useWindow={false}
       >
-        {<AddWordList style={{ maxHeight: "70vh" }} words={kanjiList} selectable={true} />}
+        {<AddWordList style={{ maxHeight: "55vh" }} words={kanjiList} selectable={true} />}
       </InfiniteScroll>
 
       <ul className="add-word-list">
@@ -144,7 +142,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         ))}
       </ul>
       <button onClick={handleSubmit}>Submit</button>
-    </Modal>
+    </WideModal>
   );
 };
 
