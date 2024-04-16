@@ -40,7 +40,7 @@ const decks_info: Deck[] = [
 const ComponentRouter: React.FC = () => {
 
   const [showHeader, setShowHeader] = useState(true);
-  const [kanjiList, setKanjiList] = useState<any[]>( []);
+  const [kanjiList, setKanjiList] = useState<any[]>([]);
   const [lastRef, setLastRef] = useState("");
 
 
@@ -51,10 +51,10 @@ const ComponentRouter: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />}></Route>
             {/* <Route path="/draw" element={<Draw allowDisplay={true} />}></Route> */}
-            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef}/>} />
+            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef} />} />
             <Route path="/character" element={<SingleWordView />} />
             {/* <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} /> */}
-            <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
+            <Route path="/decks" element={<DeckLandingView title="My Decks" kanjiList={kanjiList} lastRef={lastRef} />} />
             <Route path="/deck/:id" element={<SingleDeckView title="Deck" />} />
             <Route path="/settings" element={<SettingsView />} />
             <Route path="/review" element={<Review />} />
