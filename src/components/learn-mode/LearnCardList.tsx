@@ -97,7 +97,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
 
   //Todo, replace divs with actual tags lol
   return (
-    <div>
+    <>
       {/* <p>
                 Kanji Learned {numKanjiLearned}
                 Kanji Left {characterSessionData.length - numKanjiLearned}
@@ -115,15 +115,16 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
           <div className="session-recap">
             <div className="session-info-header">Here's what you did:</div>
             <div className="session-info">
-              <>Learned {currentCharacterIndex} new characters: </>
-
+              <div>Learned {currentCharacterIndex} new characters: </div>
+              <div >
               {characterSessionData
                 .filter((character) => {
                   return character.score !== undefined;
                 })
                 .map((word, index) => {
-                  return (index ? ", " : "") + word.unicode;
+                  return (index ? ", " : "") + word.unicode + " (" + word.one_word_meaning + ")";
                 })}
+                </div>
               <p>Average Score: {Math.floor(avgScore * 100) || 0}</p>
             </div>
             <div className="session-buttons">
@@ -140,15 +141,15 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
           </div>
         </WideModal>
       ) : (
-        <>
-        <div className="learn-card-nav-row">
+        <div className="learn-container">
+          <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
+          <div className="learn-card-nav-row">
           <p style={{marginTop:"7.5px"}}>Kanji Completed: {currentCharacterIndex}/{characterSessionData.length}</p>
           <button onClick={()=>{console.log("Session Done"); setFinished(true); setShowSessionModal(true);}}>End Session</button>
         </div>
-          <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -594,6 +594,13 @@ body {
     cursor: pointer;
 }
 
+.error-message{
+    /* width: 100%; */
+    font-size: large;
+    margin: 20px;
+    box-sizing: border-box;
+}
+
 .deck-header {
     display: flex;
     justify-content: space-between;
