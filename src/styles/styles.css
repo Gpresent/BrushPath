@@ -608,9 +608,19 @@ body {
 
 .deck-title-input input {
     padding: 5px;
-    font-size: 16px;
+    /* font-size: 16px; */
     border: 1px solid var(--deemphasized-1);
-    border-radius: 4px;
+    width: 80%;
+    margin: auto;
+    padding-left: 10px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    /* margin-bottom: 10px; */
+    box-sizing: border-box;
+    background-color: var(--background);
+    color: var(--deemphasized-2);
+    /* border-radius: 4px; */
 }
 
 /* Loading page */

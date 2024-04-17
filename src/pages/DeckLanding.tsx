@@ -62,7 +62,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title, kanjiList, lastRef }) => 
           <h2 className="deck-title">My Decks</h2>
           <AddIcon className="addButton" onClick={handleAddDeck} />
         </div>
-        <input className="search-bar" />
+        {/* <input className="search-bar" /> */}
       </div>
 
       {/* <HomeStats /> */}

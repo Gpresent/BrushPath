@@ -326,6 +326,8 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const characterRefs = await Promise.all(characterPromises)
     //TODO Filter Nulls?
 
+    // insert color 
+
     const userDeck = {
       name: deckTitle,
       desc: desc,

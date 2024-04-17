@@ -117,18 +117,22 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
     <WideModal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>
 
       <div className="deck-title-input">
-        <label className="deckTitle" htmlFor="deckTitle">
+        {/* <label className="deckTitle" htmlFor="deckTitle">
           Enter Deck Name:
-        </label>
+        </label> */}
         <input
+          placeholder="Deck Name"
           type="text"
           id="deckTitle"
           value={deckTitle}
           onChange={(e) => setDeckTitle(e.target.value)}
         />
       </div>
+      <div className="deck-title">
+        Add Words
+      </div>
       <InfiniteScroll
-        style={{ width: "100%" }}
+        style={{ width: "100%", marginTop:"10px" }}
         pageStart={0}
         loadMore={fetchCharacters}
         hasMore={(kanjiList.length < 2136) && (lastRef != "poop")}
