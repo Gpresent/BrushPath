@@ -7,6 +7,7 @@ import { gradeToWord } from "../utils/gradeToColor";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
 import { debounce } from "lodash";
+import ReplayIcon from '@mui/icons-material/Replay';
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
@@ -255,7 +256,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   }}
                   className="learn-card-nav-right"
                 >
-                  <ArrowForward />
+                  <ReplayIcon />
                 </button>
                 )}
                 {displayNextButton && (
