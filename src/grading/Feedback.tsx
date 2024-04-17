@@ -7,13 +7,15 @@ import { gradeToWord } from "../utils/gradeToColor";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
 import { debounce } from "lodash";
+import UndoIcon from '@mui/icons-material/Undo';
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
-  attempts: KanjiGrade[];
+  attempts: (KanjiGrade & {hint:boolean})[];
   character: Character;
   setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
   setDisplaySVG: React.Dispatch<React.SetStateAction<boolean>>;
+  allowDisplay: boolean;
 
   passing: number;
   color: string;
@@ -85,6 +87,32 @@ const Feedback: React.FC<feedbackProps> = (props) => {
       }, 400) 
     }
  }, [childIndex]);
+
+ const displayRetryButton = useMemo(() => {
+  //If not in recall mode (ex dictionary page), don't show button
+  if(!props.recall) {
+    return false;
+  }
+
+  //Learn Mode
+  if(props.learn) {
+    const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
+    const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
+    debugger;
+
+    if(attemptsWithHint.length >= 1 && passingWithoutHint.length ===0 && !props.allowDisplay) {
+      return props.kanjiGrade // true
+    }
+    else {
+      return false
+    }
+  } 
+  //Review Mode
+  else {
+    return props.kanjiGrade && props.kanjiGrade.overallGrade > 65 
+  }
+  
+},[props.attempts, props.allowDisplay])
   
 
   const displayNextButton = useMemo(() => {
@@ -95,7 +123,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
     //Learn Mode
     if(props.learn) {
-      if(props.attempts.length > 1) {
+      if(props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
         return props.kanjiGrade 
       }
     } 
@@ -212,15 +240,23 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <div className="feedback-word">
                     {gradeToWord(Math.round(kanji_grade.overallGrade))}
                   </div>
-                  {props.learn && props.attempts.length === 1 &&
-                    <div className="feedback-word">
-                    <strong>Try again without the kanji to continue</strong>
-                  </div>
-                  }
-                </div>
+                  
+                  
                 </div>
                 
+                </div>
                 
+                {displayRetryButton &&(
+                  <button
+                  onClick={() => {
+                    
+                    props.clearKanji!()
+                  }}
+                  className="learn-card-nav-right"
+                >
+                  <UndoIcon />
+                </button>
+                )}
                 {displayNextButton && (
                   <button
                     onClick={() => {
