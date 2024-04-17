@@ -326,6 +326,8 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const characterRefs = await Promise.all(characterPromises)
     //TODO Filter Nulls?
 
+    // insert color 
+
     const userDeck = {
       name: deckTitle,
       desc: desc,
@@ -541,11 +543,55 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
+export const editCharInDecks = async (userID: string,character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
+  try {
+    if(!userID) {
+      throw "no userID"
+    }
+    const charRef = doc(db,'Character',character.id);
+
+    //Add to decks
+    const updatePromises = decksToAdd.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayUnion(charRef)
+      });
+      
+    });
+
+    await Promise.all(updatePromises);
+    
+
+    //Remove from decks
+    const removePromises = decksToRemove.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayRemove(charRef)
+      });
+      
+    });
+
+    await Promise.all(removePromises);
+
+  } catch (error: any) {
+    console.error("Error adding char to decks:", error);
+    
+    if(error?.code === "unavailable") {
+      return -1;
+    }
+
+    throw error;
+  }
+
+}
+
 export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
   try {
-
-    const userRef = doc(db, "User", userID)
-    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef));
+    let currDate = new Date();
+    currDate.setDate(currDate.getDate() + 14); // get where review date is in next 14 days
+    const nextReviewDate = Timestamp.fromDate(currDate);
+    const userRef = doc(db, "User", userID);
+    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef), where("nextReviewDate", "<=", nextReviewDate), orderBy("nextReviewDate", "asc"));
     const characterScoreResult = await getDocs(characterScoreQuery);
     const characterScoreData = characterScoreResult.docs.map((score) => {
       return { _score_id: score.id, ...score.data() }
@@ -620,3 +666,4 @@ export const getCharScoreDataByID = async (userID: string, charID: string) => {
     throw error;
   }
 }
+

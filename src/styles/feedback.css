@@ -45,6 +45,7 @@
     overflow: wrap;
     /* border: 1px solid black;  */
     border-radius: 10px;
+    scroll-snap-align: start;
 }
 
 .feedback-header {
@@ -89,6 +90,7 @@
     flex-direction: column;
     align-items: center;
     padding: 0 1rem;
+    scroll-snap-align: start;
     
     min-width: calc(99% - 2rem);
     overflow: wrap;

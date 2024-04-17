@@ -7,13 +7,15 @@ import { gradeToWord } from "../utils/gradeToColor";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
 import { debounce } from "lodash";
+import ReplayIcon from '@mui/icons-material/Replay';
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
-  attempts: KanjiGrade[];
+  attempts: (KanjiGrade & {hint:boolean})[];
   character: Character;
   setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
   setDisplaySVG: React.Dispatch<React.SetStateAction<boolean>>;
+  allowDisplay: boolean;
 
   passing: number;
   color: string;
@@ -85,6 +87,32 @@ const Feedback: React.FC<feedbackProps> = (props) => {
       }, 400) 
     }
  }, [childIndex]);
+
+ const displayRetryButton = useMemo(() => {
+  //If not in recall mode (ex dictionary page), don't show button
+  if(!props.recall) {
+    return false;
+  }
+
+  //Learn Mode
+  if(props.learn) {
+    const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
+    const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
+    // debugger;
+
+    if(attemptsWithHint.length >= 1 && passingWithoutHint.length ===0 && !props.allowDisplay) {
+      return props.kanjiGrade // true
+    }
+    else {
+      return false
+    }
+  } 
+  //Review Mode
+  else {
+    return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
+  }
+  
+},[props.attempts, props.allowDisplay])
   
 
   const displayNextButton = useMemo(() => {
@@ -95,7 +123,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
     //Learn Mode
     if(props.learn) {
-      if(props.attempts.length > 1) {
+      if(props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
         return props.kanjiGrade 
       }
     } 
@@ -108,35 +136,37 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   // console.log(kanji_grade);
 
   useEffect(() => {
-    const handleScroll = debounce((container) => {
+    const handleScroll = () => {
+      const container = document.querySelector(".feedback-container") as HTMLElement;
+      if (!container) return;
+  
       const scrollLeft = container.scrollLeft;
       const children = Array.from(container.children) as HTMLElement[];
-      const index = children.findIndex((child) => child.offsetLeft > scrollLeft);
-      setChildIndex(Math.floor(scrollLeft / container.clientWidth));
-
-      if (index !== -1) {
-        const nextBoxLeft = children[index].offsetLeft;
-        const prevBoxLeft = index > 0 ? children[index - 1].offsetLeft : 0;
-
-        const targetLeft =
-          scrollLeft - prevBoxLeft < nextBoxLeft - scrollLeft
-            ? prevBoxLeft
-            : nextBoxLeft;
-        container.scrollTo({
-          left: targetLeft,
-          behavior: "smooth",
-        });
+  
+      // Find the index of the child element that is currently snapped to
+      let snappedIndex = -1;
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        const childScrollLeft = child.offsetLeft - container.offsetLeft;
+        const childWidth = child.offsetWidth;
+        if (Math.abs(scrollLeft - childScrollLeft) < childWidth / 10) {
+          snappedIndex = i;
+          break;
+        }
       }
-    }, 100); // Debounce time in milliseconds
-
-    document.querySelectorAll(".feedback-container").forEach((container) => {
-      container.addEventListener('scroll', () => handleScroll(container));
-    });
-
+      if (snappedIndex >= 0)
+        setChildIndex(snappedIndex);
+    };
+  
+    const container = document.querySelector(".feedback-container");
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+  
     return () => {
-      document.querySelectorAll(".feedback-container").forEach((container) => {
-        container.removeEventListener('scroll', () => handleScroll(container));
-      });
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
@@ -212,15 +242,23 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   <div className="feedback-word">
                     {gradeToWord(Math.round(kanji_grade.overallGrade))}
                   </div>
-                  {props.learn && props.attempts.length === 1 &&
-                    <div className="feedback-word">
-                    <strong>Try again without the kanji to continue</strong>
-                  </div>
-                  }
-                </div>
+                  
+                  
                 </div>
                 
+                </div>
                 
+                {displayRetryButton &&(
+                  <button
+                  onClick={() => {
+                    
+                    props.clearKanji!()
+                  }}
+                  className="learn-card-nav-right"
+                >
+                  <ReplayIcon />
+                </button>
+                )}
                 {displayNextButton && (
                   <button
                     onClick={() => {

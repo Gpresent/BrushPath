@@ -99,7 +99,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
-  const [attempts, setAttempts] = React.useState<KanjiGrade[]>([]);
+  const [attempts, setAttempts] = React.useState<(KanjiGrade & {hint: boolean})[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
@@ -167,8 +167,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       try {
 
         var svgText;
-        if (character?.svg) {
-          console.log("SVG Found")
+        if(character?.svg)  {
           svgText = character?.svg
         }
         else {
@@ -241,6 +240,12 @@ const Draw: React.FC<DrawProps> = (props) => {
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const canvas = document.getElementById("react-sketch-canvas");
+    canvas?.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+    }, { passive: false });
   }, []);
 
   const handleAdvance = (character: Character, grade: KanjiGrade) => {
@@ -359,36 +364,56 @@ const Draw: React.FC<DrawProps> = (props) => {
                   }
                   grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
-                    setKanjiGrade(grade);
-                    //If in learn mode, hide svg on second attempt
-                    if (props.learn) {
-                      if (attempts.length === 0) {
-                        setAllowDisplaySVG(false)
-                        setDisplaySVG(false)
-                      }
-                      else if (!allowDisplaySVG) {
-                        setAllowDisplaySVG(true)
-                      }
-
-                    }
-                    setAttempts((prevAttempts) => [...prevAttempts, grade])
-                    if (props.character) {
-                      if (props.handleComplete) {
-                        props.handleComplete(props.character, grade)
-                      }
-                      if (props.character.unicode_str) {
-                        handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
+                setKanjiGrade(grade)
+                  setAttempts((prevAttempts) => {
+                    const attempts =  [...prevAttempts,{...grade, hint: allowDisplaySVG}]
+                    if(props.learn) {
+                      const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
+                      if(!some) {
+                        if(allowDisplaySVG) {
+                          if(grade.overallGrade > 65) {
+                            setAllowDisplaySVG(false)
+                            setDisplaySVG(false)
+                          }
+                          
+                        }
+                        else {
+                          setAllowDisplaySVG(true)
+                          setDisplaySVG(true)
+                        }
                       }
                       else {
-                        console.log("Character score not saved..")
+                        setAllowDisplaySVG(true)
+                        setDisplaySVG(true)
                       }
-
+                        
+                        
+                      
+                     
+                      
                     }
+                    return attempts
+                  } )
+                  //If in learn mode, hide svg on second attempt
+                  
 
-
-                    if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                      canvas.current.exportImage('jpeg').then((data: any) => {
-                        interpretImage(data).then(result => {
+                  if(props.character) {
+                    if(props.handleComplete) {
+                      props.handleComplete(props.character,grade)
+                    }
+                    if(props.character.unicode_str) {
+                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
+                    }
+                    else {
+                      console.log("Character score not saved..")
+                    }
+                    
+                  }
+                  
+                  
+                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                    canvas.current.exportImage('jpeg').then((data: any) => {
+                      interpretImage(data).then(result => {
 
                           console.log("Predictions:", result);
 
@@ -429,7 +454,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           </button>
         }
       </div>
-      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );
