@@ -16,11 +16,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ deck, isOpen, onC
 
   return (
     <Modal title={deck.name} isOpen={isOpen} onClose={onClose}>
-      {deck.desc.split(".").map((sentence, index) => (
+      {deck.desc.split("~").map((sentence, index) => (
         (sentence !== "" && 
         <div>
           {(index !== 0 && <br/>)}
-          <p key={index}>{sentence + "."}</p>
+          {<p key={index}>{sentence}</p>}
         </div>)
       ))}
     </Modal>
