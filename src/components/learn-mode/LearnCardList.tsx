@@ -141,9 +141,9 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
         </WideModal>
       ) : (
         <>
-        <div>
-          <button onClick={()=>{console.log("Session Done"); setFinished(true); setShowSessionModal(true);}}>End Session</button>
+        <div className="learn-card-nav-row">
           <p style={{marginBottom:"5px"}}>Kanji Completed: {currentCharacterIndex}/{characterSessionData.length}</p>
+          <button onClick={()=>{console.log("Session Done"); setFinished(true); setShowSessionModal(true);}}>End Session</button>
         </div>
           <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
         </>

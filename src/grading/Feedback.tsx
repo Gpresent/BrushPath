@@ -98,7 +98,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   if(props.learn) {
     const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
     const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-    debugger;
+    // debugger;
 
     if(attemptsWithHint.length >= 1 && passingWithoutHint.length ===0 && !props.allowDisplay) {
       return props.kanjiGrade // true
