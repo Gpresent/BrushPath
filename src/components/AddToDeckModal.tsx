@@ -130,9 +130,9 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
         <div className="deck-list-container">
 
         {
-          !userData ? <LoadingSpinner /> : <><p>Saved in </p><SelectableDeckList decks={savedInDecks} 
+          !userData ? <LoadingSpinner /> : <><p className="deck-title">Saved in </p><SelectableDeckList decks={savedInDecks} 
             user={userData} preSelect={true} handleDeckClick={handleDeckClick} />
-            <p>Other Decks</p>
+            <p className="deck-title">Other Decks</p>
             <SelectableDeckList decks={notSavedInDecks}
             user={userData} handleDeckClick={handleDeckClick}  />
             </>

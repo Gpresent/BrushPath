@@ -54,8 +54,8 @@ const DeckListRow: React.FC<DeckListRowProps> = ({ deck, user,initialSelected, h
   return (
     
     <>
-      <div className="deck-card" onClick={handleDeckClickHandler}>
-        <p className="deck-name">{deck.name}</p>
+      <div className="deck-select-card" onClick={handleDeckClickHandler}>
+        <p className="deck-select-name">{deck.name}</p>
         <p className="hiragana">{ }</p>
         <input type="checkbox" checked={selected} disabled={deck?.userRef?.id !== user.email} className="deck-check"/>
       </div>

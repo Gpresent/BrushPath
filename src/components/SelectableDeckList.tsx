@@ -14,7 +14,7 @@ interface SelectableDeckListProps {
 const SelectableDeckList: React.FC<SelectableDeckListProps> = ({ decks, user, preSelect , handleDeckClick}) => {
 
   return (
-    <div className="deck-list">
+    <div className="deck-select-list">
       {decks.map((deck, index) => (
         <DeckListRow
           key={index} // Using the index as a key
