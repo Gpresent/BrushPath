@@ -168,7 +168,6 @@ const Draw: React.FC<DrawProps> = (props) => {
         
         var svgText;
         if(character?.svg)  {
-          console.log("SVG Found")
           svgText = character?.svg
         }
         else {
@@ -241,6 +240,12 @@ const Draw: React.FC<DrawProps> = (props) => {
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const canvas = document.getElementById("react-sketch-canvas");
+    canvas?.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+    }, { passive: false });
   }, []);
 
   const handleAdvance = (character: Character, grade: KanjiGrade) => {
@@ -389,8 +394,6 @@ const Draw: React.FC<DrawProps> = (props) => {
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
-
-                        console.log("Predictions:", result);
 
                         setPrediction(result);
                         if (kanji === result?.[0]?.label) return;
