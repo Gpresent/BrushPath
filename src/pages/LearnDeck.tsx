@@ -12,14 +12,14 @@ import LearnCardList from "../components/learn-mode/LearnCardList";
 import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 
-interface LearnProps {}
+interface LearnProps { }
 type RetrievableData = {
   data: Character[] | null;
   loading: boolean;
   error: string;
 };
 
-const LearnDeck: React.FC<LearnProps> = ({}) => {
+const LearnDeck: React.FC<LearnProps> = ({ }) => {
   const [characters, setCharacters] = useState<RetrievableData>({
     data: null,
     loading: true,
@@ -102,6 +102,8 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
     });
   };
 
+
+
   useEffect(() => {
     if (userData) {
       fetchCharactersToLearn(7);
@@ -115,7 +117,7 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
       ) : characters.error || characters.data == null ? (
         <p>{characters.error}</p>
       ) : characters.data.length > 0 ? (
-        <LearnCardList characters={characters.data} />
+        <LearnCardList learn={true} characters={characters.data} />
       ) : (
         <p>Learned them all</p>
       )}

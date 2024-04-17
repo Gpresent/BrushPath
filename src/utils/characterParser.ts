@@ -22,6 +22,7 @@ function characterParser(data: any) {
         parts: [],
         coords: null,
         totalLengths: 0,
+        svg: undefined
     }
 
     if (data == null) {
@@ -32,6 +33,8 @@ function characterParser(data: any) {
     //     data = data.data
     // }
 
+
+    
     character = {
         id: data.unicode_str,
         unicode: data.literal || data.unicode,
@@ -48,8 +51,9 @@ function characterParser(data: any) {
         jlpt: data.jlpt,
         compounds: data.compounds,
         parts: data.parts,
-        coords: [],
-        totalLengths: data.totalLengths
+        coords: data.coords,
+        totalLengths: data.totalLengths,
+        svg: data.svg
     }
 
     if (character.one_word_meaning == "") {

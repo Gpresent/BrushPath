@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { channel } from "diagnostics_channel";
+import { initializeApp } from "firebase/app";
 
 
 
@@ -46,51 +47,11 @@ const Home: React.FC = (props) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const createIndexedDB = () => {
-    const indexedDB = window.indexedDB;
-    const request = indexedDB.open("MyDatabase", 1);
-
-    request.onupgradeneeded = (event: any) => {
-      const db = event.target.result;
-
-      // Create an object store
-      const objectStore = db.createObjectStore("MyObjectStore", { keyPath: "id", autoIncrement: true });
-
-      console.log("Object store created successfully!");
-    };
-
-    request.onerror = (event: any) => {
-      console.error("Database creation error:", event.target.errorCode);
-    };
-
-    request.onsuccess = (event: any) => {
-      console.log("Database created successfully!");
-    };
-
-
-
-  }
-
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-
-
-
-    }
-
-
-
-  }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {
       const decksResult = await getDecksFromRefs(userData?.decks)
       setDecks(decksResult);
-
-
-
-
       setLoading(false);
     }
 
@@ -119,14 +80,10 @@ const Home: React.FC = (props) => {
       setUserCharacterScoreCount({ data: characterScoreCount, loading: false, error: "" })
     }
 
-
-
     if (userData) {
       fetchDecks();
-
       fetchScoreCount();
     }
-
 
   }, [userData]);
 

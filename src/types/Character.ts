@@ -17,6 +17,7 @@ type Character = {
     selected?: boolean;
     coords: any;
     totalLengths: number;
+    svg?: string;
 };
 
 export default Character;

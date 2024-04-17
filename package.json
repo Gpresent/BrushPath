@@ -76,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/react-infinite-scroller": "^1.2.5"
   }
 }

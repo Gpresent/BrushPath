@@ -19,7 +19,7 @@ interface WordListProps {
   style?:  React.CSSProperties;
 }
 
-const search = new MiniSearch({
+var search: MiniSearch<any> = new MiniSearch({
   fields: [
     "on",
     "unicode_str",
@@ -94,6 +94,7 @@ const WordList: React.FC<WordListProps> = ({
   }, [words, memoizedWordList]);
 
   useMemo(() => {
+    search.removeAll();
     search.addAll(
       memoizedWordList.filter(
         (elem) => elem != null && !search.has((elem as any).id)

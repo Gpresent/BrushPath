@@ -4,6 +4,7 @@ import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -17,6 +18,7 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { upsertCharacterScoreData } from "../utils/FirebaseQueries";
 import Feedback from "../grading/Feedback";
 import gradeToColor from "../utils/gradeToColor";
+import { DocumentData } from "@firebase/firestore";
 
 
 const passing = 0.65;
@@ -58,10 +60,11 @@ const parser = new DOMParser();
 
 interface DrawProps {
   character?: Character;
-  handleComplete?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
   allowDisplay: boolean;
-  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   recall: boolean;
+  learn?: boolean;
 }
 // Define types for coordinates
 interface Point {
@@ -78,14 +81,15 @@ function calculateIconPosition(canvasRect: DOMRect, path: SVGPathElement, index:
 }
 
 const Draw: React.FC<DrawProps> = (props) => {
-  const {userData } = useContext(AuthContext);
+  const { userData, getUserData } = useContext(AuthContext);
   const canvas: any = useRef<any>();
-  const canvasElement = document.getElementById("react-sketch-canvas");
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
-  const [displaySVG, setDisplaySVG] = React.useState<boolean>(false);
+  const [inputStrokes, setInputStrokes] = React.useState<number>(0);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(props.learn || false);
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
+  const [showStrokeGuide, setStrokeGuide] = React.useState<boolean>(true);
   const [allowDisplaySVG, setAllowDisplaySVG] = React.useState<boolean>(props.allowDisplay);
   const [kanji_grade, setKanjiGrade] = React.useState<KanjiGrade>({
     overallGrade: -1,
@@ -94,6 +98,8 @@ const Draw: React.FC<DrawProps> = (props) => {
     feedback: [],
     strokeInfo: [],
   });
+
+  const [attempts, setAttempts] = React.useState<(KanjiGrade & {hint: boolean})[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
@@ -107,15 +113,41 @@ const Draw: React.FC<DrawProps> = (props) => {
     });
   }
 
+
+
+  const handleUpsertCharacterScoreData = async (characterID: string, grade: number) => {
+    if (!userData) {
+      const buffer = async () => {
+
+      }
+      buffer().then(() => {
+        if (userData) {
+          upsertCharacterScoreData((userData as DocumentData)?.email || "", characterID, grade);
+        }
+
+      });
+    }
+    else {
+      upsertCharacterScoreData(userData?.email, characterID, grade);
+    }
+
+
+  }
+
+
+
+  const checkStrokeNumber = () => {
+    const canvasElement = document.getElementById("react-sketch-canvas");
+    const paths = canvasElement?.getElementsByTagName("path").length;
+    setInputStrokes(paths || 0);
+  };
+
   const [color, setColor] = React.useState("rgba(0,0,0,0)");
 
   useEffect(() => {
-      console.log("in useeffect")
-      // if(kanji_grade.overallGrade > -1){
-          setColor(gradeToColor(kanji_grade.overallGrade))
-          console.log("updated color")
-      // }
+    setColor(gradeToColor(kanji_grade.overallGrade))
   }, [kanji_grade])
+
 
   const [prediction, setPrediction] = React.useState<PredictionResult[]>()
   const [strokeColor, setStrokeColor] = useState("rgba(40, 40, 41, .75)");
@@ -124,8 +156,6 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   useLayoutEffect(() => {
     if (props.character) {
-      console.log("in Draw", props.character.unicode)
-      // setKanji(props.character.unicode); 
       setKanji(props.character.unicode);
       setAskInput(false);
     }
@@ -135,24 +165,57 @@ const Draw: React.FC<DrawProps> = (props) => {
     const loadSvg = async (unicode: string) => {
       // Load SVG dynamically
       try {
-        const svgModule = await fetch("/joyo_kanji/" + unicode + ".svg");
-        var svgText = await svgModule.text();
+
+        var svgText;
+        if(character?.svg)  {
+          svgText = character?.svg
+        }
+        else {
+          const svgModule = await fetch("/joyo_kanji/" + unicode + ".svg");
+          svgText = await svgModule.text();
+        }
         var doc = parser.parseFromString(svgText, "image/svg+xml");
         const svg = doc.getElementsByTagName("svg")[0];
         svg.setAttribute("width", "100%");
         svg.setAttribute("height", "100%");
         const paths = svg.getElementsByTagName("path");
+        var circles = svg.getElementsByTagName("circle");
+        checkStrokeNumber();
+        while (circles.length > 0) {
+          circles[0].remove();
+        }
         for (var i = 0; i < paths.length; i++) {
           paths[i].setAttribute("stroke", "rgba(140, 140, 241, .75)");
           paths[i].setAttribute("stroke-width", "3");
+
+          if (showStrokeGuide && i === inputStrokes) {
+            const startDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const startPosition = paths[i].getPointAtLength(0);
+            startDot.setAttribute("cx", startPosition.x.toString());
+            startDot.setAttribute("cy", startPosition.y.toString());
+            startDot.setAttribute("r", "4");
+            startDot.setAttribute("fill", "rgba(0, 246, 156, 0.75)");
+            svg.appendChild(startDot);
+
+            const endDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const pathLength = paths[i].getTotalLength();
+            const endPosition = paths[i].getPointAtLength(pathLength);
+            endDot.setAttribute("cx", endPosition.x.toString());
+            endDot.setAttribute("cy", endPosition.y.toString());
+            endDot.setAttribute("r", "4");
+            endDot.setAttribute("fill", "rgba(246, 0, 0, 0.75)"); // Change color as needed
+            svg.appendChild(endDot);
+          }
         }
         const nums = svg.getElementsByTagName("text");
         for (var i = 0; i < nums.length; i++) {
           nums[i].setAttribute("fill", "rgba(140, 140, 241, .75)");
         }
-        // while (nums.length > 0) {
-        //   nums[0].remove();
-        // }
+        if (inputStrokes < nums.length) {
+          while (nums.length > 0) {
+            nums[0].remove();
+          }
+        }
         svgText = svg.outerHTML;
 
         setSvgHtml({ __html: svgText });
@@ -163,7 +226,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       ? props.character?.unicode_str
       : "";
     loadSvg(unicode);
-  }, [kanji]);
+  }, [kanji, inputStrokes]);
 
   useEffect(() => {
     const checkDarkMode = () => {
@@ -171,18 +234,34 @@ const Draw: React.FC<DrawProps> = (props) => {
     };
 
     checkDarkMode();
+    checkStrokeNumber();
 
     const observer = new MutationObserver(checkDarkMode);
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    const canvas = document.getElementById("react-sketch-canvas");
+    canvas?.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+    }, { passive: false });
+  }, []);
+
+  const handleAdvance = (character: Character, grade: KanjiGrade) => {
+    setAttempts([]);
+    if (props.handleAdvance) {
+      props.handleAdvance(character, grade);
+    }
+
+
+  }
 
   useEffect(() => {
     // This function will be called whenever someProp changes
     // Perform any necessary actions here
     // Example: setState(...)
-    
+
     setAllowDisplaySVG(props.allowDisplay)
   }, [props.allowDisplay]);
 
@@ -201,9 +280,9 @@ const Draw: React.FC<DrawProps> = (props) => {
           />
         </div>
       )}
-      
-      <div className="canvas">
-         <div className="canvas-color" style={{border: `7px solid ${color}`, opacity:'.5'}}></div>
+
+      <div className="canvas" onMouseUp={checkStrokeNumber} onTouchEnd={checkStrokeNumber}>
+        <div className="canvas-color" style={{ border: `7px solid ${color}`, opacity: '.5' }}></div>
         <ReactSketchCanvas
           ref={canvas}
           style={{
@@ -224,6 +303,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           style={styles.button}
           onClick={() => {
             canvas.current.clearCanvas();
+            setInputStrokes(0);
             setReadOnly(false);
             setKanjiGrade({
               overallGrade: -1,
@@ -244,67 +324,137 @@ const Draw: React.FC<DrawProps> = (props) => {
               setDisplaySVG(!displaySVG);
             }}
           >
-            {displaySVG ? <VisibilityOffIcon fontSize="medium"/> : <VisibilityIcon fontSize="medium"/>}
+            {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
+        {kanji_grade.overallGrade !== -1 ?
           <button
-          className="check-kanji"
-          style={styles.button}
-          onClick={() => {
-            if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
-              setReadOnly(true);
-              canvas.current.exportSvg().then((data: any) => {
-                console.log("kanji", kanji);
-                grade(data, kanji, passing).then((grade: KanjiGrade) => {
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              canvas.current.clearCanvas();
+              setInputStrokes(0);
+              setReadOnly(false);
+              setKanjiGrade({
+                overallGrade: -1,
+                overallFeedback: "",
+                grades: [],
+                feedback: [],
+                strokeInfo: [],
+              });
+            }}
+          >
+            <AutorenewIcon fontSize="medium" />
+          </button>
+          :
+          <button
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+                setReadOnly(true);
+                canvas.current.exportSvg().then((data: any) => {
 
-                  setKanjiGrade(grade);
-                  if(props.handleComplete && props.character) {
-                    props.handleComplete(props.character,grade)
+                  const convertCoords = (coords: any) => {
+                    let coordsArr: any[] = []
+                    Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
+                      coordsArr.push(coords[coordKey].map((coordsSet: { x: number, y: number }) => [coordsSet.x, coordsSet.y]))
+                    })
+                    return coordsArr;
                   }
-                  upsertCharacterScoreData(userData?.email || "",props.character?.unicode_str || "",grade.overallGrade)
+                  grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
+                setKanjiGrade(grade)
+                  setAttempts((prevAttempts) => {
+                    const attempts =  [...prevAttempts,{...grade, hint: allowDisplaySVG}]
+                    if(props.learn) {
+                      const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
+                      if(!some) {
+                        if(allowDisplaySVG) {
+                          if(grade.overallGrade > 65) {
+                            setAllowDisplaySVG(false)
+                            setDisplaySVG(false)
+                          }
+                          
+                        }
+                        else {
+                          setAllowDisplaySVG(true)
+                          setDisplaySVG(true)
+                        }
+                      }
+                      else {
+                        setAllowDisplaySVG(true)
+                        setDisplaySVG(true)
+                      }
+                        
+                        
+                      
+                     
+                      
+                    }
+                    return attempts
+                  } )
+                  //If in learn mode, hide svg on second attempt
+                  
+
+                  if(props.character) {
+                    if(props.handleComplete) {
+                      props.handleComplete(props.character,grade)
+                    }
+                    if(props.character.unicode_str) {
+                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
+                    }
+                    else {
+                      console.log("Character score not saved..")
+                    }
+                    
+                  }
+                  
+                  
                   if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                    //console.log(grade)
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
 
-                        setPrediction(result);
-                        if (kanji === result?.[0]?.label) return;
+                          console.log("Predictions:", result);
+
+                          setPrediction(result);
+                          if (kanji === result?.[0]?.label) return;
 
 
-                        if (grade.overallFeedback === "") {
-                          setKanjiGrade(prevState => ({
-                            ...prevState,
-                            overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
-                          }));
-                        }
-                        else {
-                          setKanjiGrade(prevState => ({
-                            ...prevState,
-                            overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
+                          if (grade.overallFeedback === "") {
+                            setKanjiGrade(prevState => ({
+                              ...prevState,
+                              overallFeedback: grade.overallFeedback + "Looks like you might have written the kanji " + result?.[0]?.label ?? "No feedback available"
+                            }));
+                          }
+                          else {
+                            setKanjiGrade(prevState => ({
+                              ...prevState,
+                              overallFeedback: grade.overallFeedback + "Did you draw " + result?.[0]?.label + " instead?" ?? "No feedback available"
 
-                          }));
-                        }
-                        
-                        
-                      }).catch(error => {
-                        console.error('Error interpreting image:', error);
+                            }));
+                          }
+
+
+                        }).catch(error => {
+                          console.error('Error interpreting image:', error);
+                        });
+                      }).catch((e: any) => {
+                        console.error(e);
                       });
-                    }).catch((e: any) => {
-                      console.error(e);
-                    });
-                  }
-                }).catch((e: any) => {
-                  console.log(e);
+                    }
+                  }).catch((e: any) => {
+                    console.error(e);
+                  });
                 });
-              });
-            }
-          }}
-        >
-          <DoneIcon fontSize="medium"/>
-        </button>
+              }
+            }}
+          >
+            <DoneIcon fontSize="medium" />
+          </button>
+        }
       </div>
-      <Feedback clearKanji={clearKanji} recall={props.recall} character={props.character!} handleAdvance={props.handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color}/>
+      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );
