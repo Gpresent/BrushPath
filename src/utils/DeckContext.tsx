@@ -22,6 +22,7 @@ export const useDecks = () => useContext(DecksContext);
 export const DecksProvider = ({ children }: { children: ReactNode }) => {
     const [decks, setDecks] = useState<Deck[]>([]);
     const { user, userData } = useContext(AuthContext);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const fetchDecks = async () => {
 
@@ -42,6 +43,9 @@ export const DecksProvider = ({ children }: { children: ReactNode }) => {
             console.error("Error fetching decks:", error);
             setDecks([]); // Optionally reset decks on error to avoid stale data
         }
+        finally {
+            setLoading(false)
+        }
     };
 
     // const addDeckById = (newDeck: string) => {
@@ -60,7 +64,7 @@ export const DecksProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <DecksContext.Provider value={{ decks, fetchDecks }}>
-            {children}
+            {loading ? <Loading /> : children}
         </DecksContext.Provider>
     );
 };
