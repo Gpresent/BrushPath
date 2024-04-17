@@ -5,7 +5,7 @@ import React, {
     useMemo,
     useState,
 } from "react";
-import WordCard from "./WordCard";
+import EditWordCard from "./EditWordCard";
 import Character from "../types/Character";
 import MiniSearch from "minisearch";
 import characterParser from "../utils/characterParser";
@@ -166,14 +166,21 @@ const AddWordList: React.FC<WordListProps> = ({
         console.log("Selected ", selectedCharacter);
         if (setSelectedWords && selectedWords) {
             //If it is selected, remove it
+            // debugger;
             if (selectedCharacter.selected) {
+                const filtered_words = selectedWords.filter(
+                    (char) => char.unicode !== selectedCharacter.unicode
+                )
+                // debugger;
                 setSelectedWords(
-                    selectedWords.filter(
-                        (char) => char.unicode !== selectedCharacter.unicode
-                    )
+                    // selectedWords.filter(
+                    //     (char) => char.unicode !== selectedCharacter.unicode
+                    // )
+                    filtered_words
                 );
             } else {
                 setSelectedWords([...selectedWords, selectedCharacter]);
+                // debugger;
             }
 
         }
@@ -197,19 +204,23 @@ const AddWordList: React.FC<WordListProps> = ({
                     <>
                         {filteredKanjiList.length > 0
                             ? filteredKanjiList.map((word) => (
-                                <WordCard
+                                <EditWordCard
                                     key={word.unicode}
                                     character={word}
                                     selectable={selectable}
                                     handleClick={handleClick}
+                                    selectedWords={selectedWords}
+
                                 />
                             ))
                             : words?.map((word) => (
-                                <WordCard
+                                <EditWordCard
                                     key={word.unicode}
                                     character={word}
                                     selectable={selectable}
                                     handleClick={handleClick}
+                                    selectedWords={selectedWords}
+
                                 />
                             ))}{" "}
                     </>

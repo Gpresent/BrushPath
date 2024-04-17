@@ -53,6 +53,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
     //   console.log("calling dfetch ")
     //   fetchCharacters();  // call this function to fetch characters if not already loaded
     // }
+    setSelectedKanji([])
     console.log(kanjiList.length)
   }, []);
 
