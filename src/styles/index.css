@@ -133,7 +133,7 @@ code {
   border-top: 1.9px solid var(--border);
   background-color: var(--background);
   z-index: 10;
-  padding-bottom: 15px;
+  padding-bottom: 25px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -152,6 +152,21 @@ code {
   border-radius: 10px;
   box-sizing: border-box;
   position: relative;
+}
+
+.title-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-icon {
+  position: relative;
+  margin-right: 5px;
+  z-index: 10;
+  color: var(--text);
 }
 
 @keyframes shake {
