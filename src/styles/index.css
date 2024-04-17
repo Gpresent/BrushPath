@@ -4,6 +4,7 @@
   --text: black;
   --deemphasized-1: #3a3a3ad7;
   --deemphasized-2: #333;
+  --checkbox-radius: 50px;
 }
 
 body {
@@ -36,6 +37,23 @@ p {
 
 .title {
   color: var(--text);
+}
+
+
+
+input[type="checkbox"] {
+  
+  /* width: 10px; */
+  height: 20px;
+  aspect-ratio: 1/1;
+  /* border-radius: 50%; */
+  border: 1px solid var(--border);
+  /* clip-path: circle(46% at 50% 50%); */
+  /* appearance: unset; */
+}
+
+input [type="checkbox"] :disabled {
+  border: 1px solid var(--deemphasized-1);
 }
 
 
@@ -133,7 +151,7 @@ code {
   border-top: 1.9px solid var(--border);
   background-color: var(--background);
   z-index: 10;
-  padding-bottom: 15px;
+  padding-bottom: 25px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -152,6 +170,21 @@ code {
   border-radius: 10px;
   box-sizing: border-box;
   position: relative;
+}
+
+.title-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-icon {
+  position: relative;
+  margin-right: 5px;
+  z-index: 10;
+  color: var(--text);
 }
 
 @keyframes shake {
@@ -173,8 +206,9 @@ code {
 .delete-icon {
   z-index: 10;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 5px;
+  top: 5px;
+  color: var(--text);
   /* color:#333; */
 }
 
@@ -252,6 +286,12 @@ code {
   box-sizing: border-box;
   background-color: var(--background);
   color: var(--deemphasized-2);
+}
+
+.AddToDeckButton {
+  flex-shrink: 0;
+  /* position: absolute;
+  margin-top: 100px; */
 }
 
 /* Dark Mode Toggle */

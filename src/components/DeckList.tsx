@@ -7,6 +7,7 @@ interface DeckListProps {
   decks: any[],
   user: DocumentData,
   length: number,
+  rows?: boolean
 }
 
 const DeckList: React.FC<DeckListProps> = ({ decks, user, length }) => {
