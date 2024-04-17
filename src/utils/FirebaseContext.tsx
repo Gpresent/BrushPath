@@ -5,7 +5,7 @@ import { DecksProvider } from './DeckContext';  // Import DecksProvider
 import React, { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
+import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
 
 
 
@@ -116,6 +116,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
 
+
+  useEffect(() => {
+    if (user && user.email) {
+      const userRef = doc(db, "User", user.email);
+      const unsubscribeDoc = onSnapshot(userRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          // console.log("Document data:", docSnapshot.data());
+          getUserData(user); // Call getUserData when the document updates
+        } else {
+          console.log("No such document!");
+        }
+      }, (error) => {
+        console.error("Error on document snapshot:", error);
+      });
+
+      return unsubscribeDoc; // Clean up doc listener
+    }
+  }, [user]);
 
   const value = {
     userData: userData,
