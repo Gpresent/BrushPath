@@ -47,7 +47,8 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
       if (userData && userData.decks) {
         const fetchedDecks = await getDecksFromRefs(userData.decks)
         setDecks(fetchedDecks);
-        setSelectedDecks(fetchedDecks.filter((deck: any) => deck.characters.some((ref: { id: string; }) => ref.id === character.unicode_str) ));
+        const initialSelectedDecks = fetchedDecks.filter((deck: any) => deck.characters.some((ref: { id: string; }) => ref.id === character.unicode_str) )
+        setSelectedDecks([...initialSelectedDecks]);
 
         
       }
@@ -68,9 +69,11 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
     // TODO add logic :)
     if(user?.email) {
       //where to remove from
+      //Check savedInDecks
       const decksToRemoveChar = savedInDecks.filter((deck: any) => !selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
       const decksToAddChar = notSavedInDecks.filter((deck: any) => selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
-      editCharInDecks(user?.email,decksToAddChar,decksToRemoveChar);
+      editCharInDecks(user?.email,character,decksToAddChar,decksToRemoveChar);
+      getUserData();
 
     }
     onClose();
@@ -84,15 +87,17 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
     //Update Selected
     if(userData) {
       //User can't edit decks they can't own
-      if(decks.some((deck: any) => deck.userRef === user?.email) ){
-        debugger;
+      const filteredDecks = decks.filter((deck: any) => deck._id === deckID);
+      const ownedDecks = filteredDecks.some((deck: any) => deck.userRef.id === user?.email) 
+      if(ownedDecks ){
+        
       
         setSelectedDecks((prevSelectedDecks: any) => {
           if(selectedState) {
             if(prevSelectedDecks.some((deck: any) => deck._id === deckID)) {
               return prevSelectedDecks;
             }else {
-              return [prevSelectedDecks, ...decks.filter((deck: any) => deck._id === deckID)]
+              return [...prevSelectedDecks, ...decks.filter((deck: any) => deck._id === deckID)]
             }
             
           }

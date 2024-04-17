@@ -16,6 +16,7 @@ import {
   getDocsFromServer,
   DocumentData,
   getCountFromServer,
+  arrayRemove,
 } from "firebase/firestore";
 import {
   collection,
@@ -228,8 +229,6 @@ export const fetchAllCharacters = async (skipRef:string, take: number) => {
       snapshot = await getDocs(paginatedQuery)
     }
     
-    // debugger;
-    // console.log("done with cache")
 
      
     // Extract data from the snapshot
@@ -528,10 +527,35 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
-export const editCharInDecks = async (userID: string, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
-  debugger;
+export const editCharInDecks = async (userID: string,character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
   try {
+    if(!userID) {
+      throw "no userID"
+    }
+    const charRef = doc(db,'Character',character.id);
+
+    //Add to decks
+    const updatePromises = decksToAdd.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayUnion(charRef)
+      });
+      
+    });
+
+    await Promise.all(updatePromises);
     
+
+    //Remove from decks
+    const removePromises = decksToRemove.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayRemove(charRef)
+      });
+      
+    });
+
+    await Promise.all(removePromises);
 
   } catch (error: any) {
     console.error("Error adding char to decks:", error);
