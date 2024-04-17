@@ -9,6 +9,7 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
+import { useDecks } from "../utils/DeckContext";
 
 
 interface DeckProps {
@@ -23,20 +24,27 @@ const DeckLandingView: React.FC<DeckProps> = ({ title, kanjiList, lastRef }) => 
   const [isModalOpen, setModalOpen] = useState(false);
   const { userData, getUserData, user } = useContext(AuthContext);
   const characterCache = useContext(CharacterSearchContext);
-  const [decks, setDecks] = useState<any>([]);
-
+  const { decks, fetchDecks } = useDecks();
 
 
   useEffect(() => {
-    const fetchDecks = async () => {
-      if (userData && userData.decks) {
-        const fetchedDecks = await getDecksFromRefs(userData.decks);
-        setDecks(fetchedDecks);
-      }
-    };
+    // const fetchDecks = async () => {
+    //   if (userData && userData.decks) {
+    //     const fetchedDecks = await getDecksFromRefs(userData.decks);
+    //     setDecks(fetchedDecks);
+    //   }
+    // };
 
-    fetchDecks();
+
   }, [userData]);
+
+  useEffect(() => {
+    if (userData?.decks) {
+      console.log("Fetching decks")
+      // fetchDecks();  // Only fetch decks if userData is not null and decks are available
+    }
+  }, [userData?.decks]);
+
 
   const handleAddDeck = () => {
     setModalOpen(true);

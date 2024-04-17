@@ -1,7 +1,7 @@
 import app, { auth, db } from './Firebase'
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, NextOrObserver, GoogleAuthProvider } from "firebase/auth";
-
+import { DecksProvider } from './DeckContext';  // Import DecksProvider
 import React, { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
@@ -10,7 +10,8 @@ import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDo
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: (currentUser: User) => void }>({ user: null, userData: null, getUserData: (currentUser: User) => { } });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: (currentUser: User) => void, }>
+  ({ user: null, userData: null, getUserData: (currentUser: User) => { }, });
 
 
 export const useAuth = () => {
@@ -125,6 +126,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // debugger;
   return (<AuthContext.Provider value={value}>
-    {loading ? <Loading /> : user ? children : <Login />}
+    {loading ? <Loading /> : user ? (
+      <DecksProvider>
+        {children}
+      </DecksProvider>
+    ) : <Login />}
   </AuthContext.Provider>)
 }

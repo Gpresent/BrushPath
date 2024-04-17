@@ -24,7 +24,7 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
     const fetchCharacters = useCallback(async () => {
         setLoading(true);
         let batch = 30;
-        console.log(kanjiList.length)
+        // console.log(kanjiList.length)
         await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
             if (fetchResponse.cachedData) {
                 // console.log("got data")

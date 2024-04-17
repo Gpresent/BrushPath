@@ -11,7 +11,7 @@ import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import SingleWordView from "./SingleWord";
 import LoadingSpinner from "../components/LoadingSpinner";
-
+import { useDecks } from '../utils/DeckContext';
 import { getDecksFromRefs, getDeckFromID, getCharacterScoreData, getCharacterScoreCount } from "../utils/FirebaseQueries";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -39,8 +39,9 @@ const Home: React.FC = (props) => {
 
   //const {user} = useParams<any>();
   const { user, userData, getUserData } = useContext(AuthContext);
+  const { decks, fetchDecks } = useDecks();
 
-  const [decks, setDecks] = useState<any>([]);
+  // const [decks, setDecks] = useState<any>([]);
 
   const [userCharacterScoreData, setUserCharacterScoreData] = useState<RetrievableData>({ data: null, loading: true, error: "" });
   const [userCharacterScoreCount, setUserCharacterScoreCount] = useState<RetrievableCount>({ data: -1, loading: true, error: "" });
@@ -49,11 +50,11 @@ const Home: React.FC = (props) => {
 
 
   useEffect(() => {
-    const fetchDecks = async () => {
-      const decksResult = await getDecksFromRefs(userData?.decks)
-      setDecks(decksResult);
-      setLoading(false);
-    }
+    // const fetchDecks = async () => {
+    //   const decksResult = await getDecksFromRefs(userData?.decks)
+    //   setDecks(decksResult);
+    //   setLoading(false);
+    // }
 
     //TODO: Maybe this should just get the count. Let's see if its slow on prod
     // const fetchScores = async () => {
@@ -81,15 +82,12 @@ const Home: React.FC = (props) => {
     }
 
     if (userData) {
-      fetchDecks();
+
       fetchScoreCount();
+      setLoading(false);
     }
 
   }, [userData]);
-
-
-
-
 
   // const character: Character = characterParser(charData);
 

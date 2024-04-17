@@ -26,7 +26,6 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { getAuth, updateProfile } from "firebase/auth";
-
 import { db } from "./Firebase";
 import {
   getStorage,
@@ -36,40 +35,11 @@ import {
 import { FirebaseError } from "firebase/app";
 import Character from "../types/Character";
 import { reviewItem } from "./spacedrep";
+import { AuthContext } from "../utils/FirebaseContext";
+import Deck from "../types/Deck";
+
 //Sam code
 
-// export const getDecksFromRefs = async (deckRefs: any) => {
-//   try {
-
-//     // Ensure each reference in deckRefs has a get() method
-//     // const invalidRefs = deckRefs.filter((ref:any) => typeof ref.get !== 'function');
-//     // if (invalidRefs.length > 0) {
-//     //     console.error("Invalid references found:", invalidRefs);
-//     //     throw new Error("Invalid Firestore references");
-//     // }
-//     const decks = await runTransaction(db, async (transaction) => {
-//       let deckPromises: any[] = [];
-//       deckRefs.forEach((ref: DocumentReference) => {
-//         deckPromises.push(transaction.get(ref));
-//       });
-//       const deckSnaps = await Promise.all(deckPromises);
-
-//       const decks = deckSnaps
-//         .map((snap) => (snap.exists ? snap.data() : null))
-//         .filter((data) => data !== null);
-
-//       console.log(decks);
-//       return decks;
-//     });
-//     console.log(decks);
-//     return decks;
-
-//   } catch (error) {
-//     console.error("Error fetching user decks:", error);
-//     throw error;
-//     return [];
-//   }
-// };
 
 // Fetching system will first hit the cache to see if deck exists
 // Else it will then fetch from Firebase
@@ -183,7 +153,7 @@ const fetchDocument = async (collectionName: string, documentId: string) => {
 
 export const fetchAllCharacters = async (skipRef: string, take: number) => {
 
-  console.log("skipRef is: " + skipRef)
+  // console.log("skipRef is: " + skipRef)
 
   try {
     if (skipRef === "poop") {
@@ -336,11 +306,12 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
       // 'newReference' is the reference you want to add to the array
     };
 
+
     await updateDoc(userRef, userUpdateData);
 
 
     // console.log(deckRef);
-    // return await fetchDocument("Deck",deckRef.id);
+    return await fetchDocument("Deck", deckRef.id);
   } catch (error) {
     console.error("Error creating deck:", error);
     throw error;
@@ -589,7 +560,7 @@ export const getHydratedCharacterScoreData = async (userID: string): Promise<Doc
   }
 }
 
-export const getCharScoreDataByID = async (userID:string, charID:string) => {
+export const getCharScoreDataByID = async (userID: string, charID: string) => {
   try {
     const userRef = doc(db, "User", userID);
     const charRef = doc(db, "Character", charID);

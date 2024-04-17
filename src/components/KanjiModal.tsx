@@ -14,7 +14,8 @@ import { useCharacters } from "../utils/FBCharacterContext";
 import "../styles/index.css";
 import WideModal from "./WideModal";
 import InfiniteScroll from "react-infinite-scroller";
-import WordList from "./WordList";
+import { useDecks } from "../utils/DeckContext";
+
 
 interface Kanji {
   id: number;
@@ -31,6 +32,7 @@ interface KanjiModalProps {
   characterCache: IndexedDBCachingResult | null;
   userData: DocumentData | null;
   user: User | null;
+
 }
 
 const KanjiModal: React.FC<KanjiModalProps> = ({
@@ -43,7 +45,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
   const [deckTitle, setDeckTitle] = useState("");
   const { kanjiList, fetchCharacters, lastRef } = useCharacters();
-
+  const { decks, fetchDecks } = useDecks();
 
   useEffect(() => {
     // console.log("HI")
@@ -89,7 +91,12 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
       return;
     }
     if (user?.email) {
-      addUserDeck(user?.email, selectedKanji, "", deckTitle);
+      addUserDeck(user?.email, selectedKanji, "", deckTitle).then(() => {
+        fetchDecks(); // Fetch decks to update context
+      })
+        .catch(error => {
+          console.error("Failed to add deck or fetch decks:", error);
+        });;
     }
 
     setSelectedKanji([]);
