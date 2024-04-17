@@ -535,8 +535,8 @@ export const getCharacterScoreData = async (userID: string, next_review_date?: T
     let currDate = new Date();
     currDate.setDate(currDate.getDate() + 14);
     const nextReviewDate = Timestamp.fromDate(currDate);
-    const userRef = doc(db, "User", userID)
-    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef), where("nextReviewDate", "<=", nextReviewDate));
+    const userRef = doc(db, "User", userID);
+    const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef), where("nextReviewDate", "<=", nextReviewDate), orderBy("nextReviewDate", "asc"));
     const characterScoreResult = await getDocs(characterScoreQuery);
     const characterScoreData = characterScoreResult.docs.map((score) => {
       return { _score_id: score.id, ...score.data() }
