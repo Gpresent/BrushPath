@@ -9,64 +9,44 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
+import { useDecks } from "../utils/DeckContext";
+
+
 import Deck from "../types/Deck";
 
 interface DeckProps {
   //message: string;
   title: string;
+  kanjiList: Character[];
+  lastRef: string;
 }
 
-// const decks = [
-//   {
-//     id: 0,
-//     coverImage: "../sample_deck.png",
-//     name: "JLPT N5",
-//   },
-//   {
-//     id: 1,
-//     coverImage: "../deck-covers/sample1.jpeg",
-//     name: "JLPT N4",
-//   },
-//   {
-//     id: 2,
-//     coverImage: "../deck-covers/sample2.jpeg",
-//     name: "JLPT N3",
-//   },
-//   {
-//     id: 3,
-//     coverImage: "../deck-covers/sample3.jpeg",
-//     name: "JLPT N2",
-//   },
-//   {
-//     id: 4,
-//     coverImage: "../deck-covers/sample4.jpeg",
-//     name: "JLPT N1",
-//   },
-//   {
-//     id: 5,
-//     coverImage: "../deck-covers/sample5.jpeg",
-//     name: "Custom Deck",
-//   },
-// ];
 
-const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
+const DeckLandingView: React.FC<DeckProps> = ({ title, kanjiList, lastRef }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { userData, getUserData, user } = useContext(AuthContext);
   const characterCache = useContext(CharacterSearchContext);
-  const [decks, setDecks] = useState<any>([]);
+  const { decks, fetchDecks } = useDecks();
 
 
+  // useEffect(() => {
+  //   // const fetchDecks = async () => {
+  //   //   if (userData && userData.decks) {
+  //   //     const fetchedDecks = await getDecksFromRefs(userData.decks);
+  //   //     setDecks(fetchedDecks);
+  //   //   }
+  //   // };
 
-  useEffect(() => {
-    const fetchDecks = async () => {
-      if (userData && userData.decks) {
-        const fetchedDecks = await getDecksFromRefs(userData.decks);
-        setDecks(fetchedDecks);
-      }
-    };
 
-    fetchDecks();
-  }, [userData]);
+  // }, [userData]);
+
+  // useEffect(() => {
+  //   if (userData?.decks) {
+  //     console.log("Fetching decks")
+  //     // fetchDecks();  // Only fetch decks if userData is not null and decks are available
+  //   }
+  // }, [userData?.decks]);
+
 
   const handleAddDeck = () => {
     setModalOpen(true);
@@ -81,10 +61,11 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
       <div className="deck-header-wrapper">
         <div className="deck-header">
           <h2 className="deck-title">My Decks</h2>
-          <AddIcon className="addButton" onClick={handleAddDeck} />
+          {/* <AddIcon className="addButton" onClick={handleAddDeck} /> */}
         </div>
-        <input className="search-bar" />
+        {/* <input className="search-bar" /> */}
       </div>
+
       {/* <HomeStats /> */}
       <div className="deck-list-container">
 
@@ -101,6 +82,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title }) => {
         userData={userData}
         user={user}
       />
+
     </div>
   );
 };

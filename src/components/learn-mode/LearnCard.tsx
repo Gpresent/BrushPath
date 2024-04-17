@@ -59,7 +59,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
         ></DrawReview>
       </div>
 
-      <div className="learn-card-nav-row">
+      {/* <div className="learn-card-nav-row"> */}
         {/* <div></div> */}
         {/* {grade && grade.overallGrade > 50 && (
           <button
@@ -73,7 +73,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
             <ArrowForward/>
           </button>
         )} */}
-      </div>
+      {/* </div> */}
     </div>
   );
 };

@@ -69,16 +69,16 @@ const DictionaryView: React.FC<DictionaryProps> = ({ kanjiList, setKanjiList, ti
     <div className="dictionary-view">
       <p className="my-words">Dictionary</p>
       <InfiniteScroll
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
         pageStart={0}
         loadMore={fetchChars}
         hasMore={(kanjiList.length < 2136) && (lastRef != "poop")}
         // loader={<LoadingSpinner />}
         useWindow={false}
       >
-        {<WordList style={{maxHeight:"70vh"}} words={kanjiList} />}
+        {<WordList style={{ maxHeight: "70vh" }} words={kanjiList} />}
       </InfiniteScroll>
-      
+
     </div>
   );
 };

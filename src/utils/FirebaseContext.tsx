@@ -1,16 +1,17 @@
 import app, { auth, db } from './Firebase'
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User, NextOrObserver, GoogleAuthProvider } from "firebase/auth";
-
+import { DecksProvider } from './DeckContext';  // Import DecksProvider
 import React, { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Login from '../pages/Login';
 import Loading from '../components/Loading';
-import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs } from 'firebase/firestore';
+import { DocumentData, Timestamp, doc, runTransaction, getDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
 
 
 
 //Initialize Context
-export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: (currentUser: User) => void }>({ user: null, userData: null, getUserData: (currentUser: User) => { } });
+export const AuthContext = createContext<{ user: null | User, userData: null | DocumentData, getUserData: (currentUser: User) => void, }>
+  ({ user: null, userData: null, getUserData: (currentUser: User) => { }, });
 
 
 export const useAuth = () => {
@@ -116,6 +117,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
 
+  useEffect(() => {
+    if (user && user.email) {
+      const userRef = doc(db, "User", user.email);
+      const unsubscribeDoc = onSnapshot(userRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          // console.log("Document data:", docSnapshot.data());
+          getUserData(user); // Call getUserData when the document updates
+        } else {
+          console.log("No such document!");
+        }
+      }, (error) => {
+        console.error("Error on document snapshot:", error);
+      });
+
+      return unsubscribeDoc; // Clean up doc listener
+    }
+  }, [user]);
+
   const value = {
     userData: userData,
     getUserData: getUserData,
@@ -125,6 +144,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // debugger;
   return (<AuthContext.Provider value={value}>
-    {loading ? <Loading /> : user ? children : <Login />}
+    {loading ? <Loading /> : user ? (
+      <DecksProvider>
+        {children}
+      </DecksProvider>
+    ) : <Login />}
   </AuthContext.Provider>)
 }

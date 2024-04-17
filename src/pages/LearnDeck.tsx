@@ -1,5 +1,5 @@
 import react, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getCharacterScoreData,
   getCharsFromRefs,
@@ -11,15 +11,16 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import LearnCardList from "../components/learn-mode/LearnCardList";
 import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
-interface LearnProps { }
+interface LearnProps {}
 type RetrievableData = {
   data: Character[] | null;
   loading: boolean;
   error: string;
 };
 
-const LearnDeck: React.FC<LearnProps> = ({ }) => {
+const LearnDeck: React.FC<LearnProps> = ({}) => {
   const [characters, setCharacters] = useState<RetrievableData>({
     data: null,
     loading: true,
@@ -95,14 +96,13 @@ const LearnDeck: React.FC<LearnProps> = ({ }) => {
             (character: Character | null): character is Character =>
               character !== null
           )
-          .slice(0, numCharacters);
-        console.log(filteredChars);
+          .slice(0, Math.min(numCharacters, fetchedChars.length));
+        // console.log(fetchedChars);
+        // debugger;
         setCharacters({ data: filteredChars, loading: false, error: "" });
       });
     });
   };
-
-
 
   useEffect(() => {
     if (userData) {
@@ -110,8 +110,10 @@ const LearnDeck: React.FC<LearnProps> = ({ }) => {
     }
   }, [userData]);
 
+  let navigate = useNavigate();
+
   return (
-    <div>
+    <>
       {characters.loading ? (
         <LoadingSpinner />
       ) : characters.error || characters.data == null ? (
@@ -119,9 +121,22 @@ const LearnDeck: React.FC<LearnProps> = ({ }) => {
       ) : characters.data.length > 0 ? (
         <LearnCardList learn={true} characters={characters.data} />
       ) : (
-        <p>Learned them all</p>
+        <>
+          <div className="deck-title-back">
+            <div
+              style={{ display: "flex", alignItems: "center" }}
+              onClick={() => navigate("/")}
+            >
+              <ArrowBackIosNewIcon
+                style={{ fontSize: "18px" }}
+              ></ArrowBackIosNewIcon>
+            </div>
+          
+          <p className="error-message">You've already learned all the words in this deck.</p>
+          </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 
