@@ -198,6 +198,9 @@ body {
 }
 
 .deck-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     /* max-height: 72vh;
     overflow-y: scroll; */
 }
@@ -222,6 +225,25 @@ body {
     border-radius: 10px;
     box-sizing: border-box;
     cursor: pointer;
+}
+
+.deck-select-card {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+    /* border-radius: 10px; */
+    box-sizing: border-box;
+    /* cursor: pointer; */
+}
+
+.deck-select-name{
+    font-size: large;
 }
 
 @media (min-width: 700px) {
@@ -484,7 +506,7 @@ body {
     z-index: 30;
     height: 90vh;
     align-self: flex-start;
-    overflow-y: scroll;
+    overflow-y: auto;
     transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
 }
 
@@ -536,7 +558,7 @@ body {
     z-index: 30;
     align-self: flex-start;
     max-height: 70%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .modal-title {
@@ -553,7 +575,7 @@ body {
 }
 
 .add-word-list {
-    overflow: scroll;
+    overflow: auto;
     max-height: 50vh;
     padding: unset;
 }

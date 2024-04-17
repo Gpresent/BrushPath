@@ -16,6 +16,7 @@ import {
   getDocsFromServer,
   DocumentData,
   getCountFromServer,
+  arrayRemove,
 } from "firebase/firestore";
 import {
   collection,
@@ -530,6 +531,48 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
+export const editCharInDecks = async (userID: string,character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
+  try {
+    if(!userID) {
+      throw "no userID"
+    }
+    const charRef = doc(db,'Character',character.id);
+
+    //Add to decks
+    const updatePromises = decksToAdd.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayUnion(charRef)
+      });
+      
+    });
+
+    await Promise.all(updatePromises);
+    
+
+    //Remove from decks
+    const removePromises = decksToRemove.map(async (deck) => {
+      
+      return updateDoc(doc(db,'Deck',deck._id), {
+        characters: arrayRemove(charRef)
+      });
+      
+    });
+
+    await Promise.all(removePromises);
+
+  } catch (error: any) {
+    console.error("Error adding char to decks:", error);
+    
+    if(error?.code === "unavailable") {
+      return -1;
+    }
+
+    throw error;
+  }
+
+}
+
 export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
   try {
     let currDate = new Date();
@@ -611,3 +654,4 @@ export const getCharScoreDataByID = async (userID:string, charID:string) => {
     throw error;
   }
 }
+

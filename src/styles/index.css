@@ -4,6 +4,7 @@
   --text: black;
   --deemphasized-1: #3a3a3ad7;
   --deemphasized-2: #333;
+  --checkbox-radius: 50px;
 }
 
 body {
@@ -36,6 +37,23 @@ p {
 
 .title {
   color: var(--text);
+}
+
+
+
+input[type="checkbox"] {
+  
+  /* width: 10px; */
+  height: 20px;
+  aspect-ratio: 1/1;
+  /* border-radius: 50%; */
+  border: 1px solid var(--border);
+  /* clip-path: circle(46% at 50% 50%); */
+  /* appearance: unset; */
+}
+
+input [type="checkbox"] :disabled {
+  border: 1px solid var(--deemphasized-1);
 }
 
 
@@ -268,6 +286,12 @@ code {
   box-sizing: border-box;
   background-color: var(--background);
   color: var(--deemphasized-2);
+}
+
+.AddToDeckButton {
+  flex-shrink: 0;
+  /* position: absolute;
+  margin-top: 100px; */
 }
 
 /* Dark Mode Toggle */
