@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import "../styles/styles.css";
-
+import { useNavigate } from "react-router-dom";
 import Character from "../types/Character";
 import { IndexedDBCachingResult } from "../utils/CharacterSearchContext";
 import characterParser from "../utils/characterParser";
@@ -44,18 +44,19 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
 }) => {
   const [selectedKanji, setSelectedKanji] = useState<Character[]>([]);
   const [deckTitle, setDeckTitle] = useState("");
-  const { kanjiList, fetchCharacters, lastRef } = useCharacters();
+  const { kanjiList, fetchCharacters, lastRef, setPause } = useCharacters();
   const { decks, fetchDecks } = useDecks();
-
+  const navigate = useNavigate();
   useEffect(() => {
     // console.log("HI")
     // if (kanjiList.length == 0) {
     //   console.log("calling dfetch ")
     //   fetchCharacters();  // call this function to fetch characters if not already loaded
     // }
+
     fetchCharacters();
     setSelectedKanji([])
-    console.log(kanjiList.length)
+    // console.log(kanjiList.length)
   }, []);
 
   const characters: Character[] | undefined = useMemo(() => {
@@ -76,9 +77,10 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // TODO add logic :)
-    console.log(user);
+    setPause(true)
+    // console.log(user);
     if (deckTitle === "") {
       console.log("No deck title");
       return;
@@ -93,12 +95,12 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
       return;
     }
     if (user?.email) {
-      addUserDeck(user?.email, selectedKanji, "", deckTitle).then(() => {
-        fetchDecks(); // Fetch decks to update context
-      })
+      const deck_id = await addUserDeck(user?.email, selectedKanji, "", deckTitle)
         .catch(error => {
           console.error("Failed to add deck or fetch decks:", error);
-        });;
+        });
+      // navigate(`/deck/${deck_id}`);
+      // navigate(`/deck/JLPT_4`);
     }
 
     setSelectedKanji([]);
@@ -107,6 +109,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   };
 
   const handleClose = () => {
+    setPause(true)
     setSelectedKanji([]);
     setDeckTitle("");
     onClose();

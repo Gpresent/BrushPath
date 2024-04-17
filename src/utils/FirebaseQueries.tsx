@@ -313,6 +313,8 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const userRef = doc(db, "User", userId);
 
 
+
+
     //Dedupe Character Array
     var uniqueMap: {
       [key: string]: Character;
@@ -342,18 +344,29 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const deckRef = await addDoc(collection(db, 'Deck'), userDeck);
     console.log("Post document added with ID: ", deckRef.id);
 
+
+    const userData = await getDoc(userRef);
+
+    const newDecks = [deckRef, ...userData.data()?.decks]
     //Add Ref to user
     const userUpdateData = {
-      decks: arrayUnion(deckRef)
+      decks: newDecks
       // 'newReference' is the reference you want to add to the array
     };
+
+
 
 
     await updateDoc(userRef, userUpdateData);
 
 
-    // console.log(deckRef);
-    return await fetchDocument("Deck", deckRef.id);
+
+
+
+
+
+    // console.log(deckRef); await fetchDocument("Deck", deckRef.id);
+    return deckRef.id;
   } catch (error) {
     console.error("Error creating deck:", error);
     throw error;
@@ -543,40 +556,40 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
-export const editCharInDecks = async (userID: string,character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
+export const editCharInDecks = async (userID: string, character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
   try {
-    if(!userID) {
+    if (!userID) {
       throw "no userID"
     }
-    const charRef = doc(db,'Character',character.id);
+    const charRef = doc(db, 'Character', character.id);
 
     //Add to decks
     const updatePromises = decksToAdd.map(async (deck) => {
-      
-      return updateDoc(doc(db,'Deck',deck._id), {
+
+      return updateDoc(doc(db, 'Deck', deck._id), {
         characters: arrayUnion(charRef)
       });
-      
+
     });
 
     await Promise.all(updatePromises);
-    
+
 
     //Remove from decks
     const removePromises = decksToRemove.map(async (deck) => {
-      
-      return updateDoc(doc(db,'Deck',deck._id), {
+
+      return updateDoc(doc(db, 'Deck', deck._id), {
         characters: arrayRemove(charRef)
       });
-      
+
     });
 
     await Promise.all(removePromises);
 
   } catch (error: any) {
     console.error("Error adding char to decks:", error);
-    
-    if(error?.code === "unavailable") {
+
+    if (error?.code === "unavailable") {
       return -1;
     }
 

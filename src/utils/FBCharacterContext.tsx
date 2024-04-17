@@ -9,7 +9,8 @@ const CharacterContext = createContext({
     kanjiList: [] as Character[],
     loading: true,
     fetchCharacters: async () => { },
-    lastRef: "" as string
+    lastRef: "" as string,
+    setPause: (pause: boolean) => { },
 });
 
 
@@ -19,11 +20,17 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
     const [kanjiList, setKanjiList] = useState<Character[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [lastRef, setLastRef] = useState("");
+    const [paused, setPause] = useState(false)
 
 
     const fetchCharacters = useCallback(async () => {
+        // console.log("Paused Status:", paused);
+        if (paused) {
+            // console.log("Fetching is paused.");  // Additional log for clarity
+            return;
+        }
         setLoading(true);
-        let batch = 30;
+        let batch = 250;
         // console.log(kanjiList.length)
         await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
             if (fetchResponse.cachedData) {
@@ -46,7 +53,7 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
             setLastRef(fetchResponse.skipRef);
 
         });
-    }, [lastRef]);
+    }, [lastRef, paused]);
 
     // useEffect(() => {
 
@@ -57,7 +64,7 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
 
 
     return (
-        <CharacterContext.Provider value={{ kanjiList, loading, fetchCharacters, lastRef }}>
+        <CharacterContext.Provider value={{ kanjiList, loading, fetchCharacters, lastRef, setPause }}>
             {children}
         </CharacterContext.Provider>
     );
