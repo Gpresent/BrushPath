@@ -134,9 +134,11 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         // loader={<LoadingSpinner />}
         useWindow={false}
       >
-        {<AddWordList style={{ maxHeight: "55vh" }} words={kanjiList} selectable={true} selectedWords={selectedKanji}
-          setSelectedWords={setSelectedKanji} />}
-      </InfiniteScroll>
+        {
+          <AddWordList style={{ maxHeight: "55vh" }} words={kanjiList} selectable={true} selectedWords={selectedKanji}
+            setSelectedWords={setSelectedKanji} />
+        }
+      </InfiniteScroll >
 
       <ul className="add-word-list">
         {characters?.map((kanji) => (
@@ -151,7 +153,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         ))}
       </ul>
       <button onClick={handleSubmit}>Submit</button>
-    </WideModal>
+    </WideModal >
   );
 };
 
