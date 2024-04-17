@@ -16,6 +16,8 @@ import {
   getDocsFromServer,
   DocumentData,
   getCountFromServer,
+  arrayRemove,
+  deleteDoc,
 } from "firebase/firestore";
 import {
   collection,
@@ -275,6 +277,35 @@ export const getDeckFromID = async (deckId: string) => {
   }
 };
 
+export const deleteDeck = async (userID: string, deck: Deck) => {
+  try {
+    if (!userID) {
+      throw "no userID"
+    }
+    if (!deck || !deck._id) {
+      throw "no deck"
+    }
+
+
+    const deckRef = doc(db, "Deck", deck._id);
+    const userRef = doc(db, "User", userID);
+
+    //Remove from User
+    await updateDoc(userRef, { decks: arrayRemove(deckRef) });
+
+    //Remove from Deck
+    await deleteDoc(deckRef);
+  } catch (error: any) {
+    console.error("Error getting character score data count:", error);
+
+    if (error?.code === "unavailable") {
+      return -1;
+    }
+
+    throw error;
+  }
+}
+
 //TODO add image and public bool
 export const addUserDeck = async (userId: string, characters: Character[], desc: string, deckTitle: string) => {
   try {
@@ -282,7 +313,16 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const userRef = doc(db, "User", userId);
 
 
-    const characterPromises = characters.map((char) => doc(db, "Character", char.unicode_str));
+    //Dedupe Character Array
+    var uniqueMap: {
+      [key: string]: Character;
+    } = {}
+    characters.forEach((char) => {
+      uniqueMap[char.unicode_str] = char
+    })
+    const uniqueCharacters = Object.values(uniqueMap)
+
+    const characterPromises = uniqueCharacters.map((char) => doc(db, "Character", char.unicode_str));
     const characterRefs = await Promise.all(characterPromises)
     //TODO Filter Nulls?
 
