@@ -53,6 +53,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
     //   console.log("calling dfetch ")
     //   fetchCharacters();  // call this function to fetch characters if not already loaded
     // }
+    fetchCharacters();
     setSelectedKanji([])
     console.log(kanjiList.length)
   }, []);
@@ -132,7 +133,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
         Add Words
       </div>
       <InfiniteScroll
-        style={{ width: "100%", marginTop:"10px" }}
+        style={{ width: "100%", marginTop: "10px" }}
         pageStart={0}
         loadMore={fetchCharacters}
         hasMore={(kanjiList.length < 2136) && (lastRef != "poop")}

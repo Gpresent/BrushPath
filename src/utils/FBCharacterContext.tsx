@@ -48,12 +48,12 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
         });
     }, [lastRef]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        fetchCharacters();
+    //     fetchCharacters();
 
 
-    }, [fetchCharacters]);
+    // }, [fetchCharacters]);
 
 
     return (
