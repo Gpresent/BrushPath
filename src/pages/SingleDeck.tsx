@@ -125,7 +125,6 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
             </div>
             {/* <input className="search-bar" /> */}
           </div>
-
           <div
           // style={{ maxHeight: "70vh", overflow: "auto" }}
           >

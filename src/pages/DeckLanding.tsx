@@ -9,6 +9,7 @@ import { AuthContext } from "../utils/FirebaseContext";
 import { getDecksFromRefs } from "../utils/FirebaseQueries";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { CharacterSearchContext } from "../utils/CharacterSearchContext";
+import Deck from "../types/Deck";
 
 interface DeckProps {
   //message: string;

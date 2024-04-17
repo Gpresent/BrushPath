@@ -5,6 +5,7 @@ type Deck = {
     id: number;
     image: string;
     name: string;
+    desc: string;
     userRef?: DocumentReference;
 };
 

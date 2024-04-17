@@ -7,9 +7,12 @@ import { updateUserRecentDeck } from "../utils/FirebaseQueries";
 import { AuthContext } from "../utils/FirebaseContext";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ConfirmationModal from '../components/ConfirmationModal';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import DeckInfoModal from "./DeckInfoModal";
 import {
   refEqual
 } from "firebase/firestore";
+import Info from "@mui/icons-material/Info";
 
 interface DeckCardProps {
   deck: Deck;
@@ -25,6 +28,7 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
   let pressTimer: ReturnType<typeof setTimeout> | null = null;
   const [isShaking, setIsShaking] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   const handleDeckClick = (deckId: any) => {
     if (!showDeleteIcon && !showConfirmationModal) {
@@ -70,8 +74,12 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
     setShowDeleteIcon(false);
   };
 
+  const handleInfoClick = () => {
+    setShowInfoModal(true);
+  }
+
   return (
-    <div className={`deck-card clip-contents ${showDeleteIcon ? 'shaking' : ''}`} onClick={() => handleDeckClick(deck._id)}
+    <div className={`deck-card clip-contents ${showDeleteIcon ? 'shaking' : ''}`}
       onMouseDown={startPressTimer}
       onMouseUp={handleMouseUpOrTouchEnd}
       onMouseLeave={handleMouseLeaveOrTouchMove}
@@ -82,15 +90,23 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
       {(userData?.email === deck.userRef?.id) && showDeleteIcon && (
         <DeleteForeverIcon className="delete-icon" onClick={() => handleTrashClick()} />
       )}
-      <div className="cover-image" style={{ backgroundImage: `url(${deck.image})` }}>
+      <div className="cover-image" style={{ backgroundImage: `url(${deck.image})` }} onClick={() => handleDeckClick(deck._id)}>
       </div>
-      <p className="title">{deck.name}</p>
+      <div className="title-bar">
+        <p className="title" onClick={() => handleDeckClick(deck._id)}>{deck.name}</p>
+        {deck.desc !== "" && (<InfoOutlinedIcon className="info-icon" onClick={() => handleInfoClick()} />)}
+      </div>
 
     <ConfirmationModal
       deck={deck}
       user={user} 
       isOpen={showConfirmationModal}
       onClose={closeConfirmationModal}
+    />
+    <DeckInfoModal
+      deck={deck}
+      isOpen={showInfoModal}
+      onClose={() => setShowInfoModal(false)}
     />
 
     </div>
