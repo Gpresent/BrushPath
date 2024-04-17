@@ -47,11 +47,6 @@ const Home: React.FC = (props) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-    }
-  }, []);
 
   useEffect(() => {
     const fetchDecks = async () => {

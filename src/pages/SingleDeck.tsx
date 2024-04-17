@@ -35,7 +35,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
   });
   const [characters, setCharacters] = useState<any>([]);
   const [charIndex, setCharIndex] = useState<number>(0);
-  const {userData, getUserData} = useContext(AuthContext);
+  const { userData, getUserData } = useContext(AuthContext);
 
   const characterCache = useContext(CharacterSearchContext);
 
@@ -62,11 +62,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
 
   let { id } = useParams();
 
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-    }
-  }, []);
+
 
   useEffect(() => {
     if (userData && id) {
@@ -140,7 +136,7 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
               loader={<></>}
               useWindow={false}
             >
-              {<WordList style={{ maxHeight: "48vh"}} words={characters} />}
+              {<WordList style={{ maxHeight: "48vh" }} words={characters} />}
             </InfiniteScroll>
           </div>
 

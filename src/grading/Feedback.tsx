@@ -136,35 +136,37 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   // console.log(kanji_grade);
 
   useEffect(() => {
-    const handleScroll = debounce((container) => {
+    const handleScroll = () => {
+      const container = document.querySelector(".feedback-container") as HTMLElement;
+      if (!container) return;
+  
       const scrollLeft = container.scrollLeft;
       const children = Array.from(container.children) as HTMLElement[];
-      const index = children.findIndex((child) => child.offsetLeft > scrollLeft);
-      setChildIndex(Math.floor(scrollLeft / container.clientWidth));
-
-      if (index !== -1) {
-        const nextBoxLeft = children[index].offsetLeft;
-        const prevBoxLeft = index > 0 ? children[index - 1].offsetLeft : 0;
-
-        const targetLeft =
-          scrollLeft - prevBoxLeft < nextBoxLeft - scrollLeft
-            ? prevBoxLeft
-            : nextBoxLeft;
-        container.scrollTo({
-          left: targetLeft,
-          behavior: "smooth",
-        });
+  
+      // Find the index of the child element that is currently snapped to
+      let snappedIndex = -1;
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        const childScrollLeft = child.offsetLeft - container.offsetLeft;
+        const childWidth = child.offsetWidth;
+        if (Math.abs(scrollLeft - childScrollLeft) < childWidth / 10) {
+          snappedIndex = i;
+          break;
+        }
       }
-    }, 100); // Debounce time in milliseconds
-
-    document.querySelectorAll(".feedback-container").forEach((container) => {
-      container.addEventListener('scroll', () => handleScroll(container));
-    });
-
+      if (snappedIndex >= 0)
+        setChildIndex(snappedIndex);
+    };
+  
+    const container = document.querySelector(".feedback-container");
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+  
     return () => {
-      document.querySelectorAll(".feedback-container").forEach((container) => {
-        container.removeEventListener('scroll', () => handleScroll(container));
-      });
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
