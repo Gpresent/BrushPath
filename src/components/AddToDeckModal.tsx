@@ -32,15 +32,11 @@ interface AddModalProps {
 
 const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) => {
   
-  const { userData, getUserData, user } = useContext(AuthContext);
+  const { userData, user } = useContext(AuthContext);
   const [decks, setDecks] = useState<any>([]);
   const [selectedDecks, setSelectedDecks] = useState<any>([]);
 
-  useEffect(() => {
-    if (!userData) {
-      getUserData();
-    }
-  }, []);
+  
 
   useEffect(() => {
     const fetchDecks = async () => {
@@ -73,7 +69,7 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
       const decksToRemoveChar = savedInDecks.filter((deck: any) => !selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
       const decksToAddChar = notSavedInDecks.filter((deck: any) => selectedDecks.some((selectedDeck: any) => selectedDeck._id === deck._id))
       editCharInDecks(user?.email,character,decksToAddChar,decksToRemoveChar);
-      getUserData();
+  
 
     }
     onClose();
@@ -110,9 +106,7 @@ const AddToDeckModal: React.FC<AddModalProps> = ({isOpen, onClose, character}) =
 
     }
   }
-    else {
-      getUserData();
-    }
+
     
     
   }
