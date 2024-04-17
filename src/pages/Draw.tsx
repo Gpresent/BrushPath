@@ -322,43 +322,42 @@ const Draw: React.FC<DrawProps> = (props) => {
             {displaySVG ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
           </button>
         )}
+        {kanji_grade.overallGrade !== -1 ?
+          <button
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              canvas.current.clearCanvas();
+              setInputStrokes(0);
+              setReadOnly(false);
+              setKanjiGrade({
+                overallGrade: -1,
+                overallFeedback: "",
+                grades: [],
+                feedback: [],
+                strokeInfo: [],
+              });
+            }}
+          >
+            <AutorenewIcon fontSize="medium" />
+          </button>
+          :
+          <button
+            className="check-kanji"
+            style={styles.button}
+            onClick={() => {
+              if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
+                setReadOnly(true);
+                canvas.current.exportSvg().then((data: any) => {
 
-        { kanji_grade.overallGrade !== -1 ?
-        <button
-        className="check-kanji"
-        style={styles.button}
-        onClick={() => {
-          canvas.current.clearCanvas();
-          setInputStrokes(0);
-          setReadOnly(false);
-          setKanjiGrade({
-            overallGrade: -1,
-            overallFeedback: "",
-            grades: [],
-            feedback: [],
-            strokeInfo: [],
-          });
-        }}
-        >
-           <AutorenewIcon fontSize="medium"/>
-        </button>
-        :
-        <button
-          className="check-kanji"
-          style={styles.button}
-          onClick={() => {
-            if (document.getElementById("react-sketch-canvas")?.getElementsByTagName("path").length) {
-              setReadOnly(true);
-              canvas.current.exportSvg().then((data: any) => {
-
-                const convertCoords = (coords: any) => {
-                  let coordsArr: any[] = []
-                  Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
-                      coordsArr.push(coords[coordKey].map((coordsSet: {x: number, y:number}) => [coordsSet.x,coordsSet.y]))
-                  })
-                  return coordsArr;
-              }
-                grade(data, kanji, passing, convertCoords(character?.coords),character?.totalLengths).then((grade: KanjiGrade) => {
+                  const convertCoords = (coords: any) => {
+                    let coordsArr: any[] = []
+                    Object.keys(coords).map((key: string) => parseInt(key)).sort((a, b) => a - b).forEach((coordKey) => {
+                      coordsArr.push(coords[coordKey].map((coordsSet: { x: number, y: number }) => [coordsSet.x, coordsSet.y]))
+                    })
+                    return coordsArr;
+                  }
+                  grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
                 setKanjiGrade(grade)
                   setAttempts((prevAttempts) => {
@@ -400,24 +399,16 @@ const Draw: React.FC<DrawProps> = (props) => {
                     if(props.character.unicode_str) {
                       handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
                     }
-                    setAttempts((prevAttempts) => [...prevAttempts, grade])
-                    if (props.character) {
-                      if (props.handleComplete) {
-                        props.handleComplete(props.character, grade)
-                      }
-                      if (props.character.unicode_str) {
-                        handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
-                      }
-                      else {
-                        console.log("Character score not saved..")
-                      }
-
+                    else {
+                      console.log("Character score not saved..")
                     }
-
-
-                    if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                      canvas.current.exportImage('jpeg').then((data: any) => {
-                        interpretImage(data).then(result => {
+                    
+                  }
+                  
+                  
+                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                    canvas.current.exportImage('jpeg').then((data: any) => {
+                      interpretImage(data).then(result => {
 
                           console.log("Predictions:", result);
 
