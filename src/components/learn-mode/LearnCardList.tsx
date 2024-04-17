@@ -97,7 +97,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
 
   function onCloseLearn() {
     setFinished(true);
-    navigate(`/deck/${id}`);
+    navigate("/");
     setShowLearnModal(false);
   }
 
