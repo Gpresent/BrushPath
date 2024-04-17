@@ -19,28 +19,12 @@ import ReviewWordView from '../review_mode/components/rv_wordview';
 import Learn from '../pages/LearnDeck';
 import { CharacterFamiliarityInfo } from '../components/CharacterFamiliarityInfo';
 
-const decks_info: Deck[] = [
-  {
-    id: 0,
-    image: "./sample_deck.png",
-    name: "awesome deck 1",
-  },
-  {
-    id: 1,
-    image: "./sample_deck.png",
-    name: "awesome deck 2",
-  },
-  {
-    id: 2,
-    image: "./sample_deck.png",
-    name: "another dope deck",
-  }
-]
+
 
 const ComponentRouter: React.FC = () => {
 
   const [showHeader, setShowHeader] = useState(true);
-  const [kanjiList, setKanjiList] = useState<any[]>( []);
+  const [kanjiList, setKanjiList] = useState<any[]>([]);
   const [lastRef, setLastRef] = useState("");
 
 
@@ -51,7 +35,7 @@ const ComponentRouter: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />}></Route>
             {/* <Route path="/draw" element={<Draw allowDisplay={true} />}></Route> */}
-            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef}/>} />
+            <Route path="/dictionary" element={<DictionaryView title={'TEST'} kanjiList={kanjiList} setKanjiList={setKanjiList} lastRef={lastRef} setLastRef={setLastRef} />} />
             <Route path="/character" element={<SingleWordView />} />
             {/* <Route path="/character/study" element={< DrawReview setShowHeader={setShowHeader} />} /> */}
             <Route path="/decks" element={<DeckLandingView title="My Decks" />} />
