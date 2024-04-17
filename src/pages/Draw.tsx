@@ -167,8 +167,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       try {
 
         var svgText;
-        if (character?.svg) {
-          console.log("SVG Found")
+        if(character?.svg)  {
           svgText = character?.svg
         }
         else {
@@ -241,6 +240,12 @@ const Draw: React.FC<DrawProps> = (props) => {
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const canvas = document.getElementById("react-sketch-canvas");
+    canvas?.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+    }, { passive: false });
   }, []);
 
   const handleAdvance = (character: Character, grade: KanjiGrade) => {
