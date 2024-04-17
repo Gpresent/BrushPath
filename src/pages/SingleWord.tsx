@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { CharacterFamiliarityInfo } from "../components/CharacterFamiliarityInfo";
 import AddToDeckModal from "../components/AddToDeckModal";
 
@@ -34,7 +34,6 @@ const SingleWordView: React.FC = () => {
   }
   let navigate = useNavigate();
 
-
   const handleAddToDeck = () => {
     setModalOpen(true);
   };
@@ -54,7 +53,7 @@ const SingleWordView: React.FC = () => {
                   style={{ display: "flex", alignItems: "center" }}
                   onClick={() => navigate(-1)}
                 >
-                  <ArrowBackIosNewIcon/>
+                  <ArrowBackIosNewIcon />
                 </div>
                 {character.unicode}
               </div>
@@ -70,20 +69,43 @@ const SingleWordView: React.FC = () => {
               )}
             </div>
 
-            <button className="AddToDeckButton" onClick={() => handleAddToDeck()}> Add To Deck </button>
+            <div style={{display:"flex", justifyContent:"space-between", width:"100%", maxWidth:"500px", alignItems:"center"}}>
+              <button
+                className="AddToDeckButton"
+                onClick={() => handleAddToDeck()}
+              >
+                {" "}
+                Add To Deck{" "}
+              </button>
 
-            <div className="character-info-button" onClick={() => {
+              <div
+                className="character-info-button"
+                onClick={() => {
                   console.log("clicked");
                   setCharacterInfo(!characterinfo);
-                  document.getElementsByClassName("info")[0]?.classList.toggle("info-hidden");
-                }}>
-            
-                {characterinfo ? <> Less Info <ExpandLess fontSize="medium"/></> : <> More Info <ExpandMore fontSize="medium"/></>}
-            
+                  document
+                    .getElementsByClassName("info")[0]
+                    ?.classList.toggle("info-hidden");
+                }}
+              >
+                {characterinfo ? (
+                  <>
+                    {" "}
+                    Less Info <ExpandLess fontSize="medium" />
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    More Info <ExpandMore fontSize="medium" />
+                  </>
+                )}
+              </div>
             </div>
             <div className="info info-hidden">
               <div className="character-info">
-                <div className="info-line">strokes: {character.stroke_count} </div>
+                <div className="info-line">
+                  strokes: {character.stroke_count}{" "}
+                </div>
                 {character.kun.length > 0 && (
                   <div className="info-line">
                     kun:{" "}
@@ -126,9 +148,9 @@ const SingleWordView: React.FC = () => {
           </>
         )}
         <AddToDeckModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        character={character}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          character={character}
         />
       </div>
     </>

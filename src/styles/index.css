@@ -273,8 +273,9 @@ code {
 }
 
 .AddToDeckButton {
-  position: absolute;
-  margin-top: 100px;
+  flex-shrink: 0;
+  /* position: absolute;
+  margin-top: 100px; */
 }
 
 /* Dark Mode Toggle */
