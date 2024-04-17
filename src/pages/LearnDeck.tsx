@@ -96,8 +96,9 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
             (character: Character | null): character is Character =>
               character !== null
           )
-          .slice(0, numCharacters);
-        console.log(filteredChars);
+          .slice(0, Math.min(numCharacters, fetchedChars.length));
+        // console.log(fetchedChars);
+        // debugger;
         setCharacters({ data: filteredChars, loading: false, error: "" });
       });
     });
@@ -131,7 +132,7 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
               ></ArrowBackIosNewIcon>
             </div>
           
-          <p className="error-message">Your deck must have at least 7 characters to enter Learn Mode.</p>
+          <p className="error-message">You've already learned all the words in this deck.</p>
           </div>
         </>
       )}
