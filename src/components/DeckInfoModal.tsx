@@ -14,17 +14,15 @@ interface ConfirmationModalProps {
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ deck, isOpen, onClose}) => {
   if (!isOpen) return null;
 
-const handleConfirmClick = () => {
-    console.log("Deleted", deck._id);
-    
-    //sam logic here :)
-
-    onClose();
-};
-
   return (
     <Modal title={deck.name} isOpen={isOpen} onClose={onClose}>
-        <span>{deck.desc}</span>
+      {deck.desc.split(".").map((sentence, index) => (
+        (sentence !== "" && 
+        <div>
+          {(index !== 0 && <br/>)}
+          <p key={index}>{sentence + "."}</p>
+        </div>)
+      ))}
     </Modal>
   );
 };

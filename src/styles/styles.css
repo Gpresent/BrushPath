@@ -556,7 +556,7 @@ body {
     max-width: 300px;
     border-radius: 10px;
     z-index: 30;
-    align-self: flex-start;
+    align-self: center;
     max-height: 70%;
     overflow-y: auto;
 }
