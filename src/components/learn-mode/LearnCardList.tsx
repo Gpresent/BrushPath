@@ -115,7 +115,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
           <div className="session-recap">
             <div className="session-info-header">Here's what you did:</div>
             <div className="session-info">
-              <>Learned {characterSessionData.length} new characters: </>
+              <>Learned {currentCharacterIndex} new characters: </>
 
               {characterSessionData
                 .filter((character) => {
@@ -124,7 +124,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
                 .map((word, index) => {
                   return (index ? ", " : "") + word.unicode;
                 })}
-              <p>Average Score: {Math.floor(avgScore * 100)}</p>
+              <p>Average Score: {Math.floor(avgScore * 100) || 0}</p>
             </div>
             <div className="session-buttons">
             <button
@@ -140,7 +140,13 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
           </div>
         </WideModal>
       ) : (
-        <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
+        <>
+        <div className="learn-card-nav-row">
+          <p style={{marginTop:"7.5px"}}>Kanji Completed: {currentCharacterIndex}/{characterSessionData.length}</p>
+          <button onClick={()=>{console.log("Session Done"); setFinished(true); setShowSessionModal(true);}}>End Session</button>
+        </div>
+          <LearnCard character={currentCharacter} learn={learn} handleAdvance={handleAdvance} />
+        </>
       )}
     </div>
   );
