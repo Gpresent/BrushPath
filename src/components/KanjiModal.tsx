@@ -54,10 +54,11 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
     //   fetchCharacters();  // call this function to fetch characters if not already loaded
     // }
 
-    fetchCharacters();
+    // fetchCharacters();
     setSelectedKanji([])
     // console.log(kanjiList.length)
   }, []);
+
 
   const characters: Character[] | undefined = useMemo(() => {
     //return characterCache?.data?.map((docData) => characterParser(docData) ).filter((character) => character!==null)
@@ -79,7 +80,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
 
   const handleSubmit = async () => {
     // TODO add logic :)
-    setPause(true)
+
     // console.log(user);
     if (deckTitle === "") {
       console.log("No deck title");
@@ -116,6 +117,7 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   };
 
   if (!isOpen) return null;
+  if (isOpen) { setPause(false) }
 
   return (
     <WideModal title={"New Deck"} onClose={handleClose} isOpen={isOpen} onSubmit={handleSubmit}>

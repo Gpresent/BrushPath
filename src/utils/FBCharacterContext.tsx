@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchAllCharacters } from "../utils/FirebaseQueries";
 import { DocumentData } from 'firebase/firestore';
 import characterParser from './characterParser';
@@ -20,17 +20,19 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
     const [kanjiList, setKanjiList] = useState<Character[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [lastRef, setLastRef] = useState("");
-    const [paused, setPause] = useState(false)
+    const [paused, setPause] = useState(true)
+    const fetching = useRef(false);
 
 
     const fetchCharacters = useCallback(async () => {
         // console.log("Paused Status:", paused);
-        if (paused) {
+        if (paused || fetching.current) {
             // console.log("Fetching is paused.");  // Additional log for clarity
             return;
         }
+        fetching.current = true;
         setLoading(true);
-        let batch = 250;
+        let batch = 100;
         // console.log(kanjiList.length)
         await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
             if (fetchResponse.cachedData) {
@@ -44,23 +46,27 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
                             result !== undefined &&
                             !kanjiList.includes(result)
                     );
-                console.log("data is processed")
-                // console.log(kanjiList)
+                // console.log("kanji data is processed")
+                // console.log(newData)
                 setKanjiList(kanjiList.concat(newData as any));
+                // console.log(kanjiList.length)
             } else {
                 console.log("deck.data or something not found, not fetching");
             }
             setLastRef(fetchResponse.skipRef);
-
+            fetching.current = false;
         });
+
     }, [lastRef, paused]);
 
-    // useEffect(() => {
-
-    //     fetchCharacters();
+    useEffect(() => {
 
 
-    // }, [fetchCharacters]);
+        fetchCharacters();
+
+
+
+    }, [fetchCharacters]);
 
 
     return (
