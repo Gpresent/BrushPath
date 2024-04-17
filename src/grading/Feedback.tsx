@@ -7,6 +7,7 @@ import { gradeToWord } from "../utils/gradeToColor";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
 import { debounce } from "lodash";
+import ReplayIcon from '@mui/icons-material/Replay';
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
@@ -97,7 +98,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   if(props.learn) {
     const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
     const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-    debugger;
+    // debugger;
 
     if(attemptsWithHint.length >= 1 && passingWithoutHint.length ===0 && !props.allowDisplay) {
       return props.kanjiGrade // true
@@ -108,7 +109,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   } 
   //Review Mode
   else {
-    return props.kanjiGrade && props.kanjiGrade.overallGrade > 65 
+    return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
   }
   
 },[props.attempts, props.allowDisplay])
@@ -255,7 +256,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                   }}
                   className="learn-card-nav-right"
                 >
-                  <ArrowForward />
+                  <ReplayIcon />
                 </button>
                 )}
                 {displayNextButton && (
