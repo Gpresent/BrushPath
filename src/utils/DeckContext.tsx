@@ -4,6 +4,7 @@ import { doc, getDocs, collection, DocumentReference } from 'firebase/firestore'
 import { getDeckFromID, getDecksFromRefs } from "../utils/FirebaseQueries";
 import { AuthContext } from './FirebaseContext';
 import Deck from '../types/Deck';
+import Loading from '../components/Loading';
 import { User } from 'firebase/auth';
 
 interface DecksContextType {
@@ -20,20 +21,21 @@ export const useDecks = () => useContext(DecksContext);
 
 export const DecksProvider = ({ children }: { children: ReactNode }) => {
     const [decks, setDecks] = useState<Deck[]>([]);
-    const { user, userData, getUserData } = useContext(AuthContext);
+    const { user, userData } = useContext(AuthContext);
 
     const fetchDecks = async () => {
 
         if (!userData?.decks) {
-            debugger;
+
             setDecks([]);
             return;
         }
         try {
-            // getUserData(user as User);
-            debugger;
-            console.log("old length ", decks.length)
+
+
+            // console.log("old length ", decks.length)
             const decksResult = await getDecksFromRefs(userData.decks);
+
             setDecks(decksResult as Deck[]);
 
         } catch (error) {
@@ -49,11 +51,11 @@ export const DecksProvider = ({ children }: { children: ReactNode }) => {
     // };
 
     useEffect(() => {
-        if (userData?.decks) {
-            fetchDecks();
-        }
 
-    }, [userData?.decks]);
+        fetchDecks();
+
+
+    }, []);
 
 
     return (
