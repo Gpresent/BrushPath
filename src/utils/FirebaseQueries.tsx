@@ -533,7 +533,7 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
 export const getCharacterScoreData = async (userID: string, next_review_date?: Timestamp) => {
   try {
     let currDate = new Date();
-    currDate.setDate(currDate.getDate() + 14);
+    currDate.setDate(currDate.getDate() + 14); // get where review date is in next 14 days
     const nextReviewDate = Timestamp.fromDate(currDate);
     const userRef = doc(db, "User", userID);
     const characterScoreQuery = query(collection(db, "CharacterScore"), where("userRef", "==", userRef), where("nextReviewDate", "<=", nextReviewDate), orderBy("nextReviewDate", "asc"));

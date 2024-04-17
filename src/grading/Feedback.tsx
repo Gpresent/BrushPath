@@ -109,7 +109,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   } 
   //Review Mode
   else {
-    return props.kanjiGrade && props.kanjiGrade.overallGrade > 65 
+    return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
   }
   
 },[props.attempts, props.allowDisplay])
