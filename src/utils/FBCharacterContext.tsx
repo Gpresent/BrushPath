@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchAllCharacters } from "../utils/FirebaseQueries";
 import { DocumentData } from 'firebase/firestore';
 import characterParser from './characterParser';
@@ -9,7 +9,8 @@ const CharacterContext = createContext({
     kanjiList: [] as Character[],
     loading: true,
     fetchCharacters: async () => { },
-    lastRef: "" as string
+    lastRef: "" as string,
+    setPause: (pause: boolean) => { },
 });
 
 
@@ -19,11 +20,19 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
     const [kanjiList, setKanjiList] = useState<Character[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [lastRef, setLastRef] = useState("");
+    const [paused, setPause] = useState(true)
+    const fetching = useRef(false);
 
 
     const fetchCharacters = useCallback(async () => {
+        // console.log("Paused Status:", paused);
+        if (paused || fetching.current) {
+            // console.log("Fetching is paused.");  // Additional log for clarity
+            return;
+        }
+        fetching.current = true;
         setLoading(true);
-        let batch = 30;
+        let batch = 100;
         // console.log(kanjiList.length)
         await fetchAllCharacters(lastRef, batch).then((fetchResponse) => {
             if (fetchResponse.cachedData) {
@@ -37,27 +46,31 @@ export const CharacterProvider = (({ children }: { children: ReactNode }) => {
                             result !== undefined &&
                             !kanjiList.includes(result)
                     );
-                console.log("data is processed")
-                // console.log(kanjiList)
+                // console.log("kanji data is processed")
+                // console.log(newData)
                 setKanjiList(kanjiList.concat(newData as any));
+                // console.log(kanjiList.length)
             } else {
                 console.log("deck.data or something not found, not fetching");
             }
             setLastRef(fetchResponse.skipRef);
-
+            fetching.current = false;
         });
-    }, [lastRef]);
+
+    }, [lastRef, paused]);
 
     useEffect(() => {
 
+
         fetchCharacters();
+
 
 
     }, [fetchCharacters]);
 
 
     return (
-        <CharacterContext.Provider value={{ kanjiList, loading, fetchCharacters, lastRef }}>
+        <CharacterContext.Provider value={{ kanjiList, loading, fetchCharacters, lastRef, setPause }}>
             {children}
         </CharacterContext.Provider>
     );

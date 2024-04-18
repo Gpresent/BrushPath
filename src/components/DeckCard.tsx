@@ -45,7 +45,7 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
     }
   };
   const handleTrashClick = () => {
-    console.log("Trashcan Clicked: You're Trash!");
+    // console.log("Trashcan Clicked: You're Trash!");
     setShowConfirmationModal(true)
     setShowDeleteIcon(false);
   };
@@ -97,17 +97,17 @@ const DeckCard: React.FC<DeckCardProps> = ({ deck, user }) => {
         {deck.desc !== "" && (<InfoOutlinedIcon className="info-icon" onClick={() => handleInfoClick()} />)}
       </div>
 
-    <ConfirmationModal
-      deck={deck}
-      user={user} 
-      isOpen={showConfirmationModal}
-      onClose={closeConfirmationModal}
-    />
-    <DeckInfoModal
-      deck={deck}
-      isOpen={showInfoModal}
-      onClose={() => setShowInfoModal(false)}
-    />
+      <ConfirmationModal
+        deck={deck}
+        user={user}
+        isOpen={showConfirmationModal}
+        onClose={closeConfirmationModal}
+      />
+      <DeckInfoModal
+        deck={deck}
+        isOpen={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+      />
 
     </div>
   );

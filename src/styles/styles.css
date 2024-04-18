@@ -341,8 +341,9 @@ body {
     align-items: flex-start;
     box-sizing: border-box;
     width: 100%;
+    max-width: 500px;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .icon {
@@ -616,6 +617,7 @@ body {
 }
 
 .deck-header-wrapper{
+    max-width: 500px;
     padding-top: 10px;
     padding-bottom: 10px;
     position: sticky;

@@ -267,6 +267,7 @@ code {
 
 .search-bar-wrapper{
   width: 100%;
+  max-width: 500px;
   height: max-content;
   box-sizing: border-box;
   padding: 5px;
@@ -277,6 +278,7 @@ code {
 .search-bar {
   /* position: absolute; */
   width: 100%;
+  max-width: 500px;
   padding-left: 10px;
   height: 36px;
   border: 1px solid var(--border);

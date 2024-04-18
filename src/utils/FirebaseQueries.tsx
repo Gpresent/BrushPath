@@ -306,11 +306,26 @@ export const deleteDeck = async (userID: string, deck: Deck) => {
   }
 }
 
+const imageUrls = [
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/bc6c25.png?alt=media&token=91f2c6c6-fabf-4760-8d2a-c623689a437b",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/c8d5bb.png?alt=media&token=3216004a-03f0-442b-ad80-9542133e47d4",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/efcd9a.png?alt=media&token=1cf308ae-e40f-4ed7-add2-a4157131e8d5",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/3c91e6.png?alt=media&token=7df20626-3a14-4535-9e75-ed9898b1ed2c",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/492c1d.png?alt=media&token=a3a05d9f-6c5b-43bc-8646-c69b2f1c37ee",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/4a6d7c.png?alt=media&token=c6891d18-b9f4-4cfc-9c51-1e68b10afe11",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/4c3b4d.png?alt=media&token=f3898fce-bc90-4bb4-bfae-1ab9e53d19a3",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/540d6e.png?alt=media&token=01101072-195b-4648-8f2e-e7299e2cd8a4",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/606c38.png?alt=media&token=d90626dc-eec1-459a-a083-85ef9c7e2a54",
+  "https://firebasestorage.googleapis.com/v0/b/zenji-1e015.appspot.com/o/6d6466.png?alt=media&token=309b2100-13de-493a-bd39-3d827ff45a7f"
+];
+
 //TODO add image and public bool
 export const addUserDeck = async (userId: string, characters: Character[], desc: string, deckTitle: string) => {
   try {
     // const userSnap = await fetchDocument("User", userId);
     const userRef = doc(db, "User", userId);
+
+
 
 
     //Dedupe Character Array
@@ -333,7 +348,7 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
       desc: desc,
       public: false,
       userRef: userRef,
-      image: "",
+      image: imageUrls[Math.floor(Math.random() * imageUrls.length)],
       characters: characterRefs,
     };
     //TODO add transaction to prevent concurrency issues
@@ -342,18 +357,29 @@ export const addUserDeck = async (userId: string, characters: Character[], desc:
     const deckRef = await addDoc(collection(db, 'Deck'), userDeck);
     console.log("Post document added with ID: ", deckRef.id);
 
+
+    const userData = await getDoc(userRef);
+
+    const newDecks = [deckRef, ...userData.data()?.decks]
     //Add Ref to user
     const userUpdateData = {
-      decks: arrayUnion(deckRef)
+      decks: newDecks
       // 'newReference' is the reference you want to add to the array
     };
+
+
 
 
     await updateDoc(userRef, userUpdateData);
 
 
-    // console.log(deckRef);
-    return await fetchDocument("Deck", deckRef.id);
+
+
+
+
+
+    // console.log(deckRef); await fetchDocument("Deck", deckRef.id);
+    return deckRef.id;
   } catch (error) {
     console.error("Error creating deck:", error);
     throw error;
@@ -543,40 +569,40 @@ export const getCharacterScoreCount = async (userID: string, next_review_date?: 
   }
 }
 
-export const editCharInDecks = async (userID: string,character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
+export const editCharInDecks = async (userID: string, character: Character, decksToAdd: DocumentData[], decksToRemove: DocumentData[]) => {
   try {
-    if(!userID) {
+    if (!userID) {
       throw "no userID"
     }
-    const charRef = doc(db,'Character',character.id);
+    const charRef = doc(db, 'Character', character.id);
 
     //Add to decks
     const updatePromises = decksToAdd.map(async (deck) => {
-      
-      return updateDoc(doc(db,'Deck',deck._id), {
+
+      return updateDoc(doc(db, 'Deck', deck._id), {
         characters: arrayUnion(charRef)
       });
-      
+
     });
 
     await Promise.all(updatePromises);
-    
+
 
     //Remove from decks
     const removePromises = decksToRemove.map(async (deck) => {
-      
-      return updateDoc(doc(db,'Deck',deck._id), {
+
+      return updateDoc(doc(db, 'Deck', deck._id), {
         characters: arrayRemove(charRef)
       });
-      
+
     });
 
     await Promise.all(removePromises);
 
   } catch (error: any) {
     console.error("Error adding char to decks:", error);
-    
-    if(error?.code === "unavailable") {
+
+    if (error?.code === "unavailable") {
       return -1;
     }
 
