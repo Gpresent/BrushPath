@@ -92,13 +92,13 @@ const SettingsView: React.FC = () => {
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Privacy Policy')} />
           </div>
 
-          <p className="title">User Stats</p>
+          {/* <p className="title">User Stats</p>
           <div className="settings-list">
             <div className="settings-item">
               <span onClick={() => handleArrowClick('Stats')}>Stats</span>
               <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Stats')} />
             </div>
-          </div>
+          </div> */}
           {/* <div className="settings-item">
             <span onClick={() => handleArrowClick('Terms of Service')}>Terms of Service</span>
             <ArrowForwardIcon className="right-arrow" onClick={() => handleArrowClick('Terms of Service')} />

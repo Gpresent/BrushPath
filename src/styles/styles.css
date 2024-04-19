@@ -325,6 +325,7 @@ body {
 }
 
 .settingsButton {
+    color: var(--deemphasized-2);
     margin: 15px;
     height: 20px;
     width: 20px;
