@@ -88,7 +88,7 @@
 .feedback-box {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     padding: 0 1rem;
     scroll-snap-align: start;
     
@@ -113,9 +113,13 @@
     font-size: 30px;
     font-weight: 500;
     margin: 10px;
+    color: #333;
 }
 
 .feedback-text {
+    /* align-self: start;
+     */
+     margin-left: 10px;
     padding-bottom: 20px;
 }
 
