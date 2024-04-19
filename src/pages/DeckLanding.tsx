@@ -61,7 +61,7 @@ const DeckLandingView: React.FC<DeckProps> = ({ title, kanjiList, lastRef }) => 
       <div className="deck-header-wrapper">
         <div className="deck-header">
           <h2 className="deck-title">My Decks</h2>
-          {/* <AddIcon className="addButton" onClick={handleAddDeck} /> */}
+          <AddIcon className="addButton" onClick={handleAddDeck} />
         </div>
         {/* <input className="search-bar" /> */}
       </div>
