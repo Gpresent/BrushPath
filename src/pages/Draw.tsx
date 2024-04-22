@@ -103,6 +103,7 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   function clearKanji() {
     canvas.current.clearCanvas();
+    setInputStrokes(0);
     setReadOnly(false);
     setKanjiGrade({
       overallGrade: -1,
