@@ -65,7 +65,7 @@ const Review: React.FC = () => {
             {
                 words.loading ? <LoadingSpinner /> :
                     words.error || words.data === null ? <p>words.error</p> :
-                        <LearnCardList learn={false} characters={words.data} />
+                        <LearnCardList learn={true} characters={words.data} />
             }
 
 
