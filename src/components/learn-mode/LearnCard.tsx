@@ -11,9 +11,10 @@ interface LearnCardProps {
   character: Character;
   handleAdvance: (arg0: Character, arg1: KanjiGrade) => void;
   learn: boolean;
+  recall: boolean;
 }
 
-const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }) => {
+const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn, recall }) => {
   const [grade, setGrade] = useState<KanjiGrade | null>(null);
   const [attempts, setAttempts] = useState<KanjiGrade[]>([]);
   const [allowDisplay, setAllowDisplay] = useState<boolean>(false);
@@ -57,6 +58,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
           handleComplete={handleComplete}
           char={character}
           handleAdvance={handleAdvance}
+          recall={recall}
           learn={learn}
         ></DrawReview>
       </div>

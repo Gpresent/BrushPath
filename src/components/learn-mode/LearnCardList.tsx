@@ -14,6 +14,7 @@ interface LearnCardListProps {
   characters: Character[];
   refetch?: (numCharacters?: number) => void;
   learn: boolean;
+  recall: boolean;
 }
 type CharacterSessionData = Character & {
   score?: KanjiGrade;
@@ -23,9 +24,10 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
   characters,
   refetch,
   learn,
+  recall
 }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState<number>(0);
-
+  // console.log("Recall:", recall, "Learn:", learn);
   const [characterSessionData, setCharacterSessionData] =
     useState<CharacterSessionData[]>(characters);
 
@@ -66,9 +68,10 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
   const currentCharacter = useMemo(() => {
     return characterSessionData[currentCharacterIndex];
   }, [currentCharacterIndex]);
-  useEffect(() => {
-    //Build components
-  }, []);
+  // useEffect(() => {
+  //   //Build components
+
+  // }, []);
 
   const numKanjiLearned = useMemo(() => {
     return characterSessionData.filter((character) => {
@@ -157,7 +160,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
         </WideModal>
       ) : (
         <WideModal
-          title={learn ? "Learn Session" : "Review Session"}
+          title={recall ? "Review Session" : "Learn Session"}
           isOpen={showLearnModal}
           onClose={onCloseLearn}
         >
@@ -167,6 +170,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
             <LearnCard
               character={currentCharacter}
               learn={learn}
+              recall={recall}
               handleAdvance={handleAdvance}
             />
             {/* <div className="learn-card-nav-row">

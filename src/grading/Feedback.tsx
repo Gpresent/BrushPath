@@ -10,7 +10,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 
 interface feedbackProps {
   kanjiGrade: KanjiGrade;
-  attempts: (KanjiGrade & {hint:boolean})[];
+  attempts: (KanjiGrade & { hint: boolean })[];
   character: Character;
   setAllowDisplay: React.Dispatch<React.SetStateAction<boolean>>;
   setDisplaySVG: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,7 +20,7 @@ interface feedbackProps {
   color: string;
   recall: boolean;
   learn: boolean;
-  handleAdvance?: (arg0: Character, arg1:KanjiGrade )=> void;
+  handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
   clearKanji?: () => void;
 }
@@ -80,68 +80,73 @@ const Feedback: React.FC<feedbackProps> = (props) => {
       nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
       setTimeout(() => {
         nextStroke?.setAttribute("stroke", flashColor);
-      }, 200)   
+      }, 200)
       setTimeout(() => {
         nextStroke?.setAttribute("stroke", "rgba(255, 55, 221, 0.8)");
-      }, 400) 
+      }, 400)
     }
- }, [childIndex]);
+  }, [childIndex]);
 
- const displayRetryButton = useMemo(() => {
-  //If not in recall mode (ex dictionary page), don't show button
-  if(!props.recall) {
-    return false;
-  }
-
-  //Learn Mode
-  if(props.learn) {
-    const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
-    const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-    // debugger;
-
-    if(attemptsWithHint.length >= 1 && passingWithoutHint.length ===0) {
-      return props.kanjiGrade // true
-    }
-    else {
-      return false
-    }
-  } 
-  //Review Mode
-  else {
-    return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
-  }
-  
-},[props.attempts, props.allowDisplay])
-  
-
-  const displayNextButton = useMemo(() => {
+  const displayRetryButton = useMemo(() => {
     //If not in recall mode (ex dictionary page), don't show button
-    if(!props.recall) {
+    if (!props.recall) {
       return false;
     }
 
     //Learn Mode
-    if(props.learn) {
-      if(props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
-        return props.kanjiGrade 
+    if (props.learn) {
+      const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
+      const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
+      // debugger;
+
+      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0) {
+        return props.kanjiGrade // true
       }
-    } 
+      else {
+        return false
+      }
+    }
     //Review Mode
     else {
-      return props.kanjiGrade && props.kanjiGrade.overallGrade > 65 
+      return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
     }
-    
-  },[props])
+
+  }, [props.attempts, props.allowDisplay])
+
+
+  const displayNextButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    // if (!props.recall) {
+    //   return false;
+    // }
+
+    //Learn Mode
+    if (props.learn && !props.recall) {
+
+      if (props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
+
+        return props.kanjiGrade
+      }
+    }
+    //Review Mode
+    else {
+      if (props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
+
+        return props.kanjiGrade
+      }
+    }
+
+  }, [props])
   // console.log(kanji_grade);
 
   useEffect(() => {
     const handleScroll = () => {
       const container = document.querySelector(".feedback-container") as HTMLElement;
       if (!container) return;
-  
+
       const scrollLeft = container.scrollLeft;
       const children = Array.from(container.children) as HTMLElement[];
-  
+
       // Find the index of the child element that is currently snapped to
       let snappedIndex = -1;
       for (let i = 0; i < children.length; i++) {
@@ -156,12 +161,12 @@ const Feedback: React.FC<feedbackProps> = (props) => {
       if (snappedIndex >= 0)
         setChildIndex(snappedIndex);
     };
-  
+
     const container = document.querySelector(".feedback-container");
     if (container) {
       container.addEventListener("scroll", handleScroll);
     }
-  
+
     return () => {
       if (container) {
         container.removeEventListener("scroll", handleScroll);
@@ -203,9 +208,8 @@ const Feedback: React.FC<feedbackProps> = (props) => {
           {[...Array(pagenumber + 1)].map((_, index) => (
             <div
               key={index}
-              className={`page-dot ${
-                childIndex === index ? "page-dot-active" : "page-dot-inactive"
-              }`}
+              className={`page-dot ${childIndex === index ? "page-dot-active" : "page-dot-inactive"
+                }`}
               style={{ width: `${100 / (pagenumber + 1)}%` }}
             ></div>
           ))}
@@ -227,48 +231,49 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
                 <div style={{
                   display: "flex",
-                  alignItems: "center",}}>
-                <div
-                  className="grade-circle"
-                  style={{ backgroundColor: color }}
-                >
-                  {Math.round(kanji_grade.overallGrade)}
+                  alignItems: "center",
+                }}>
+                  <div
+                    className="grade-circle"
+                    style={{ backgroundColor: color }}
+                  >
+                    {Math.round(kanji_grade.overallGrade)}
+                  </div>
+
+                  <div className="score-overview">
+                    <div className="your-score">Your Score:</div>
+                    <div className="feedback-word">
+                      {gradeToWord(Math.round(kanji_grade.overallGrade))}
+                    </div>
+
+
+                  </div>
+
                 </div>
 
-                <div className="score-overview">
-                  <div className="your-score">Your Score:</div>
-                  <div className="feedback-word">
-                    {gradeToWord(Math.round(kanji_grade.overallGrade))}
-                  </div>
-                  
-                  
-                </div>
-                
-                </div>
-                
-                {displayRetryButton &&(
+                {displayRetryButton && (
                   <button
-                  onClick={() => {
-                    
-                    props.clearKanji!()
-                  }}
-                  className="learn-card-nav-right"
-                >
-                  <ReplayIcon />
-                </button>
+                    onClick={() => {
+
+                      props.clearKanji!()
+                    }}
+                    className="learn-card-nav-right"
+                  >
+                    <ReplayIcon />
+                  </button>
                 )}
                 {displayNextButton && (
                   <button
                     onClick={() => {
-                      
-                      if(props.learn) {
+
+                      if (props.learn && !props.recall) {
                         props.setDisplaySVG(true);
                       }
                       else {
-                          props.setAllowDisplay(false);
-                      
+                        props.setAllowDisplay(false);
+
                       }
-                      if(props.clearKanji)  props.clearKanji() 
+                      if (props.clearKanji) props.clearKanji()
                       props.handleAdvance!(props.character, kanji_grade)
                       setGrade(null);
                     }}
@@ -277,7 +282,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                     <ArrowForward />
                   </button>
                 )}
-                
+
               </div>
               {kanji_grade.overallFeedback && (
                 <div className="feedback-text">

@@ -85,7 +85,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
-  const [displaySVG, setDisplaySVG] = React.useState<boolean>(props.learn || false);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(!props.recall && (props.learn || false));
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
@@ -265,6 +265,7 @@ const Draw: React.FC<DrawProps> = (props) => {
 
     setAllowDisplaySVG(props.allowDisplay)
 
+
   }, [props.allowDisplay]);
 
   return (
@@ -370,7 +371,9 @@ const Draw: React.FC<DrawProps> = (props) => {
                     setKanjiGrade(grade)
                     setAttempts((prevAttempts) => {
                       const attempts = [...prevAttempts, { ...grade, hint: allowDisplaySVG }]
-                      if (props.learn) {
+                      const lastAttempt = attempts[attempts.length - 1];
+                      const isSuccessful = lastAttempt.overallGrade > 65 && !lastAttempt.hint;
+                      if (props.learn && !props.recall) {
 
                         const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
                         if (!some) {
@@ -391,32 +394,30 @@ const Draw: React.FC<DrawProps> = (props) => {
                           setDisplaySVG(true)
                         }
 
-
-
-
-
                       }
 
-                      if (props.recall && !props.learn) {
-                        console.log("Review mode")
-                        if (!allowDisplaySVG) {
-                          if (grade.overallGrade < 65) {
-                            setAllowDisplaySVG(true)
-                            setDisplaySVG(true)
-                          }
-                          else {
-                            setAllowDisplaySVG(false)
-                            setDisplaySVG(false)
-                          }
 
+                      if (props.recall) {
+                        //if not success full, show them svg 
+                        if (!isSuccessful) { //doesnt not hit it perfect 
+                          if (allowDisplaySVG) { //displa is tre in temp mode
+                            if (grade.overallGrade > 65) { //they pass in temp mode go to final mode
+                              setAllowDisplaySVG(false)
+                              setDisplaySVG(false)
+                            }
+                          }
+                          else {   //fail in temp mode back to square one
+                            // console.log("User failed, showing SVG and allowing display.");
+                            setDisplaySVG(true);
+                            setAllowDisplaySVG(true);
+                          }
+                        }
+                        else {
+                          // console.log("User succeeded, hiding SVG and disallowing display.");
+                          setAllowDisplaySVG(false)
+                          setDisplaySVG(false)
                         }
 
-
-                        ///needs to start with no dispaly and no Allow display
-
-                        //if they fail the first prompt, allow both 
-
-                        //if finnally pass with no svg display , send to next char
                       }
 
                       return attempts
