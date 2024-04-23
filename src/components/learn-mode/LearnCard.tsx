@@ -22,7 +22,7 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
   const handleComplete = (character: Character, grade: KanjiGrade) => {
     setGrade(grade);
     setAttempts((prevAttempts) => {
-      
+
       if (!allowDisplay) {
         const gradeIsNull =
           (grade !== null && grade.overallGrade === null) ||
@@ -32,12 +32,14 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
           grade.grades.length > 0 &&
           Math.max(...grade.grades) < 60;
         // debugger;
+
         setAllowDisplay(gradeIsNotHighEnough || gradeIsNull);
+
       }
       return [...prevAttempts, grade]
     })
-    
-    
+
+
   };
 
   //Todo, replace divs with actual tags lol
@@ -60,8 +62,8 @@ const LearnCard: React.FC<LearnCardProps> = ({ character, handleAdvance, learn }
       </div>
 
       {/* <div className="learn-card-nav-row"> */}
-        {/* <div></div> */}
-        {/* {grade && grade.overallGrade > 50 && (
+      {/* <div></div> */}
+      {/* {grade && grade.overallGrade > 50 && (
           <button
             onClick={() => {
               setAllowDisplay(false);

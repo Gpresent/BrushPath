@@ -1,4 +1,4 @@
-import { upsertCharacterScoreData } from "../../utils/FirebaseQueries";
+import { upsertCharacterScoreData } from "../../../utils/FirebaseQueries";
 
 
 export function Repetition() {

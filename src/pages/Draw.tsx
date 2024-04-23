@@ -99,7 +99,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
-  const [attempts, setAttempts] = React.useState<(KanjiGrade & {hint: boolean})[]>([]);
+  const [attempts, setAttempts] = React.useState<(KanjiGrade & { hint: boolean })[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
@@ -167,7 +167,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       try {
 
         var svgText;
-        if(character?.svg)  {
+        if (character?.svg) {
           svgText = character?.svg
         }
         else {
@@ -263,6 +263,7 @@ const Draw: React.FC<DrawProps> = (props) => {
     // Example: setState(...)
 
     setAllowDisplaySVG(props.allowDisplay)
+
   }, [props.allowDisplay]);
 
   return (
@@ -365,56 +366,80 @@ const Draw: React.FC<DrawProps> = (props) => {
                   const startTime = performance.now();
                   grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
-                setKanjiGrade(grade)
-                  setAttempts((prevAttempts) => {
-                    const attempts =  [...prevAttempts,{...grade, hint: allowDisplaySVG}]
-                    if(props.learn) {
-                      const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
-                      if(!some) {
-                        if(allowDisplaySVG) {
-                          if(grade.overallGrade > 65) {
-                            setAllowDisplaySVG(false)
-                            setDisplaySVG(false)
+                    setKanjiGrade(grade)
+                    setAttempts((prevAttempts) => {
+                      const attempts = [...prevAttempts, { ...grade, hint: allowDisplaySVG }]
+                      if (props.learn) {
+
+                        const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
+                        if (!some) {
+                          if (allowDisplaySVG) {
+                            if (grade.overallGrade > 65) {
+                              setAllowDisplaySVG(false)
+                              setDisplaySVG(false)
+                            }
+
                           }
-                          
+                          else {
+                            setAllowDisplaySVG(true)
+                            setDisplaySVG(true)
+                          }
                         }
                         else {
                           setAllowDisplaySVG(true)
                           setDisplaySVG(true)
                         }
+
+
+
+
+
+                      }
+
+                      if (props.recall && !props.learn) {
+                        console.log("Review mode")
+                        if (!allowDisplaySVG) {
+                          if (grade.overallGrade < 65) {
+                            setAllowDisplaySVG(true)
+                            setDisplaySVG(true)
+                          }
+                          else {
+                            setAllowDisplaySVG(false)
+                            setDisplaySVG(false)
+                          }
+
+                        }
+
+
+                        ///needs to start with no dispaly and no Allow display
+
+                        //if they fail the first prompt, allow both 
+
+                        //if finnally pass with no svg display , send to next char
+                      }
+
+                      return attempts
+                    })
+                    //If in learn mode, hide svg on second attempt
+
+
+                    if (props.character) {
+                      if (props.handleComplete) {
+                        props.handleComplete(props.character, grade)
+                      }
+                      if (props.character.unicode_str) {
+                        handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
                       }
                       else {
-                        setAllowDisplaySVG(true)
-                        setDisplaySVG(true)
+                        console.log("Character score not saved..")
                       }
-                        
-                        
-                      
-                     
-                      
-                    }
-                    return attempts
-                  } )
-                  //If in learn mode, hide svg on second attempt
-                  
 
-                  if(props.character) {
-                    if(props.handleComplete) {
-                      props.handleComplete(props.character,grade)
                     }
-                    if(props.character.unicode_str) {
-                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
-                    }
-                    else {
-                      console.log("Character score not saved..")
-                    }
-                    
-                  }
-                  
-                  
-                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                    canvas.current.exportImage('jpeg').then((data: any) => {
-                      interpretImage(data).then(result => {
+
+
+                    if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                      canvas.current.exportImage('jpeg').then((data: any) => {
+                        interpretImage(data).then(result => {
 
                           setPrediction(result);
                           if (kanji === result?.[0]?.label) return;

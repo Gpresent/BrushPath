@@ -50,7 +50,7 @@ export const interpretImage = async (imageDataUrl: string) => {
 
     // Get prediction data
     const predictionData = await prediction.data();
-    //console.log(predictionData);
+    // console.log(predictionData);
 
     // Assuming generatePredictions is implemented elsewhere
     const result = processPredictions(predictionData);

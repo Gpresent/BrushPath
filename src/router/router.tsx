@@ -14,8 +14,8 @@ import DrawReview from '../pages/DrawReview';
 import { useState } from 'react';
 
 import { DarkModeProvider } from '../components/DarkModeContext';
-import Review from '../review_mode/review';
-import ReviewWordView from '../review_mode/components/rv_wordview';
+import Review from '../components/review_mode/review';
+import ReviewWordView from '../components/review_mode/components/rv_wordview';
 import Learn from '../pages/LearnDeck';
 import { CharacterFamiliarityInfo } from '../components/CharacterFamiliarityInfo';
 
