@@ -407,13 +407,13 @@ const Draw: React.FC<DrawProps> = (props) => {
                             }
                           }
                           else {   //fail in temp mode back to square one
-                            // console.log("User failed, showing SVG and allowing display.");
+
                             setDisplaySVG(true);
                             setAllowDisplaySVG(true);
                           }
                         }
                         else {
-                          // console.log("User succeeded, hiding SVG and disallowing display.");
+
                           setAllowDisplaySVG(false)
                           setDisplaySVG(false)
                         }
