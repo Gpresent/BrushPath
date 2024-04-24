@@ -280,6 +280,7 @@ export default function grade(input: string, targetKanji: string, passing: numbe
             try {
                 var targetInfo = data as unknown as interp_data;
                 const tCoords = targetInfo.coords;
+                console.log("Target strokes:", tCoords.length)
                 const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
                 if (!iCoords.length) return;
                 let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately
@@ -340,6 +341,7 @@ export default function grade(input: string, targetKanji: string, passing: numbe
                 .then(data => {
                     var targetInfo = data as unknown as interp_data;
                     const tCoords = targetInfo.coords;
+                    console.log("Target strokes:", tCoords.length)
                     const iCoords = interpolate((' ' + input).slice(1), targetInfo.totalLengths);
                     if (!iCoords.length) return;
                     let grades: number[], strokeInfo: string[], feedback: string[], aspectString: string, failing: number, strokeOrder: number[]; // Declare the types of the variables separately

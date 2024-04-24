@@ -55,17 +55,7 @@ export default function crossing_points(inputCoords: number[][][]): number[][] {
                     const tx4 = inputCoords[j][l + 1][0];
                     const ty4 = inputCoords[j][l + 1][1];
                     if (doIntersect(ix1, iy1, ix2, iy2, tx3, ty3, tx4, ty4)) {
-                        var cross = 1;
-                        const strokeStart = inputCoords[i][0];
-                        const strokeEnd = inputCoords[i][inputCoords[i].length - 1];
-                        for (let m = 0; m < inputCoords[j].length; m++) {
-                            const startDiff = Math.sqrt((inputCoords[j][m][0] - strokeStart[0]) ** 2 + (inputCoords[j][m][1] - strokeStart[1]) ** 2);
-                            const endDiff = Math.sqrt((inputCoords[j][m][0] - strokeEnd[0]) ** 2 + (inputCoords[j][m][1] - strokeEnd[1]) ** 2);
-                            if (startDiff <= 20 || endDiff <= 20) {
-                                cross = 0;
-                            }
-                        }
-                        inputCrosses[i][j] = cross;
+                        inputCrosses[i][j] = 1;
                     }
                 }
             }
