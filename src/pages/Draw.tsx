@@ -448,7 +448,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                     console.error(e);
                   });
                   const endTime = performance.now();
-                  console.log("Time taken:", endTime - startTime);
+                  console.log("Time taken:", endTime - startTime, "ms");
                 });
               }
             }}
