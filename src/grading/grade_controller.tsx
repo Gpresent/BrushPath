@@ -132,7 +132,7 @@ function choose_strokes(iCoords: number[][][], tCoords: number[][][]): [number[]
             const lengthDiff2 = Math.abs(iCoords[secondIndex].length - tCoords[i].length);
             console.log("Target stroke could be", minIndex + 1, "or", secondIndex + 1, "for stroke", i + 1, "with length difference", lengthDiff, "and", lengthDiff2)
             console.log("Differences are", minDiff, "and", secondDiff)
-            if (lengthDiff <= lengthDiff2 || minDiff < secondDiff * 0.75) {
+            if (lengthDiff <= lengthDiff2 || minDiff < secondDiff * 0.5) {
                 assigned[minIndex] = i + 1;
                 console.log("Assigned stroke", minIndex + 1, "to target stroke", i + 1)
             } else {
@@ -191,7 +191,7 @@ function choose_strokes(iCoords: number[][][], tCoords: number[][][]): [number[]
             const lengthDiff2 = Math.abs(iCoords[i].length - tCoords[secondIndex].length);
             console.log("Target stroke could be", minIndex + 1, "or", secondIndex + 1, "for stroke", i + 1, "with length difference", lengthDiff, "and", lengthDiff2)
             console.log("Differences are", minDiff, "and", secondDiff)
-            if (lengthDiff <= lengthDiff2 || minDiff < secondDiff * 0.75) {
+            if (lengthDiff <= lengthDiff2 || minDiff < secondDiff * 0.5) {
                 assigned[minIndex] = i + 1;
             } else {
                 assigned[secondIndex] = i + 1;
