@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { gradeToWord } from "../utils/gradeToColor";
 import ArrowForward from "@mui/icons-material/ArrowForward";
 import Character from "../types/Character";
-import { debounce } from "lodash";
 import ReplayIcon from '@mui/icons-material/Replay';
 
 interface feedbackProps {
@@ -172,7 +171,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
   useEffect(() => {
     let hasInfo = false;
-    let pages = kanji_grade.grades.filter((value) => value < passing && value !== -1).length;
+    let pages = kanji_grade.grades.filter((value) => value < passing && value >= 0).length;
     if (pages !== pagenumber) setPageNumber(pages)
     console.log(pages)
     setChildIndex(0)
@@ -296,7 +295,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
               index -= extras
               if (
                 grade >= passing ||
-                grade === -1 ||
+                grade < 0 ||
                 kanji_grade.feedback.length <= index
               )
                 return null;

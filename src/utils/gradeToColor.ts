@@ -6,11 +6,11 @@ export default function gradeToColor(score: number) {
 
     if (0 <= score && score < 45){
         return "#D9544D";
-    }else if(45 < score && score < 65){
+    }else if(45 <= score && score < 65){
         return "#F69B46";
-    }else if(65 < score && score < 85){
+    }else if(65 <= score && score < 85){
         return "#FFFBB9";
-    }else if(85 < score){
+    }else if(85 <= score){
         return "#8EF076";
     }else{
         return "rgba(0,0,0,0)";
@@ -20,16 +20,16 @@ export default function gradeToColor(score: number) {
 
 export function gradeToWord(score: number) {
 
-    // console.log("score is: " + score)
-
     if (0 <= score && score < 45){
         return "Try Again";
-    }else if(45 < score && score < 65){
+    }else if(45 <= score && score < 65){
         return "Needs Work";
-    }else if(65 < score && score < 85){
+    }else if(65 <= score && score < 85){
         return "Fair";
-    }else if(85 < score && score < 100){
+    }else if(85 <= score && score < 95){
         return "Good";
+    }else if(95 <= score && score < 100){
+        return "Great";
     }else if (score === 100){
         return "Perfect";
     } else {
