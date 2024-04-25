@@ -416,8 +416,6 @@ const Draw: React.FC<DrawProps> = (props) => {
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
 
-                          console.log("Predictions:", result);
-
                           setPrediction(result);
                           if (kanji === result?.[0]?.label) return;
 

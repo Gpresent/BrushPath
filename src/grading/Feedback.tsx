@@ -173,7 +173,6 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     let hasInfo = false;
     let pages = kanji_grade.grades.filter((value) => value < passing && value >= 0).length;
     if (pages !== pagenumber) setPageNumber(pages)
-    console.log(pages)
     setChildIndex(0)
     document.querySelectorAll(".feedback-container").forEach((container) => {
       container.scrollTo({ left: 0, behavior: "smooth" });

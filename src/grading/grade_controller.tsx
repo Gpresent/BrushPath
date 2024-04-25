@@ -137,8 +137,6 @@ function choose_strokes(iCoords: number[][][], tCoords: number[][][]): [number[]
             }
         } 
         order_feedback(sOrder);
-        console.log("Stroke order: ", sOrder)
-        console.log("Grade colors: ", gradeColors)
         return [gradeColors, strokeInfo, feedback, aspectString, failing];
 
     } else {

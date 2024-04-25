@@ -72,7 +72,6 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
         } else {
           setDeck({ data: null, loading: false, error: "Deck not found" });
         }
-        console.log(deckData);
       });
     } else {
       setDeck({ data: null, loading: false, error: "No url parameter" });
