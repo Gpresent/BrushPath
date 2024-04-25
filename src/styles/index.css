@@ -240,6 +240,19 @@ code {
   font-weight: 500;
 }
 
+.try-again-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.try-again-text {
+  justify-self: center;
+  text-align: center;
+}
+
 .my-words {
   /* position: absolute;
   top: 163px;

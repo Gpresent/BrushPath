@@ -23,6 +23,9 @@ interface feedbackProps {
   handleAdvance?: (arg0: Character, arg1: KanjiGrade) => void;
   handleComplete?: (arg0: Character, arg1: KanjiGrade) => void;
   clearKanji?: () => void;
+  displayRetryWithHintButton:boolean;
+  displayRetryWithoutHintButton:boolean;
+
 }
 
 function pageCreator(feedback: string, index: number) {
@@ -87,31 +90,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     }
   }, [childIndex]);
 
-  const displayRetryButton = useMemo(() => {
-    //If not in recall mode (ex dictionary page), don't show button
-    if (!props.recall) {
-      return false;
-    }
-
-    //Learn Mode
-    if (props.learn) {
-      const attemptsWithHint = props.attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
-      const passingWithoutHint = props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-      // debugger;
-
-      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0) {
-        return props.kanjiGrade // true
-      }
-      else {
-        return false
-      }
-    }
-    //Review Mode
-    else {
-      return props.kanjiGrade //&& props.kanjiGrade.overallGrade > 65 
-    }
-
-  }, [props.attempts, props.allowDisplay])
+  
 
 
   const displayNextButton = useMemo(() => {
@@ -251,7 +230,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
                 </div>
 
-                {displayRetryButton && (
+                {props.displayRetryWithHintButton && (
                   <button
                     onClick={() => {
 
@@ -260,6 +239,17 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                     className="learn-card-nav-right"
                   >
                     <ReplayIcon />
+                  </button>
+                )}
+                {props.displayRetryWithoutHintButton && (
+                  <button
+                    onClick={() => {
+
+                      props.clearKanji!()
+                    }}
+                    className="learn-card-nav-right"
+                  >
+                    <ArrowForward />
                   </button>
                 )}
                 {displayNextButton && (

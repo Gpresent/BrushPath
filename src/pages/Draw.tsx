@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useContext, useLayoutEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -268,6 +268,64 @@ const Draw: React.FC<DrawProps> = (props) => {
 
   }, [props.allowDisplay]);
 
+  const displayRetryWithoutHintButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    // if (!props.recall) {
+    //   return false;
+    // }
+
+    //Learn Mode
+    if (props.learn) {
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade > 65: false;
+      // debugger;
+
+      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && lastAttemptPassedWithHint) {
+        return true 
+      }
+      else {
+        return false
+      }
+    }
+    //Review Mode
+    else {
+      return true 
+    }
+
+  }, [attempts, allowDisplaySVG])
+
+  const displayRetryWithHintButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    // if (!props.recall) {
+    //   return false;
+    // }
+
+    //Learn Mode
+    if (props.learn) {
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade > 65: false;
+      // debugger;
+
+      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && !lastAttemptPassedWithHint) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    //Review Mode
+    else {
+      return true
+    }
+
+  }, [attempts, allowDisplaySVG])
+
+
+
+  
+
   return (
     <div style={styles.container}>
       {askInput && (
@@ -482,7 +540,14 @@ const Draw: React.FC<DrawProps> = (props) => {
           </button>
         }
       </div>
-      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      {displayRetryWithoutHintButton && kanji_grade.overallGrade == -1 &&
+      <div className="try-again-container">
+        <div className="try-again-text">
+        <strong>Try again with no guide!</strong>
+        </div>
+      </div>
+      }
+      <Feedback displayRetryWithHintButton={displayRetryWithHintButton} displayRetryWithoutHintButton={displayRetryWithoutHintButton} setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );
