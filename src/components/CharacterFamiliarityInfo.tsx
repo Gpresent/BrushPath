@@ -11,7 +11,6 @@ export const CharacterFamiliarityInfo : React.FC<FamiliarityProps> = ({character
     const getInfo = async (charID:string) => {
         if (user && user.email) {
             const data = await getCharScoreDataByID(user.email, charID);
-            console.log("data", data);
             return data;
         }
         

@@ -48,7 +48,6 @@ const KanjiModal: React.FC<KanjiModalProps> = ({
   const { decks, fetchDecks } = useDecks();
   const navigate = useNavigate();
   useEffect(() => {
-    // console.log("HI")
     // if (kanjiList.length == 0) {
     //   console.log("calling dfetch ")
     //   fetchCharacters();  // call this function to fetch characters if not already loaded

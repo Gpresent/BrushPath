@@ -494,8 +494,6 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
     }
 
 
-    console.log(userID)
-    console.log(characterID)
     const characterRef = doc(db, "Character", characterID);
     const userRef = doc(db, "User", userID);
 
