@@ -494,8 +494,6 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
     }
 
 
-    console.log(userID)
-    console.log(characterID)
     const characterRef = doc(db, "Character", characterID);
     const userRef = doc(db, "User", userID);
 
@@ -508,24 +506,18 @@ export const upsertCharacterScoreData = async (userID: string, characterID: stri
     let easeFactor = 1.25;
     let nextReviewDate = Timestamp.now();
 
-    console.log("result", characterScoreResult);
     // If the document exists, update it; otherwise, create a new document
     if (!characterScoreResult.empty) {
       characterScoreResult.forEach(async (doc) => {
         const data = doc.data();
         const repData = reviewItem(characterID, score, data.repetition, data.interval, data.easeFactor);
-        console.log(data);
-        console.log("updateRepData", repData);
 
         await setDoc(doc.ref, { score, last_time_practice: Timestamp.now(), ...repData }, { merge: true });
-        console.log("CharacterScore document updated:", doc.id);
       });
     } else {
       const repData = reviewItem(characterID, score, repetition, interval, easeFactor);
-      console.log("repData", repData);
 
       await addDoc(collection(db, "CharacterScore"), { userRef, characterRef, score, last_time_practice: Timestamp.now(), ...repData });
-      console.log("New CharacterScore document created.");
     }
 
   } catch (error) {
@@ -645,7 +637,6 @@ export const getHydratedCharacterScoreData = async (userID: string): Promise<Doc
 
     //Make hash maps based on unicode #
     let characterMap: any = {}
-    console.log(characterData)
     characterData.forEach((char: any) => {
       if (char !== null && char !== undefined) {
         characterMap[char._id] = { ...char, unicode: char.literal }

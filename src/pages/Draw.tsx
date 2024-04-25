@@ -362,6 +362,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                     })
                     return coordsArr;
                   }
+                  const startTime = performance.now();
                   grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
                 setKanjiGrade(grade)
@@ -415,8 +416,6 @@ const Draw: React.FC<DrawProps> = (props) => {
                     canvas.current.exportImage('jpeg').then((data: any) => {
                       interpretImage(data).then(result => {
 
-                          console.log("Predictions:", result);
-
                           setPrediction(result);
                           if (kanji === result?.[0]?.label) return;
 
@@ -446,6 +445,8 @@ const Draw: React.FC<DrawProps> = (props) => {
                   }).catch((e: any) => {
                     console.error(e);
                   });
+                  const endTime = performance.now();
+                  console.log("Time taken:", endTime - startTime, "ms");
                 });
               }
             }}

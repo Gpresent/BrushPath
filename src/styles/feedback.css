@@ -17,6 +17,7 @@
     gap: 1rem; /* Add gap between feedback boxes */
     overflow-x: scroll; /* Allow horizontal scrolling */
     scroll-snap-type: x mandatory; /* Enable mandatory snap points on the x-axis */
+    scroll-snap-stop: always; /* Snap to the start of each feedback box */
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer/Edge */
 }
