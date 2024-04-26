@@ -425,8 +425,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                   }
                   const startTime = performance.now();
                   grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
-                    //Temp curve for presentation
-                    setKanjiGrade({...grade, overallGrade: grade.overallGrade*1.25 > 100? 100: grade.overallGrade*1.25})
+                    setKanjiGrade(grade);
                     setAttempts((prevAttempts) => {
                       const attempts = [...prevAttempts, { ...grade, hint: allowDisplaySVG }]
                       const lastAttempt = attempts[attempts.length - 1];
