@@ -7,6 +7,12 @@ body {
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .save-kanji {

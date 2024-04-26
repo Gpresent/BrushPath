@@ -85,6 +85,10 @@ function choose_strokes(iCoords: number[][][], tCoords: number[][][]): [number[]
     const iCenters = center_points(iCoords);
     const tCenters = center_points(tCoords);
     if (iCoords.length > tCoords.length) {
+        if (iCoords.length > Math.floor(tCoords.length * 1.25)) {
+            kanji_grade.overallFeedback += "Too many extra strokes! Review the model and try again.\n";
+            return [[],[],[],"",0];
+        }
         let assigned = Array.from({ length: iCoords.length }, () => -1);
         for (let i = 0; i < tCoords.length; i++) {
             let minDiff = Number.MAX_VALUE;
@@ -140,6 +144,10 @@ function choose_strokes(iCoords: number[][][], tCoords: number[][][]): [number[]
         return [gradeColors, strokeInfo, feedback, aspectString, failing];
 
     } else {
+        if (iCoords.length < Math.ceil(tCoords.length * 0.75)) {
+            kanji_grade.overallFeedback += "Too many missing strokes! Review the model and try again.\n";
+            return [[],[],[],"",0];
+        }
         let assigned = Array.from({ length: tCoords.length }, () => -1);
         for (let i = 0; i < iCoords.length; i++) {
             let minDiff = Number.MAX_VALUE;
