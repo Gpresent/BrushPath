@@ -5,6 +5,16 @@
 
 .character-prompt {
     font-size: 24px;
+    margin-bottom: 10px;
+    align-self: center;
+}
+
+.reading-prompt {
+    font-size: 20px;
     margin-bottom: 20px;
     align-self: center;
+    width: 80%;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
 }

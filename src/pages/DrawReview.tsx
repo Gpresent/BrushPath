@@ -50,6 +50,10 @@ const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdv
       {character && (
         <>
           <div className="character-prompt">{character.one_word_meaning}</div>
+          <div className="reading-prompt">
+            {character.on.length ? <div className="reading">{"on: " + character.on[0]}</div>: null}
+            {character.kun.length ? <div className="reading">{"kun: " + character.kun[0]}</div> : null}
+          </div>
           <Draw recall={recall} learn={learn} handleAdvance={handleAdvance} handleComplete={handleComplete} character={character} allowDisplay={!(recall && learn)} />
         </>
       )}
