@@ -540,7 +540,7 @@ const Draw: React.FC<DrawProps> = (props) => {
           </button>
         }
       </div>
-      {displayRetryWithoutHintButton && kanji_grade.overallGrade == -1 &&
+      {(props.learn || props.recall) && displayRetryWithoutHintButton && kanji_grade.overallGrade == -1 &&
       <div className="try-again-container">
         <div className="try-again-text">
         <strong>Try again with no guide!</strong>
