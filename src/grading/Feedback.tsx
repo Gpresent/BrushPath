@@ -69,7 +69,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
   useEffect(() => {
     let nextIndex = 0;
     for (let i = 0; i < childIndex; i++) {
-      while (kanji_grade.grades[nextIndex] > passing || kanji_grade.grades[nextIndex] === -1) nextIndex++;
+      while (kanji_grade.grades[nextIndex] > passing || kanji_grade.grades[nextIndex] <= -1) nextIndex++;
       nextIndex++;
     }
     nextIndex--;
@@ -164,7 +164,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     kanji_grade.grades.forEach((grade, index) => {
       if (
         grade >= passing ||
-        grade === -1 ||
+        grade <= -1 ||
         kanji_grade.feedback.length <= index
       )
         return;
@@ -285,7 +285,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
         {haveGradeInfo && (kanji_grade.overallFeedback || kanji_grade.grades.filter((value) => value < passing).length > 0) && (
           <>
             {kanji_grade.grades.map((grade, index) => {
-              const extras = kanji_grade.grades.filter((value, eIndex) => value === -1 && eIndex < index).length
+              const extras = kanji_grade.grades.filter((value, eIndex) => value <= -1 && eIndex < index).length
               index -= extras
               if (
                 grade >= passing ||
