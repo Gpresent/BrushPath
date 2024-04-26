@@ -230,7 +230,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
 
                 </div>
 
-                {props.displayRetryWithHintButton && (
+                {(props.learn || props.recall) && props.displayRetryWithHintButton && (
                   <button
                     onClick={() => {
 
@@ -241,7 +241,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                     <ReplayIcon />
                   </button>
                 )}
-                {props.displayRetryWithoutHintButton && (
+                {(props.learn || props.recall) && props.displayRetryWithoutHintButton && (
                   <button
                     onClick={() => {
 
