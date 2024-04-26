@@ -276,9 +276,9 @@ const Draw: React.FC<DrawProps> = (props) => {
 
     //Learn Mode
     if (props.learn) {
-      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
-      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade > 65: false;
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade >= 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade >= 65: false;
       // debugger;
 
       if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && lastAttemptPassedWithHint) {
@@ -303,9 +303,9 @@ const Draw: React.FC<DrawProps> = (props) => {
 
     //Learn Mode
     if (props.learn) {
-      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade > 65 && grade.hint)
-      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint)
-      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade > 65: false;
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade >= 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade >= 65: false;
       // debugger;
 
       if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && !lastAttemptPassedWithHint) {
@@ -430,13 +430,13 @@ const Draw: React.FC<DrawProps> = (props) => {
                     setAttempts((prevAttempts) => {
                       const attempts = [...prevAttempts, { ...grade, hint: allowDisplaySVG }]
                       const lastAttempt = attempts[attempts.length - 1];
-                      const isSuccessful = lastAttempt.overallGrade > 65 && !lastAttempt.hint;
+                      const isSuccessful = lastAttempt.overallGrade >= 65 && !lastAttempt.hint;
                       if (props.learn && !props.recall) {
 
-                        const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
+                        const some = attempts.some((grade) => grade.overallGrade >= 65 && !grade.hint)
                         if (!some) {
                           if (allowDisplaySVG) {
-                            if (grade.overallGrade > 65) {
+                            if (grade.overallGrade >= 65) {
                               setAllowDisplaySVG(false)
                               setDisplaySVG(false)
                             }
@@ -459,7 +459,7 @@ const Draw: React.FC<DrawProps> = (props) => {
                         //if not success full, show them svg 
                         if (!isSuccessful) { //doesnt not hit it perfect 
                           if (allowDisplaySVG) { //displa is tre in temp mode
-                            if (grade.overallGrade > 65) { //they pass in temp mode go to final mode
+                            if (grade.overallGrade >= 65) { //they pass in temp mode go to final mode
                               setAllowDisplaySVG(false)
                               setDisplaySVG(false)
                             }

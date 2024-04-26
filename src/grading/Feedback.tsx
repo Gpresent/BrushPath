@@ -102,14 +102,14 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     //Learn Mode
     if (props.learn && !props.recall) {
 
-      if (props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
+      if (props.attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint).length > 0) {
 
         return props.kanjiGrade
       }
     }
     //Review Mode
     else {
-      if (props.attempts.filter((grade) => grade.overallGrade > 65 && !grade.hint).length > 0) {
+      if (props.attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint).length > 0) {
 
         return props.kanjiGrade
       }
