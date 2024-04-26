@@ -13,14 +13,14 @@ import characterParser from "../utils/characterParser";
 import Character from "../types/Character";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
-interface LearnProps {}
+interface LearnProps { }
 type RetrievableData = {
   data: Character[] | null;
   loading: boolean;
   error: string;
 };
 
-const LearnDeck: React.FC<LearnProps> = ({}) => {
+const LearnDeck: React.FC<LearnProps> = ({ }) => {
   const [characters, setCharacters] = useState<RetrievableData>({
     data: null,
     loading: true,
@@ -119,7 +119,7 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
       ) : characters.error || characters.data == null ? (
         <p>{characters.error}</p>
       ) : characters.data.length > 0 ? (
-        <LearnCardList learn={true} characters={characters.data} />
+        <LearnCardList recall={false} learn={true} characters={characters.data} />
       ) : (
         <>
           <div className="deck-title-back">
@@ -131,8 +131,8 @@ const LearnDeck: React.FC<LearnProps> = ({}) => {
                 style={{ fontSize: "18px" }}
               ></ArrowBackIosNewIcon>
             </div>
-          
-          <p className="error-message">You've already learned all the words in this deck.</p>
+
+            <p className="error-message">You've already learned all the words in this deck.</p>
           </div>
         </>
       )}

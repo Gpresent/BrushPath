@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useContext, useLayoutEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "../styles/App.css";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useEffect } from "react";
@@ -85,7 +85,7 @@ const Draw: React.FC<DrawProps> = (props) => {
   const canvas: any = useRef<any>();
   const [svgHtml, setSvgHtml] = React.useState({ __html: "" });
   const [inputStrokes, setInputStrokes] = React.useState<number>(0);
-  const [displaySVG, setDisplaySVG] = React.useState<boolean>(props.learn || false);
+  const [displaySVG, setDisplaySVG] = React.useState<boolean>(!props.recall && (props.learn || false));
   const [readOnly, setReadOnly] = React.useState<boolean>(false);
   const [kanji, setKanji] = React.useState<string>("何");
   const [askInput, setAskInput] = React.useState<boolean>(true);
@@ -99,10 +99,11 @@ const Draw: React.FC<DrawProps> = (props) => {
     strokeInfo: [],
   });
 
-  const [attempts, setAttempts] = React.useState<(KanjiGrade & {hint: boolean})[]>([]);
+  const [attempts, setAttempts] = React.useState<(KanjiGrade & { hint: boolean })[]>([]);
 
   function clearKanji() {
     canvas.current.clearCanvas();
+    setInputStrokes(0);
     setReadOnly(false);
     setKanjiGrade({
       overallGrade: -1,
@@ -167,7 +168,7 @@ const Draw: React.FC<DrawProps> = (props) => {
       try {
 
         var svgText;
-        if(character?.svg)  {
+        if (character?.svg) {
           svgText = character?.svg
         }
         else {
@@ -263,7 +264,67 @@ const Draw: React.FC<DrawProps> = (props) => {
     // Example: setState(...)
 
     setAllowDisplaySVG(props.allowDisplay)
+
+
   }, [props.allowDisplay]);
+
+  const displayRetryWithoutHintButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    // if (!props.recall) {
+    //   return false;
+    // }
+
+    //Learn Mode
+    if (props.learn) {
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade >= 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade >= 65: false;
+      // debugger;
+
+      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && lastAttemptPassedWithHint) {
+        return true 
+      }
+      else {
+        return false
+      }
+    }
+    //Review Mode
+    else {
+      return true 
+    }
+
+  }, [attempts, allowDisplaySVG])
+
+  const displayRetryWithHintButton = useMemo(() => {
+    //If not in recall mode (ex dictionary page), don't show button
+    // if (!props.recall) {
+    //   return false;
+    // }
+
+    //Learn Mode
+    if (props.learn) {
+      const attemptsWithHint = attempts.filter((grade) => grade.overallGrade >= 65 && grade.hint)
+      const passingWithoutHint = attempts.filter((grade) => grade.overallGrade >= 65 && !grade.hint)
+      const lastAttemptPassedWithHint = attempts.length? attempts[attempts.length-1].hint && attempts[attempts.length-1].overallGrade >= 65: false;
+      // debugger;
+
+      if (attemptsWithHint.length >= 1 && passingWithoutHint.length === 0 && !lastAttemptPassedWithHint) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    //Review Mode
+    else {
+      return true
+    }
+
+  }, [attempts, allowDisplaySVG])
+
+
+
+  
 
   return (
     <div style={styles.container}>
@@ -365,56 +426,80 @@ const Draw: React.FC<DrawProps> = (props) => {
                   const startTime = performance.now();
                   grade(data, kanji, passing, convertCoords(character?.coords), character?.totalLengths).then((grade: KanjiGrade) => {
 
-                setKanjiGrade(grade)
-                  setAttempts((prevAttempts) => {
-                    const attempts =  [...prevAttempts,{...grade, hint: allowDisplaySVG}]
-                    if(props.learn) {
-                      const some = attempts.some((grade) => grade.overallGrade > 65 && !grade.hint)
-                      if(!some) {
-                        if(allowDisplaySVG) {
-                          if(grade.overallGrade > 65) {
-                            setAllowDisplaySVG(false)
-                            setDisplaySVG(false)
+                    setKanjiGrade(grade)
+                    setAttempts((prevAttempts) => {
+                      const attempts = [...prevAttempts, { ...grade, hint: allowDisplaySVG }]
+                      const lastAttempt = attempts[attempts.length - 1];
+                      const isSuccessful = lastAttempt.overallGrade >= 65 && !lastAttempt.hint;
+                      if (props.learn && !props.recall) {
+
+                        const some = attempts.some((grade) => grade.overallGrade >= 65 && !grade.hint)
+                        if (!some) {
+                          if (allowDisplaySVG) {
+                            if (grade.overallGrade >= 65) {
+                              setAllowDisplaySVG(false)
+                              setDisplaySVG(false)
+                            }
+
                           }
-                          
+                          else {
+                            setAllowDisplaySVG(true)
+                            setDisplaySVG(true)
+                          }
                         }
                         else {
                           setAllowDisplaySVG(true)
                           setDisplaySVG(true)
                         }
+
+                      }
+
+
+                      if (props.recall) {
+                        //if not success full, show them svg 
+                        if (!isSuccessful) { //doesnt not hit it perfect 
+                          if (allowDisplaySVG) { //displa is tre in temp mode
+                            if (grade.overallGrade >= 65) { //they pass in temp mode go to final mode
+                              setAllowDisplaySVG(false)
+                              setDisplaySVG(false)
+                            }
+                          }
+                          else {   //fail in temp mode back to square one
+
+                            setDisplaySVG(true);
+                            setAllowDisplaySVG(true);
+                          }
+                        }
+                        else {
+
+                          setAllowDisplaySVG(false)
+                          setDisplaySVG(false)
+                        }
+
+                      }
+
+                      return attempts
+                    })
+                    //If in learn mode, hide svg on second attempt
+
+
+                    if (props.character) {
+                      if (props.handleComplete) {
+                        props.handleComplete(props.character, grade)
+                      }
+                      if (props.character.unicode_str) {
+                        handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
                       }
                       else {
-                        setAllowDisplaySVG(true)
-                        setDisplaySVG(true)
+                        console.log("Character score not saved..")
                       }
-                        
-                        
-                      
-                     
-                      
-                    }
-                    return attempts
-                  } )
-                  //If in learn mode, hide svg on second attempt
-                  
 
-                  if(props.character) {
-                    if(props.handleComplete) {
-                      props.handleComplete(props.character,grade)
                     }
-                    if(props.character.unicode_str) {
-                      handleUpsertCharacterScoreData(props.character.unicode_str, grade.overallGrade)
-                    }
-                    else {
-                      console.log("Character score not saved..")
-                    }
-                    
-                  }
-                  
-                  
-                  if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
-                    canvas.current.exportImage('jpeg').then((data: any) => {
-                      interpretImage(data).then(result => {
+
+
+                    if (grade.overallGrade < 65 || grade.overallGrade === -1 || !grade.overallGrade) {
+                      canvas.current.exportImage('jpeg').then((data: any) => {
+                        interpretImage(data).then(result => {
 
                           setPrediction(result);
                           if (kanji === result?.[0]?.label) return;
@@ -455,7 +540,14 @@ const Draw: React.FC<DrawProps> = (props) => {
           </button>
         }
       </div>
-      <Feedback setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
+      {displayRetryWithoutHintButton && kanji_grade.overallGrade == -1 &&
+      <div className="try-again-container">
+        <div className="try-again-text">
+        <strong>Try again with no guide!</strong>
+        </div>
+      </div>
+      }
+      <Feedback displayRetryWithHintButton={displayRetryWithHintButton} displayRetryWithoutHintButton={displayRetryWithoutHintButton} setDisplaySVG={setDisplaySVG} setAllowDisplay={setAllowDisplaySVG} clearKanji={clearKanji} allowDisplay={allowDisplaySVG} attempts={attempts} recall={props.recall} learn={props.learn || false} character={props.character!} handleAdvance={handleAdvance} handleComplete={props.handleComplete} kanjiGrade={kanji_grade} passing={passing} color={color} />
     </div>
 
   );

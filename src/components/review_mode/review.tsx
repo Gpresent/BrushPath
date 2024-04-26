@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from 'react';
-import Draw from '../pages/Draw';
-import { reviewItem } from "../utils/spacedrep";
+import Draw from '../../pages/Draw';
+import { reviewItem } from "../../utils/spacedrep";
 import { ReviewFlashCard } from './components/rv_flashcard';
 import { useState } from 'react';
-import Character from '../types/Character';
+import Character from '../../types/Character';
 import PlayList from './components/rv_word_list';
 import { review_data } from './testdata';
-import { getCharacterScoreDataByUser, getCharsFromRefs, getCharacterScoreData, getHydratedCharacterScoreData } from '../utils/FirebaseQueries';
-import { AuthContext } from '../utils/FirebaseContext';
+import { getCharacterScoreDataByUser, getCharsFromRefs, getCharacterScoreData, getHydratedCharacterScoreData } from '../../utils/FirebaseQueries';
+import { AuthContext } from '../../utils/FirebaseContext';
 import { DocumentData, DocumentReference } from 'firebase/firestore';
-import characterParser from '../utils/characterParser';
-import LearnCardList from '../components/learn-mode/LearnCardList';
-import LoadingSpinner from '../components/LoadingSpinner';
+import characterParser from '../../utils/characterParser';
+import LearnCardList from '../learn-mode/LearnCardList';
+import LoadingSpinner from '../LoadingSpinner';
 
 
 type RetrievableData = {
@@ -65,7 +65,7 @@ const Review: React.FC = () => {
             {
                 words.loading ? <LoadingSpinner /> :
                     words.error || words.data === null ? <p>words.error</p> :
-                        <LearnCardList learn={false} characters={words.data} />
+                        <LearnCardList recall={true} learn={true} characters={words.data} />
             }
 
 

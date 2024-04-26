@@ -10,13 +10,14 @@ import KanjiGrade from "../types/KanjiGrade";
 
 interface DrawReviewProps {
   // setShowHeader: any;
-  char?:Character;
-  handleAdvance: (arg0: Character, arg1:KanjiGrade )=> void;
+  char?: Character;
+  handleAdvance: (arg0: Character, arg1: KanjiGrade) => void;
   handleComplete: (arg0: Character, arg1: KanjiGrade) => void;
   learn: boolean;
+  recall: boolean;
 }
 
-const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdvance, learn }) => {
+const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdvance, learn, recall }) => {
 
   // const [] = React.useState<boolean>(false);
 
@@ -49,7 +50,7 @@ const DrawReview: React.FC<DrawReviewProps> = ({ char, handleComplete, handleAdv
       {character && (
         <>
           <div className="character-prompt">{character.one_word_meaning}</div>
-          <Draw recall={true} learn={learn} handleAdvance={handleAdvance} handleComplete={handleComplete} character={character} allowDisplay={true} />
+          <Draw recall={recall} learn={learn} handleAdvance={handleAdvance} handleComplete={handleComplete} character={character} allowDisplay={!(recall && learn)} />
         </>
       )}
     </div>
