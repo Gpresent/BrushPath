@@ -105,9 +105,9 @@ const SingleDeckView: React.FC<DeckProp> = ({ title }) => {
                 </div>
                 <p className="my-words">{deck.data?.name}</p>
               </div>
-              {(userData?.email === deck.data?.userRef.id) && (
+              {/* {(userData?.email === deck.data?.userRef.id) && (
                 <AddIcon className="addButton" onClick={handleEditDeck} />
-              )}
+              )} */}
             </div>
             <div
               className="page-cover-image"
