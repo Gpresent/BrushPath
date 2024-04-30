@@ -1,3 +1,7 @@
+/**
+ * @file Hosts the router for the applicaiton
+ * @author Naimur Rahman
+ */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DictionaryView from '../pages/Dictionary';
 import Home from '../pages/Home';
