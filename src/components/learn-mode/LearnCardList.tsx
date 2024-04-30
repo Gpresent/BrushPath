@@ -87,7 +87,7 @@ const LearnCardList: React.FC<LearnCardListProps> = ({
         // console.log(char.score?.grades ? Math.max(...char.score?.grades || 0):0);
         // console.log(char.unicode);
         return char.score?.grades
-          ? Math.max(...(char.score?.grades || 0)) + accumulator
+          ? Math.max(...(char.score?.grades || [])) + accumulator
           : accumulator;
       }, 0) / scoredChars.length
     );
