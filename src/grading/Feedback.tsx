@@ -151,6 +151,8 @@ const Feedback: React.FC<feedbackProps> = (props) => {
         container.removeEventListener("scroll", handleScroll);
       }
     };
+
+
   }, []);
 
   useEffect(() => {
@@ -162,6 +164,11 @@ const Feedback: React.FC<feedbackProps> = (props) => {
       container.scrollTo({ left: 0, behavior: "smooth" });
     });
     kanji_grade.grades.forEach((grade, index) => {
+      if ( grade >= passing ){
+        sessionStorage.setItem('look-here', '你找到我了');
+      }else{
+        sessionStorage.removeItem('look-here');
+      }
       if (
         grade >= passing ||
         grade <= -1 ||
@@ -233,7 +240,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 {(props.learn || props.recall) && props.displayRetryWithHintButton && (
                   <button
                     onClick={() => {
-
+                      sessionStorage.removeItem('look-here');
                       props.clearKanji!()
                     }}
                     className="learn-card-nav-right"
@@ -244,7 +251,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                 {(props.learn || props.recall) && props.displayRetryWithoutHintButton && (
                   <button
                     onClick={() => {
-
+                      sessionStorage.removeItem('look-here');
                       props.clearKanji!()
                     }}
                     className="learn-card-nav-right"
@@ -263,7 +270,10 @@ const Feedback: React.FC<feedbackProps> = (props) => {
                         props.setAllowDisplay(false);
 
                       }
-                      if (props.clearKanji) props.clearKanji()
+                      if (props.clearKanji) {
+                        sessionStorage.removeItem('look-here');
+                        props.clearKanji();
+                      }
                       props.handleAdvance!(props.character, kanji_grade)
                       setGrade(null);
                     }}
