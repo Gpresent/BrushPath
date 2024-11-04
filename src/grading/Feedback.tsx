@@ -165,7 +165,7 @@ const Feedback: React.FC<feedbackProps> = (props) => {
     });
     kanji_grade.grades.forEach((grade, index) => {
       if ( grade >= passing ){
-        sessionStorage.setItem('look-here', '你找到我了');
+        sessionStorage.setItem('look-here', 'n2024');
       }else{
         sessionStorage.removeItem('look-here');
       }
